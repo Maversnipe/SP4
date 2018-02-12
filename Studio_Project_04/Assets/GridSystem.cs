@@ -12,6 +12,7 @@ public class GridSystem : MonoBehaviour
 	[SerializeField]
 	int Columns = 10;
 
+	// 2D Array of GameObjects(Grounds)
 	private GameObject[,] Grid;
 
 	void Awake()
