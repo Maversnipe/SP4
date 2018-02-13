@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GridSystem : MonoBehaviour
 {
+	public static GridSystem _instance;
 	// Serializable private variables defining Grid
 	[SerializeField]
 	GameObject Ground;
@@ -17,6 +18,14 @@ public class GridSystem : MonoBehaviour
 
 	void Awake()
 	{
+		// Check if there is already an instance of the class
+		if(_instance != null)
+		{
+			Debug.LogError ("More than one GridSystem in scene!");
+			return;
+		}
+		_instance = this;
+
 		// Create Grid based on inputted number of rows and columns
 		Grid = new GameObject[Rows, Columns];
 
@@ -31,11 +40,25 @@ public class GridSystem : MonoBehaviour
 				// (0.2f * xz) - this determines the size of gap in between the Grounds
 				GridGround.transform.position = new Vector3 (GridGround.transform.position.x + x + (0.2f * x),
 					GridGround.transform.position.y, GridGround.transform.position.z + z + (0.2f * z));
+				
+				Nodes GroundNode = GridGround.GetComponent <Nodes> ();
+				GroundNode.SetIndex (x, z);
 
 				// Put it into the Grid Array
 				Grid [x, z] = GridGround;
 			}
 		}
-
 	}
+
+	public GameObject [,] GetGrid ()
+	{
+		return Grid;
+	}
+
+	public Nodes GetNode(int _X, int _Z)
+	{
+		Debug.Log ("X: " + Grid [_X, _Z].GetComponent <Nodes> ().GetXIndex () + " Z: " + Grid [_X, _Z].GetComponent <Nodes> ().GetZIndex ());
+		return Grid [_X, _Z].GetComponent <Nodes>();
+	}
+
 }

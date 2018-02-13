@@ -4,21 +4,31 @@ using UnityEngine;
 
 public class Units : MonoBehaviour
 {
+	// To show if Unit is an ally or enemy
+	private enum FACTION
+	{
+		FACTION_ALLY,
+		FACTION_ENEMY,
+	}
+
 	// Serializable private variable defining Unit
 	[SerializeField]
 	Color HoverColor;
 	[SerializeField]
 	float speed = 10.0f;
+	[SerializeField]
+	FACTION theFaction;
 
 	// Reference to the unit's Components
 	private Renderer rend;
 	private Color DefaultColor;
 
-	// Reference to the target
-	public Transform target = null;
-
 	// Reference to the UnitManager's instance
 	private UnitManager unitmanager;
+
+	// Nodes
+	private Nodes currNode;
+	private Nodes nextNode;
 
 	void Start ()
 	{
@@ -27,6 +37,10 @@ public class Units : MonoBehaviour
 		DefaultColor = rend.material.color;
 
 		unitmanager = UnitManager.instance;
+		currNode = GridSystem._instance.GetNode (5, 5);
+		Debug.Log ( currNode.transform.position );
+		transform.position = new Vector3 (currNode.transform.position.x, 0.5f, currNode.transform.position.z);
+		Debug.Log (transform.position);
 	}
 
 	// Run only when Mouse click onto the unit
@@ -39,7 +53,7 @@ public class Units : MonoBehaviour
 			unitmanager.SetUnitToDoActions (unitmanager.TestingPlayer);
 
 			// Reset variables
-			target = null;
+			nextNode = null;
 			unitmanager.StoppedMoving = false;
 		}
 	}
@@ -66,14 +80,14 @@ public class Units : MonoBehaviour
 
 	void Update()
 	{
-		if (target == null)
+		if (nextNode == null)
 			return;
-		
+
 		// Move the unit to clicked Node position
 		if (!unitmanager.AbleToMove && !unitmanager.StoppedMoving)
 		{
 			// Movement section
-			Vector3 targetPos = new Vector3(target.position.x, transform.position.y, target.position.z);
+			Vector3 targetPos = new Vector3(nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
 			Vector3 dir = targetPos - transform.position;
 			transform.Translate (dir.normalized * speed * Time.deltaTime, Space.World);
 
@@ -87,7 +101,18 @@ public class Units : MonoBehaviour
 				rend.material.color = DefaultColor;
 
 				unitmanager.StoppedMoving = true;
+
+				currNode = nextNode;
+				nextNode = null;
 			}
 		}
 	}
+
+	// Get & Set Current Node
+	public Nodes GetCurrNode() {return currNode;}
+	public void SetCurrNode(Nodes _currnode) {currNode = _currnode;}
+
+	// Get & Set Next Node
+	public Nodes GetNextNode() {return nextNode;}
+	public void SetNextNode(Nodes _nextnode) {nextNode = _nextnode;}
 }

@@ -8,6 +8,10 @@ public class Nodes : MonoBehaviour
 	[SerializeField]
 	Color HoverColor;
 
+	// X and Z Index
+	private int X = 0;
+	private int Z = 0;
+
 	// Reference to the Node's Components
 	private Renderer rend;
 	private Color DefaultColor;
@@ -30,18 +34,26 @@ public class Nodes : MonoBehaviour
 		Debug.Log ("Clicked on Node.");
 		if (unitmanager.GetUnitToDoActions () != null && unitmanager.AbleToMove)
 		{
-			Debug.Log ("Unit moved.");
-			unitmanager.AbleToMove = false;
-
-			// Set selected unit's target to this node's position
 			Units selectedUnitClass = unitmanager.GetUnitToDoActions ().GetComponent<Units> ();
-			if (selectedUnitClass != null)
-			{
-				selectedUnitClass.target = transform;
-			}
+			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
-			// Change Color of Node back to DefaultColor
-			rend.material.color = DefaultColor;
+			if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
+				(unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
+				(unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
+				(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X))
+			{
+				Debug.Log ("Unit moved.");
+				unitmanager.AbleToMove = false;
+
+				// Set selected unit's target to this node's position
+				if (selectedUnitClass != null)
+				{
+					selectedUnitClass.SetNextNode (this);
+				}
+
+				// Change Color of Node back to DefaultColor
+				rend.material.color = DefaultColor;	
+			}
 		}
 	}
 
@@ -50,8 +62,17 @@ public class Nodes : MonoBehaviour
 	{
 		if (unitmanager.GetUnitToDoActions () != null && unitmanager.AbleToMove)
 		{
-			// Change Color of Node to HoverColor
-			rend.material.color = HoverColor;
+			Units selectedUnitClass = unitmanager.GetUnitToDoActions ().GetComponent<Units> ();
+			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
+
+			if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
+				(unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
+				(unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
+				(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X))
+			{
+				// Change Color of Node to HoverColor
+				rend.material.color = HoverColor;
+			}
 		}
 	}
 
@@ -64,4 +85,15 @@ public class Nodes : MonoBehaviour
 			rend.material.color = DefaultColor;
 		}
 	}
+
+	// Set the grid's index
+	public void SetIndex(int _x, int _z)
+	{
+		X = _x;
+		Z = _z;
+	}
+
+	// Get grid's index
+	public int GetXIndex() {return X;}
+	public int GetZIndex() {return Z;}
 }
