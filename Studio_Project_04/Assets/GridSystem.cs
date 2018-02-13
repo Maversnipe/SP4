@@ -31,6 +31,8 @@ public class GridSystem : MonoBehaviour
 				// (0.2f * xz) - this determines the size of gap in between the Grounds
 				GridGround.transform.position = new Vector3 (GridGround.transform.position.x + x + (0.2f * x),
 					GridGround.transform.position.y, GridGround.transform.position.z + z + (0.2f * z));
+
+				// Put it into the Grid Array
 				Grid [x, z] = GridGround;
 			}
 		}
