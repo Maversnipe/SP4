@@ -9,9 +9,10 @@ public class UnitManager : MonoBehaviour
 
 	// Units
 	public GameObject TestingPlayer;
+    public GameObject TestingPlayer2;
 
-	// Determine if can change selected unit
-	public bool AbleToChangeUnit = true;
+    // Determine if can change selected unit
+    public bool AbleToChangeUnit = true;
 	// Determine if can move selected unit
 	public bool AbleToMove = false;
 	// Determine if can move selected unit
