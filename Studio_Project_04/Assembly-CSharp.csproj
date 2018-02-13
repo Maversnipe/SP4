@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Actions.cs" />
+     <Compile Include="Assets\CameraChange.cs" />
      <Compile Include="Assets\GridSystem.cs" />
      <Compile Include="Assets\Nodes.cs" />
      <Compile Include="Assets\UnitManager.cs" />

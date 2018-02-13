@@ -50,8 +50,8 @@ public class Units : MonoBehaviour
 		{
 			Debug.Log ("Standard unit selected.");
 			unitmanager.AbleToChangeUnit = false;
-			unitmanager.SetUnitToDoActions (unitmanager.TestingPlayer);
-
+			unitmanager.SetUnitToDoActions (this.gameObject);
+            Camera.main.transform.position = new Vector3(unitmanager.GetUnitToDoActions().transform.position.x, Camera.main.transform.position.y, unitmanager.GetUnitToDoActions().transform.position.z);
 			// Reset variables
 			nextNode = null;
 			unitmanager.StoppedMoving = false;
