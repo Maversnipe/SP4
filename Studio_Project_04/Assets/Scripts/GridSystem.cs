@@ -62,4 +62,13 @@ public class GridSystem : MonoBehaviour
 		return Grid [_X, _Z].GetComponent <Nodes>();
 	}
 
+	public int getRows()
+	{
+		return Rows;
+	}
+
+	public int getColumn()
+	{
+		return Columns;
+	}
 }
