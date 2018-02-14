@@ -7,19 +7,19 @@ public class UnitManager : MonoBehaviour
 	// Public Reference for other class to access UnitManager
 	public static UnitManager instance;
 
-	// Units
-	public GameObject TestingPlayer;
-    public GameObject TestingPlayer2;
-
     // Determine if can change selected unit
     public bool AbleToChangeUnit = true;
 	// Determine if can move selected unit
 	public bool AbleToMove = false;
+    public bool AbleToAttack = false;
 	// Determine if can move selected unit
 	public bool StoppedMoving = false;
-
+    public bool openMenu = false;
 	// A reference to the current selected unit
 	private GameObject UnitToDoActions;
+
+    GameObject[] playerUnits;
+    GameObject[] enemyUnits;
 
 	// Taking care of Singleton for UnityManager
 	void Awake ()
@@ -30,6 +30,8 @@ public class UnitManager : MonoBehaviour
 			return;
 		}
 		instance = this;
+        playerUnits = GameObject.FindGameObjectsWithTag("PlayerUnit");
+        enemyUnits = GameObject.FindGameObjectsWithTag("enemyUnit");
 	}
 
 	// Get the currently selected unit
@@ -43,4 +45,31 @@ public class UnitManager : MonoBehaviour
 	{
 		UnitToDoActions = Unit;
 	}
+
+    void Update()
+    {
+        if (UnitToDoActions != null && !AbleToMove && !AbleToAttack)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+                UnitToDoActions = null;
+                AbleToChangeUnit = true;
+            }
+        }
+        if (AbleToMove)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+               StoppedMoving = true;
+               AbleToMove = false;
+            }
+        }
+        if (AbleToAttack)
+        {
+            if (Input.GetMouseButtonDown(1))
+            {
+               AbleToAttack = false;
+            }
+        }
+    }
 }
