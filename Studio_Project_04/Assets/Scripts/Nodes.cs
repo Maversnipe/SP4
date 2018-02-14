@@ -7,12 +7,13 @@ public class Nodes : MonoBehaviour
 	// Serializable private variable defining Node
 	[SerializeField]
 	Color HoverColor;
-	[SerializeField]
-	bool Visible = false;
 
 	// X and Z Index
 	private int X = 0;
 	private int Z = 0;
+
+	// HoverColor's alpha value
+	private float HoverAlpha;
 
 	// Reference to the Node's Components
 	private Renderer rend;
@@ -24,7 +25,7 @@ public class Nodes : MonoBehaviour
 	{
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
-		rend.enabled = Visible;
+		HoverAlpha = HoverColor.a;
 		rend.material.color = HoverColor;
 		// Code Optimising - Get UnitManager instance once only
 		unitmanager = UnitManager.instance;
@@ -53,8 +54,9 @@ public class Nodes : MonoBehaviour
 				if (selectedUnitClass != null)
 					selectedUnitClass.SetNextNode (this);
 
-				// Change Visibility of Node back to Invisible
-				rend.enabled = false;
+				// Change Visibility of Node back to translucent
+				HoverColor.a = HoverAlpha;
+				rend.material.color = HoverColor;
 			}
 		}
 	}
@@ -75,8 +77,9 @@ public class Nodes : MonoBehaviour
 				(unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
 				(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X))
 			{
-				// Change Visibility of Node to Visible
-				rend.enabled = true;
+				// Change Visibility of Node to opague
+				HoverColor.a = 1.0f;
+				rend.material.color = HoverColor;
 			}
 		}
 	}
@@ -87,8 +90,9 @@ public class Nodes : MonoBehaviour
 		// Check if unit is available and if unit can move
 		if (unitmanager.GetUnitToDoActions () != null && unitmanager.AbleToMove)
 		{
-			// Change Visibility of Node back to Invisible
-			rend.enabled = false;
+			// Change Visibility of Node back to translucent
+			HoverColor.a = HoverAlpha;
+			rend.material.color = HoverColor;
 		}
 	}
 
