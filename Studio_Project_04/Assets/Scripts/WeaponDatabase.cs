@@ -52,10 +52,23 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase> {
 
 	// Use this for initialization
 	void Start () {
-		Database.Add (new Weapon ("Dagger", 3, DamageTypes.SLASH, WeaponType.MELEE));
-		Database.Add (new Weapon ("Sword", 5, DamageTypes.SLASH, WeaponType.MELEE));
-		Database.Add (new Weapon ("Hammer", 7, DamageTypes.BLUNT, WeaponType.MELEE));
+
+		// ----- Melee Weapon Type ----- 
+
+		// Slash Damage Type
+		Database.Add (new Weapon ("Wooden Sword", 2, DamageTypes.SLASH, WeaponType.MELEE));
+		Database.Add (new Weapon ("Iron Sword", 3, DamageTypes.SLASH, WeaponType.MELEE));
+		Database.Add (new Weapon ("Steel Sword", 4, DamageTypes.SLASH, WeaponType.MELEE));
+		Database.Add (new Weapon ("Diamond Sword", 5, DamageTypes.SLASH, WeaponType.MELEE));
+
+		// Pierce Damage Type
 		Database.Add (new Weapon ("Rapier", 6, DamageTypes.PIERCE, WeaponType.MELEE));
+
+		// Blunt Damage Type
+		Database.Add (new Weapon ("Hammer", 7, DamageTypes.BLUNT, WeaponType.MELEE));
+
+		// -----  Ranged Weapon Type ----- 
+
 
 		for (int i = 0; i < Database.Count; i++) {
 			StringData.Add (Database [i].getName ());
