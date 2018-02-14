@@ -46,10 +46,25 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase> {
 
 	// Use this for initialization
 	void Start () {
-		Database.Add (new Armor ("Leather", 2, ArmorTypes.LIGHT));
-		Database.Add (new Armor ("Chainmail", 5, ArmorTypes.MEDIUM));
-		Database.Add (new Armor ("Plate", 9, ArmorTypes.HEAVY));
-		Database.Add (new Armor ("Really shitty stuff", 20, ArmorTypes.LIGHT));
+		
+		// Light Armor Type
+		Database.Add (new Armor ("Nothing", 0, ArmorTypes.LIGHT));
+		Database.Add (new Armor ("Cloth", 1, ArmorTypes.LIGHT));
+		Database.Add (new Armor ("Upgraded Cloth", 2, ArmorTypes.LIGHT));
+		Database.Add (new Armor ("Leather", 3, ArmorTypes.LIGHT));
+		Database.Add (new Armor ("Upgraded Leather", 4, ArmorTypes.LIGHT));
+
+		// Medium Armor Type
+		Database.Add (new Armor ("Wooden", 5, ArmorTypes.MEDIUM));
+		Database.Add (new Armor ("Upgraded Wooden", 6, ArmorTypes.MEDIUM));
+		Database.Add (new Armor ("Iron", 7, ArmorTypes.MEDIUM));
+		Database.Add (new Armor ("Upgraded Iron", 8, ArmorTypes.MEDIUM));
+
+		// Heavy Armor Type
+		Database.Add (new Armor ("Steel", 11, ArmorTypes.HEAVY));
+		Database.Add (new Armor ("Upgraded Steel", 12, ArmorTypes.HEAVY));
+		Database.Add (new Armor ("Silver", 13, ArmorTypes.HEAVY));
+		Database.Add (new Armor ("Upgraded Silver", 14, ArmorTypes.HEAVY));
 
 		for (int i = 0; i < Database.Count; i++) {
 			StringData.Add (Database [i].getName ());

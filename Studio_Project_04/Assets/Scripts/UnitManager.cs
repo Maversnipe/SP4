@@ -10,6 +10,7 @@ public class UnitManager : MonoBehaviour
 	// Units
 	public GameObject TestingPlayer;
     public GameObject TestingPlayer2;
+	public List<Units> UnitList = new List<Units>();
 
     // Determine if can change selected unit
     public bool AbleToChangeUnit = true;
@@ -30,6 +31,16 @@ public class UnitManager : MonoBehaviour
 			return;
 		}
 		instance = this;
+	}
+
+	// Add the unit into the list 
+	public void AddUnit(GameObject GO)
+	{
+		Units newUnit = GO.GetComponent <Units> ();
+		if(newUnit)
+		{
+			UnitList.Add (newUnit);
+		}
 	}
 
 	// Get the currently selected unit

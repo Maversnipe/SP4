@@ -50,6 +50,7 @@
      <Compile Include="Assets\Scripts\Actions.cs" />
      <Compile Include="Assets\Scripts\ArmorDatabase.cs" />
      <Compile Include="Assets\Scripts\CameraControl.cs" />
+     <Compile Include="Assets\Scripts\EnemyUpdate.cs" />
      <Compile Include="Assets\Scripts\GenericSingleton.cs" />
      <Compile Include="Assets\Scripts\GridSystem.cs" />
      <Compile Include="Assets\Scripts\Nodes.cs" />

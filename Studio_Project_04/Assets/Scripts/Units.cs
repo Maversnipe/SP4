@@ -15,7 +15,9 @@ public class Units : MonoBehaviour
 	[SerializeField]
 	Color HoverColor;
 	[SerializeField]
-	float speed = 10.0f;
+	float speed = 5.0f;
+	[SerializeField]
+	float initiative; // This determines which unit will be able to take the first turn
 	[SerializeField]
 	FACTION theFaction;
 

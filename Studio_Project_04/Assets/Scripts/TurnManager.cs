@@ -15,7 +15,7 @@ public class TurnManager : MonoBehaviour {
 		for(int i = 0; i < listOfGO.Length; ++i)
 		{
 			Units theUnit = listOfGO [i].GetComponent<Units> ();
-			if (!theUnit.IsPlayable ())
+			if (theUnit.IsPlayable ())
 				continue;
 
 
