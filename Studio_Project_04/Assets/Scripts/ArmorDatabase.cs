@@ -55,18 +55,16 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase> {
 		Database.Add (new Armor ("Upgraded Leather", 4, ArmorTypes.LIGHT));
 
 		// Medium Armor Type
-		Database.Add (new Armor ("Bronze", 5, ArmorTypes.MEDIUM));
-		Database.Add (new Armor ("Upgraded Bronze", 6, ArmorTypes.MEDIUM));
+		Database.Add (new Armor ("Wooden", 5, ArmorTypes.MEDIUM));
+		Database.Add (new Armor ("Upgraded Wooden", 6, ArmorTypes.MEDIUM));
 		Database.Add (new Armor ("Iron", 7, ArmorTypes.MEDIUM));
 		Database.Add (new Armor ("Upgraded Iron", 8, ArmorTypes.MEDIUM));
-		Database.Add (new Armor ("Mythril", 9, ArmorTypes.MEDIUM));
-		Database.Add (new Armor ("Upgraded Mythrill", 10, ArmorTypes.MEDIUM));
 
 		// Heavy Armor Type
 		Database.Add (new Armor ("Steel", 11, ArmorTypes.HEAVY));
 		Database.Add (new Armor ("Upgraded Steel", 12, ArmorTypes.HEAVY));
-		Database.Add (new Armor ("Diamond", 13, ArmorTypes.HEAVY));
-		Database.Add (new Armor ("Upgraded Diamond", 14, ArmorTypes.HEAVY));
+		Database.Add (new Armor ("Silver", 13, ArmorTypes.HEAVY));
+		Database.Add (new Armor ("Upgraded Silver", 14, ArmorTypes.HEAVY));
 
 		for (int i = 0; i < Database.Count; i++) {
 			StringData.Add (Database [i].getName ());
