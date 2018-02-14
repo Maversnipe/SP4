@@ -7,6 +7,11 @@ public class UnitManager : MonoBehaviour
 	// Public Reference for other class to access UnitManager
 	public static UnitManager instance;
 
+	// Units
+	public GameObject TestingPlayer;
+    public GameObject TestingPlayer2;
+	public List<Units> UnitList = new List<Units>();
+
     // Determine if can change selected unit
     public bool AbleToChangeUnit = true;
 	// Determine if can move selected unit
@@ -32,6 +37,16 @@ public class UnitManager : MonoBehaviour
 		instance = this;
         playerUnits = GameObject.FindGameObjectsWithTag("PlayerUnit");
         enemyUnits = GameObject.FindGameObjectsWithTag("enemyUnit");
+	}
+
+	// Add the unit into the list 
+	public void AddUnit(GameObject GO)
+	{
+		Units newUnit = GO.GetComponent <Units> ();
+		if(newUnit)
+		{
+			UnitList.Add (newUnit);
+		}
 	}
 
 	// Get the currently selected unit

@@ -15,7 +15,9 @@ public class Units : MonoBehaviour
 	[SerializeField]
 	Color HoverColor;
 	[SerializeField]
-	float speed = 10.0f;
+	float speed = 5.0f;
+	[SerializeField]
+	float initiative; // This determines which unit will be able to take the first turn
 	[SerializeField]
 	FACTION theFaction;
 
@@ -32,6 +34,13 @@ public class Units : MonoBehaviour
 	private Nodes currNode;
 	private Nodes nextNode;
 
+	// To show if unit is playable
+	private bool isPlayable;
+
+	// Unit's ID
+	private int ID;
+	private static int UnitCount = 0;
+
 	void Start ()
 	{
 		// Code Optimising - Get Renderer Component once only
@@ -42,8 +51,12 @@ public class Units : MonoBehaviour
 
 		// Set a random initial position for unit
 		//currNode = GridSystem._instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
-        currNode = GridSystem._instance.GetNode(nodeX, nodeZ);
-        transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
+		currNode = GridSystem._instance.GetNode(nodeX, nodeZ);
+		transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
+
+		// Set Unit's ID
+		ID = UnitCount;
+		++UnitCount;
 	}
 
 	// Run only when Mouse click onto the unit
@@ -118,4 +131,8 @@ public class Units : MonoBehaviour
 	// Get & Set Next Node
 	public Nodes GetNextNode() {return nextNode;}
 	public void SetNextNode(Nodes _nextnode) {nextNode = _nextnode;}
+
+	// Get & Set if unit can be controlled
+	public bool IsPlayable() {return isPlayable;}
+	public void SetPlayable(bool _playable) {isPlayable = _playable;}
 }
