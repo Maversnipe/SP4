@@ -19,10 +19,9 @@ public enum Faction{
 public class AI : MonoBehaviour {
 
 	[SerializeField]
-	public Armor _Armor;
+	public string Name;
 
-	[SerializeField]
-	public Weapon _Weapon;
+	public Unit _unit;
 
 	[SerializeField]
 	public EnemyStrategy Personality;
@@ -44,6 +43,17 @@ public class AI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		for (int i = 0; i < UnitDatabase.Database.Count; ++i) {
+			if (Name == UnitDatabase.Database [i].getName ()) {
+				_unit = UnitDatabase.Database [i];
+				break;
+			}
+		}
+
+		if (_unit == null) {
+			Destroy (this.gameObject);
+		}
+
 		CurrNode = FindObjectOfType<GridSystem> ().GetNode (Random.Range (0, FindObjectOfType<GridSystem> ().getRows ()),
 															Random.Range (0, FindObjectOfType<GridSystem> ().getColumn ()));
 		m_visited.Add (CurrNode);

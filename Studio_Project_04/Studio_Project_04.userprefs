@@ -1,15 +1,15 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\MainMenu.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\AI.cs">
     <Files>
       <File FileName="Assets\Scripts\UnitManager.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Units.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\WeaponDatabase.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GridSystem.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Nodes.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\TurnManager.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Actions.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MainMenu.cs" Line="6" Column="2" />
+      <File FileName="Assets\Scripts\MainMenu.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\AI.cs" Line="55" Column="4" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

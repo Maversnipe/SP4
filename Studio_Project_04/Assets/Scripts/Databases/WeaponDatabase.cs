@@ -52,9 +52,6 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase> {
 	[SerializeField]
 	public static List<Weapon> Database = new List<Weapon>();
 
-	[SerializeField]
-	public static List<string> StringData = new List<string>();
-
 	// Use this for initialization
 	void Start () {
 
@@ -91,15 +88,21 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase> {
 		// Blunt Damage Type
 		Database.Add (new Weapon ("Sling Shot", 7, DamageTypes.BLUNT, WeaponType.RANGED, 2));
 		Database.Add (new Weapon ("Boomerang", 8, DamageTypes.BLUNT, WeaponType.RANGED, 2)); // Have to move back to player
-
-
-		for (int i = 0; i < Database.Count; i++) {
-			StringData.Add (Database [i].getName ());
-		}
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public static Weapon getWeapon(string Name)
+	{
+		for (int i = 0; i < Database.Count; ++i) {
+			if (Database [i].getName () == Name) {
+				return Database [i];
+			}
+		}
+
+		return null;
 	}
 }

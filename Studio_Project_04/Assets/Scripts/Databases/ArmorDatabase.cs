@@ -41,8 +41,6 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase> {
 
 	[SerializeField]
 	public static List<Armor> Database = new List<Armor>();
-	[SerializeField]
-	public static List<string> StringData = new List<string>();
 
 	// Use this for initialization
 	void Start () {
@@ -65,10 +63,6 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase> {
 		Database.Add (new Armor ("Upgraded Steel", 12, ArmorTypes.HEAVY));
 		Database.Add (new Armor ("Silver", 13, ArmorTypes.HEAVY));
 		Database.Add (new Armor ("Upgraded Silver", 14, ArmorTypes.HEAVY));
-
-		for (int i = 0; i < Database.Count; i++) {
-			StringData.Add (Database [i].getName ());
-		}
 	}
 	
 	// Update is called once per frame
@@ -76,7 +70,14 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase> {
 		
 	}
 
-	public List<Armor> getList () {
-		return Database;
+	public static Armor getArmor(string Name)
+	{
+		for (int i = 0; i < Database.Count; ++i) {
+			if (Database [i].getName () == Name) {
+				return Database [i];
+			}
+		}
+
+		return null;
 	}
 }
