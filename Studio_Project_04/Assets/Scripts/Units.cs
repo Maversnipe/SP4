@@ -28,7 +28,9 @@ public class Units : MonoBehaviour
 	// Reference to the UnitManager's instance
 	private UnitManager unitmanager;
 
-	// Nodes
+    // Nodes
+    public int nodeX;
+    public int nodeZ;
 	private Nodes currNode;
 	private Nodes nextNode;
 
@@ -48,7 +50,8 @@ public class Units : MonoBehaviour
 		unitmanager = UnitManager.instance;
 
 		// Set a random initial position for unit
-		currNode = GridSystem._instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
+		//currNode = GridSystem._instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
+		currNode = GridSystem._instance.GetNode(nodeX, nodeZ);
 		transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
 
 		// Set Unit's ID
@@ -65,7 +68,7 @@ public class Units : MonoBehaviour
 			unitmanager.AbleToChangeUnit = false;
 			unitmanager.SetUnitToDoActions (this.gameObject);
             Camera.main.transform.position = new Vector3(unitmanager.GetUnitToDoActions().transform.position.x, Camera.main.transform.position.y, unitmanager.GetUnitToDoActions().transform.position.z);
-
+            unitmanager.openMenu = true;
 			// Reset variables
 			nextNode = null;
 			unitmanager.StoppedMoving = false;
@@ -96,9 +99,8 @@ public class Units : MonoBehaviour
 	{
 		if (nextNode == null)
 			return;
-
-		// Move the unit to clicked Node position
-		if (!unitmanager.AbleToMove && !unitmanager.StoppedMoving)
+        // Move the unit to clicked Node position
+        if (!unitmanager.AbleToMove && !unitmanager.StoppedMoving)
 		{
 			// Movement section
 			Vector3 targetPos = new Vector3(nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
@@ -111,11 +113,11 @@ public class Units : MonoBehaviour
 				// Reset variables
 				transform.position = targetPos;
 				unitmanager.AbleToChangeUnit = true;
+                unitmanager.openMenu = false;
 				unitmanager.SetUnitToDoActions (null);
 				rend.material.color = DefaultColor;
 
 				unitmanager.StoppedMoving = true;
-
 				currNode = nextNode;
 				nextNode = null;
 			}
