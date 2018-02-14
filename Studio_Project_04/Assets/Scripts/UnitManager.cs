@@ -8,9 +8,8 @@ public class UnitManager : MonoBehaviour
 	public static UnitManager instance;
 
 	// Units
-	public GameObject TestingPlayer;
-    public GameObject TestingPlayer2;
-	public List<Units> UnitList = new List<Units>();
+	public List<Units> AIUnitList = new List<Units>();
+	public List<Units> PlayerUnitList = new List<Units>();
 
     // Determine if can change selected unit
     public bool AbleToChangeUnit = true;
@@ -20,23 +19,19 @@ public class UnitManager : MonoBehaviour
 	// Determine if can move selected unit
 	public bool StoppedMoving = false;
     public bool openMenu = false;
+
 	// A reference to the current selected unit
 	private GameObject UnitToDoActions;
 
-    GameObject[] playerUnits;
-    GameObject[] enemyUnits;
-
-	// Taking care of Singleton for UnityManager
 	void Awake ()
 	{
+		// Taking care of Singleton for UnityManager
 		if (instance != null)
 		{
 			Debug.LogError ("More than one UnitManager in scene!");
 			return;
 		}
 		instance = this;
-        playerUnits = GameObject.FindGameObjectsWithTag("PlayerUnit");
-        enemyUnits = GameObject.FindGameObjectsWithTag("enemyUnit");
 	}
 
 	// Add the unit into the list 
@@ -45,7 +40,14 @@ public class UnitManager : MonoBehaviour
 		Units newUnit = GO.GetComponent <Units> ();
 		if(newUnit)
 		{
-			UnitList.Add (newUnit);
+			if (newUnit.IsPlayable ())
+			{
+				PlayerUnitList.Add (newUnit);
+			} 
+			else
+			{
+				AIUnitList.Add (newUnit);
+			}
 		}
 	}
 

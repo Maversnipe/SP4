@@ -11,7 +11,7 @@ public class TurnManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-		GameObject[] listOfGO = GameObject.FindGameObjectsWithTag ("Unit");
+		GameObject[] listOfGO = GameObject.FindGameObjectsWithTag ("aiUnit");
 		for(int i = 0; i < listOfGO.Length; ++i)
 		{
 			Units theUnit = listOfGO [i].GetComponent<Units> ();
