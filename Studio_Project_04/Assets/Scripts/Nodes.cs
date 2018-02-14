@@ -24,32 +24,32 @@ public class Nodes : MonoBehaviour
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
 		DefaultColor = rend.material.color;
-
+		// Code Optimising - Get UnitManager instance once only
 		unitmanager = UnitManager.instance;
 	}
 
 	// Run only when Mouse click onto the unit
 	void OnMouseDown()
 	{
-		Debug.Log ("Clicked on Node.");
+		// Check if unit is available and if unit can move
 		if (unitmanager.GetUnitToDoActions () != null && unitmanager.AbleToMove)
 		{
+			// Get information from Units class
 			Units selectedUnitClass = unitmanager.GetUnitToDoActions ().GetComponent<Units> ();
 			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
+			// Limits move range to one grid from the player current node
 			if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
 				(unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
 				(unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
 				(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X))
 			{
-				Debug.Log ("Unit moved.");
+				Debug.Log ("Node Selected.");
 				unitmanager.AbleToMove = false;
 
 				// Set selected unit's target to this node's position
 				if (selectedUnitClass != null)
-				{
 					selectedUnitClass.SetNextNode (this);
-				}
 
 				// Change Color of Node back to DefaultColor
 				rend.material.color = DefaultColor;	
@@ -58,13 +58,16 @@ public class Nodes : MonoBehaviour
 	}
 
 	// Run only when Mouse cursor move into the node collision box
+	// Visual feedback for player, show that he/she can clicked on these nodes
 	void OnMouseEnter()
 	{
+		// Check if unit is available and if unit can move
 		if (unitmanager.GetUnitToDoActions () != null && unitmanager.AbleToMove)
 		{
 			Units selectedUnitClass = unitmanager.GetUnitToDoActions ().GetComponent<Units> ();
 			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
+			// Limits move range to one grid from the player current node
 			if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
 				(unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
 				(unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
@@ -79,6 +82,7 @@ public class Nodes : MonoBehaviour
 	// Run only when Mouse cursor move out of the node collision box
 	void OnMouseExit()
 	{
+		// Check if unit is available and if unit can move
 		if (unitmanager.GetUnitToDoActions () != null && unitmanager.AbleToMove)
 		{
 			// Change Color of Node back to DefaultColor

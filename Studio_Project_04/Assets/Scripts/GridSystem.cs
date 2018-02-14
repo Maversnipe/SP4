@@ -40,7 +40,8 @@ public class GridSystem : MonoBehaviour
 				// (0.2f * xz) - this determines the size of gap in between the Grounds
 				GridGround.transform.position = new Vector3 (GridGround.transform.position.x + x + (0.2f * x),
 					GridGround.transform.position.y, GridGround.transform.position.z + z + (0.2f * z));
-				
+
+				// Get information from Nodes class
 				Nodes GroundNode = GridGround.GetComponent <Nodes> ();
 				GroundNode.SetIndex (x, z);
 
@@ -57,7 +58,7 @@ public class GridSystem : MonoBehaviour
 
 	public Nodes GetNode(int _X, int _Z)
 	{
-		Debug.Log ("X: " + Grid [_X, _Z].GetComponent <Nodes> ().GetXIndex () + " Z: " + Grid [_X, _Z].GetComponent <Nodes> ().GetZIndex ());
+		//Debug.Log ("X: " + Grid [_X, _Z].GetComponent <Nodes> ().GetXIndex () + " Z: " + Grid [_X, _Z].GetComponent <Nodes> ().GetZIndex ());
 		return Grid [_X, _Z].GetComponent <Nodes>();
 	}
 

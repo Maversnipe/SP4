@@ -15,6 +15,7 @@ public class Actions : MonoBehaviour
 	// Start moving the selected unit
 	public void StartMoving ()
 	{
+		// Check if unit is available and if unit can move
 		if (unitmanager.GetUnitToDoActions () != null && !unitmanager.AbleToMove)
 		{
 			Debug.Log ("Started moving.");
@@ -25,6 +26,7 @@ public class Actions : MonoBehaviour
 	// Skip current turn
 	public void SkipTurn ()
 	{
+		// Check if unit is available and if player can change to control another unit
 		if (unitmanager.GetUnitToDoActions () != null && !unitmanager.AbleToChangeUnit)
 		{
 			Debug.Log ("Skipped turn.");

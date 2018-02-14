@@ -35,12 +35,12 @@ public class Units : MonoBehaviour
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
 		DefaultColor = rend.material.color;
-
+		// Code Optimising - Get UnitManager instance once only
 		unitmanager = UnitManager.instance;
-		currNode = GridSystem._instance.GetNode (5, 5);
-		Debug.Log ( currNode.transform.position );
-		transform.position = new Vector3 (currNode.transform.position.x, 0.5f, currNode.transform.position.z);
-		Debug.Log (transform.position);
+
+		// Set a random initial position for unit
+		currNode = GridSystem._instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
+		transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
 	}
 
 	// Run only when Mouse click onto the unit
@@ -48,10 +48,11 @@ public class Units : MonoBehaviour
 	{
 		if (unitmanager.AbleToChangeUnit)
 		{
-			Debug.Log ("Standard unit selected.");
+			Debug.Log ("Unit Selected.");
 			unitmanager.AbleToChangeUnit = false;
 			unitmanager.SetUnitToDoActions (this.gameObject);
             Camera.main.transform.position = new Vector3(unitmanager.GetUnitToDoActions().transform.position.x, Camera.main.transform.position.y, unitmanager.GetUnitToDoActions().transform.position.z);
+
 			// Reset variables
 			nextNode = null;
 			unitmanager.StoppedMoving = false;
