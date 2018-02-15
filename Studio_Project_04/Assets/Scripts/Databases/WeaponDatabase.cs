@@ -64,7 +64,7 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase> {
 		Database.Add (new Weapon ("Silver Sword", 8, DamageTypes.SLASH, WeaponType.MELEE, 1));
 
 		// Pierce Damage Type
-		Database.Add (new Weapon ("Lance", 9, DamageTypes.PIERCE, WeaponType.MELEE, 1));
+		Database.Add (new Weapon ("Wooden Lance", 9, DamageTypes.PIERCE, WeaponType.MELEE, 1));
 		Database.Add (new Weapon ("Iron Lance", 10, DamageTypes.PIERCE, WeaponType.MELEE, 1));
 		Database.Add (new Weapon ("Steel Lance", 11, DamageTypes.PIERCE, WeaponType.MELEE, 1));
 		Database.Add (new Weapon ("Silver Lance", 12, DamageTypes.PIERCE, WeaponType.MELEE, 1));
