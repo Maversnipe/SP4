@@ -8,10 +8,10 @@ public class CameraControl : MonoBehaviour {
     bool isPanning = false;
     int cameraMode = 0;
     Vector3 anchorPos;
-    private UnitManager unitmanager;
+    private TurnManager turnManager;
     // Use this for initialization
     void Start () {
-        unitmanager = UnitManager.instance;
+		turnManager = TurnManager.Instance;
     }
 	
 	// Update is called once per frame
@@ -39,7 +39,7 @@ public class CameraControl : MonoBehaviour {
             if (Input.GetKeyDown("v"))
             {
                 freecam = false;
-                transform.position = new Vector3(unitmanager.GetUnitToDoActions().transform.position.x, transform.position.y, unitmanager.GetUnitToDoActions().transform.position.z);
+				transform.position = new Vector3(turnManager.GetCurrUnit ().transform.position.x, transform.position.y, turnManager.GetCurrUnit ().transform.position.z);
             }
 
             if (cameraMode == 0)

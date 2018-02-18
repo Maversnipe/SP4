@@ -26,7 +26,7 @@ public class Units : MonoBehaviour
 	private Color DefaultColor;
 
 	// Reference to the UnitManager's instance
-	private UnitManager unitmanager;
+	private TurnManager turnManager;
 
     // Nodes
     public int nodeX;
@@ -39,7 +39,7 @@ public class Units : MonoBehaviour
 
 	// Unit's ID
 	private int ID;
-	private static int UnitCount = 0;
+	private static int UnitCount = 5;
 
 	void Start ()
 	{
@@ -47,48 +47,53 @@ public class Units : MonoBehaviour
 		rend = GetComponent<Renderer> ();
 		DefaultColor = rend.material.color;
 		// Code Optimising - Get UnitManager instance once only
-		unitmanager = UnitManager.instance;
+		turnManager = TurnManager.Instance;
 
 		// Set a random initial position for unit
 		//currNode = GridSystem._instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
-		currNode = GridSystem._instance.GetNode(nodeX, nodeZ);
+		currNode = GridSystem.Instance.GetNode(nodeX, nodeZ);
 		transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
 
 		// Set Unit's ID
 		ID = UnitCount;
 		++UnitCount;
+
+		isPlayable = true;
+
+		// Add unit to unit manager
+		UnitManager.Instance.AddUnit (this);
 	}
 
 	// Run only when Mouse click onto the unit
 	void OnMouseDown()
 	{
-		if (unitmanager.AbleToChangeUnit)
-		{
-			Debug.Log ("Unit Selected.");
-			unitmanager.AbleToChangeUnit = false;
-			unitmanager.SetUnitToDoActions (this.gameObject);
-            Camera.main.transform.position = new Vector3(unitmanager.GetUnitToDoActions().transform.position.x, Camera.main.transform.position.y, unitmanager.GetUnitToDoActions().transform.position.z);
-            unitmanager.openMenu = true;
-			// Reset variables
-			nextNode = null;
-			unitmanager.StoppedMoving = false;
-		}
+//		if (turnManager.GetAbleToChangeUnit ())
+//		{
+//			Debug.Log ("Unit Selected.");
+//			turnManager.SetAbleToChangeUnit (false);
+//			//turnManager.SetUnitToDoActions (this.gameObject);
+//			Camera.main.transform.position = new Vector3(turnManager.GetCurrUnit ().transform.position.x, Camera.main.transform.position.y, turnManager.GetCurrUnit().transform.position.z);
+//			turnManager.SetOpenMenu (true);
+//			// Reset variables
+//			nextNode = null;
+//			turnManager.SetStopMoving (false);
+//		}
 	}
 
 	// Run only when Mouse cursor move into the unit collision box
 	void OnMouseEnter()
 	{
-		if (unitmanager.AbleToChangeUnit)
-		{
-			// Change Color of unit to HoverColor
-			rend.material.color = HoverColor;
-		}
+//		if (turnManager.GetAbleToChangeUnit ())
+//		{
+//			// Change Color of unit to HoverColor
+//			rend.material.color = HoverColor;
+//		}
 	}
 
 	// Run only when Mouse cursor move out of the unit collision box
 	void OnMouseExit()
 	{
-		if (unitmanager.AbleToChangeUnit)
+		if (turnManager.GetAbleToChangeUnit ())
 		{
 			// Change Color of unit back to DefaultColor
 			rend.material.color = DefaultColor;
@@ -99,8 +104,9 @@ public class Units : MonoBehaviour
 	{
 		if (nextNode == null)
 			return;
+		
         // Move the unit to clicked Node position
-        if (!unitmanager.AbleToMove && !unitmanager.StoppedMoving)
+		if (!turnManager.GetAbleToMove () && !turnManager.GetStopMoving ())
 		{
 			// Movement section
 			Vector3 targetPos = new Vector3(nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
@@ -112,17 +118,34 @@ public class Units : MonoBehaviour
 			{
 				// Reset variables
 				transform.position = targetPos;
-				unitmanager.AbleToChangeUnit = true;
-                unitmanager.openMenu = false;
-				unitmanager.SetUnitToDoActions (null);
-				rend.material.color = DefaultColor;
-
-				unitmanager.StoppedMoving = true;
-				currNode = nextNode;
-				nextNode = null;
+				TurnEnd ();
+				TurnManager.Instance.NextTurn ();
 			}
 		}
 	}
+
+	public void TurnStart()
+	{
+		// Change camera's position to where the unit is located
+		Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
+		turnManager.SetOpenMenu (true);
+		// Reset variables
+		nextNode = null;
+		turnManager.SetStopMoving (false);
+
+		rend.material.color = HoverColor;
+	}
+
+	public void TurnEnd()
+	{
+		turnManager.SetOpenMenu (false);
+		rend.material.color = DefaultColor;
+
+		turnManager.SetStopMoving (true);
+		currNode = nextNode;
+		nextNode = null;
+	}
+
 
 	// Get & Set Current Node
 	public Nodes GetCurrNode() {return currNode;}
@@ -135,4 +158,12 @@ public class Units : MonoBehaviour
 	// Get & Set if unit can be controlled
 	public bool IsPlayable() {return isPlayable;}
 	public void SetPlayable(bool _playable) {isPlayable = _playable;}
+
+	// Get & Set Unit's ID
+	public int GetID() {return ID;}
+	public void SetID(int _id) {ID = _id;}
+
+	// Get & Set Unit's Initiative
+	public float GetInitiative() {return initiative;}
+	public void SetInitiative(float _initiative) {initiative = _initiative;}
 }

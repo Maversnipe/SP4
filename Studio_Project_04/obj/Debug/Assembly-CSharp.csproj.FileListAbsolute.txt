@@ -29,3 +29,34 @@ C:\Users\For work\Downloads\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.VR.
 C:\Users\For work\Downloads\SP4\Studio_Project_04\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\For work\Downloads\SP4\Studio_Project_04\obj\Debug\Assembly-CSharp.dll
 C:\Users\For work\Downloads\SP4\Studio_Project_04\obj\Debug\Assembly-CSharp.pdb
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\Assembly-CSharp.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\Assembly-CSharp.pdb
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\nunit.framework.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEditor.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.Analytics.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.HoloLens.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.Networking.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.TestRunner.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.UI.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.VR.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\Mono.Cecil.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\Unity.SerializationLogic.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\Unity.DataContract.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\ICSharpCode.NRefactory.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\Unity.UNetWeaver.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\Unity.CecilTools.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\Mono.Cecil.Pdb.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\Mono.Cecil.Mdb.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.xml
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEditor.xml
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.UI.xml
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.Networking.xml
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.TestRunner.xml
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\nunit.framework.xml
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.Analytics.xml
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.HoloLens.xml
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.VR.xml
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\obj\Debug\Assembly-CSharp.dll
+E:\School (NYP)\Studio Projects\SP4\SP4\Studio_Project_04\obj\Debug\Assembly-CSharp.pdb

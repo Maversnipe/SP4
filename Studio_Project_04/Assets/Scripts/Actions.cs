@@ -5,21 +5,21 @@ using UnityEngine;
 public class Actions : MonoBehaviour
 {
 	// Reference to the UnitManager's instance
-	private UnitManager unitmanager;
+	private TurnManager turnManager;
 
     public bool moving;
 	void Start()
 	{
-		unitmanager = UnitManager.instance;	
+		turnManager = TurnManager.Instance;	
 	}
 
     public void StartAttack()
     {
         // Check if unit is available and if unit can move
-        if (unitmanager.GetUnitToDoActions() != null && !unitmanager.AbleToAttack)
+		if (turnManager.GetCurrUnit() != null && !turnManager.GetAbleToAttack())
         {
             Debug.Log("Started attack.");
-            unitmanager.AbleToAttack = true;
+			turnManager.SetAbleToAttack(true);
         }
     }
 
@@ -27,11 +27,11 @@ public class Actions : MonoBehaviour
     public void StartMoving ()
 	{
 		// Check if unit is available and if unit can move
-		if (unitmanager.GetUnitToDoActions () != null && !unitmanager.AbleToMove)
+		if (turnManager.GetCurrUnit () != null && !turnManager.GetAbleToMove())
 		{
 			Debug.Log ("Started moving.");
-            unitmanager.StoppedMoving = false;
-			unitmanager.AbleToMove = true;
+			turnManager.SetStopMoving(false);
+			turnManager.SetAbleToMove(true);
             moving = true;
 		}
 	}
@@ -40,24 +40,24 @@ public class Actions : MonoBehaviour
 	public void SkipTurn ()
 	{
 		// Check if unit is available and if player can change to control another unit
-		if (unitmanager.GetUnitToDoActions () != null && !unitmanager.AbleToChangeUnit)
+		if (turnManager.GetCurrUnit () != null)
 		{
 			Debug.Log ("Skipped turn.");
-			unitmanager.AbleToChangeUnit = true;
-			unitmanager.SetUnitToDoActions (null);
+			turnManager.GetCurrUnit ().TurnEnd ();
+			turnManager.NextTurn ();
 		}
 	}
 
     void Update()
     {
-        if(unitmanager.openMenu && !unitmanager.AbleToChangeUnit && !moving && !unitmanager.AbleToAttack)
+		if(turnManager.GetOpenMenu() && !moving && !turnManager.GetAbleToAttack())
         {
             foreach (Transform child in transform)
             {
                 child.gameObject.SetActive(true);
             }
         }
-        else if(!unitmanager.openMenu || unitmanager.AbleToChangeUnit || moving || unitmanager.AbleToAttack)
+		else if(!turnManager.GetOpenMenu() || moving || turnManager.GetAbleToAttack())
         {
             foreach (Transform child in transform)
             {
@@ -65,14 +65,14 @@ public class Actions : MonoBehaviour
             }
         }
 
-        if (unitmanager.StoppedMoving)
+		if (turnManager.GetStopMoving())
         {
             moving = false;
         }
 
-        if(!unitmanager.AbleToChangeUnit)
+		if(!turnManager.GetAbleToChangeUnit())
         {
-            Vector3 temp = new Vector3(unitmanager.GetUnitToDoActions().transform.position.x, transform.position.y, unitmanager.GetUnitToDoActions().transform.position.z);
+            Vector3 temp = new Vector3(turnManager.GetCurrUnit().transform.position.x, transform.position.y, turnManager.GetCurrUnit().transform.position.z);
             transform.position = Camera.main.WorldToScreenPoint(temp);
         }
     }

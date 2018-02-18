@@ -13,7 +13,7 @@ public class EnemyUpdate : MonoBehaviour {
     private Color DefaultColor;
 
     // Reference to the UnitManager's instance
-    private UnitManager unitmanager;
+	private TurnManager turnManager;
 
     // Nodes
     public int nodeX;
@@ -22,18 +22,18 @@ public class EnemyUpdate : MonoBehaviour {
     private Nodes nextNode;
     // Use this for initialization
     void Start () {
-        unitmanager = UnitManager.instance;
-        currNode = GridSystem._instance.GetNode(nodeX, nodeZ);
+		turnManager = TurnManager.Instance;
+        currNode = GridSystem.Instance.GetNode(nodeX, nodeZ);
         transform.position = new Vector3(currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
     }
 
    void OnMouseDown()
     {
         //placeholder destroy script
-        if(unitmanager.AbleToAttack && !unitmanager.AbleToChangeUnit)
+		if(turnManager.GetAbleToAttack() && !turnManager.GetAbleToChangeUnit())
         {
             Destroy(this.gameObject);
-            unitmanager.AbleToAttack = false;
+            turnManager.SetAbleToAttack(false);
         }
     }
 

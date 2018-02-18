@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GridSystem : MonoBehaviour
+public class GridSystem : GenericSingleton<GridSystem>
 {
-	public static GridSystem _instance;
 	// Serializable private variables defining Grid
 	[SerializeField]
 	GameObject Ground;
@@ -18,14 +17,6 @@ public class GridSystem : MonoBehaviour
 
 	void Awake()
 	{
-		// Check if there is already an instance of the class
-		if(_instance != null)
-		{
-			Debug.LogError ("More than one GridSystem in scene!");
-			return;
-		}
-		_instance = this;
-
 		// Create Grid based on inputted number of rows and columns
 		Grid = new GameObject[Rows, Columns];
 

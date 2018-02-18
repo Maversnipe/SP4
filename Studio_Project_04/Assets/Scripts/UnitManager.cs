@@ -2,39 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UnitManager : MonoBehaviour
+public class UnitManager : GenericSingleton<UnitManager>
 {
-	// Public Reference for other class to access UnitManager
-	public static UnitManager instance;
-
 	// Units
-	public List<Units> AIUnitList = new List<Units>();
-	public List<Units> PlayerUnitList = new List<Units>();
+	private List<Units> AIUnitList = new List<Units>();
+	private List<Units> PlayerUnitList = new List<Units>();
 
-    // Determine if can change selected unit
-    public bool AbleToChangeUnit = true;
-	// Determine if can move selected unit
-	public bool AbleToMove = false;
-    public bool AbleToAttack = false;
-	// Determine if can move selected unit
-	public bool StoppedMoving = false;
-    public bool openMenu = false;
-
-	// A reference to the current selected unit
-	private GameObject UnitToDoActions;
 
 	void Awake ()
 	{
-		// Taking care of Singleton for UnityManager
-		if (instance != null)
-		{
-			Debug.LogError ("More than one UnitManager in scene!");
-			return;
-		}
-		instance = this;
 	}
 
-	// Add the unit into the list 
+	// Add the unit into the list using GameObject
 	public void AddUnit(GameObject GO)
 	{
 		Units newUnit = GO.GetComponent <Units> ();
@@ -51,42 +30,45 @@ public class UnitManager : MonoBehaviour
 		}
 	}
 
-	// Get the currently selected unit
-	public GameObject GetUnitToDoActions ()
+	// Add the unit into the list using Units class
+	public void AddUnit(Units newUnit)
 	{
-		return UnitToDoActions;
+		if(newUnit)
+		{
+			if (newUnit.IsPlayable ())
+			{
+				Debug.Log ("Playable");
+				PlayerUnitList.Add (newUnit);
+			} 
+			else
+			{
+				Debug.Log ("Not Playable");
+				AIUnitList.Add (newUnit);
+			}
+		}
 	}
 
-	// Change the reference to current selected unit
-	public void SetUnitToDoActions (GameObject Unit)
+	// Get the currently selected unit
+	public Units GetUnit (int _unitID)
 	{
-		UnitToDoActions = Unit;
+		foreach (var GO in PlayerUnitList)
+		{
+			if (GO.GetID () == _unitID)
+			{
+				return GO;
+			}
+		}
+		return null;
 	}
+
+	// Get the List of AI Units
+	public List<Units> GetAIList() {return AIUnitList;}
+
+	// Get the List of Player Units
+	public List<Units> GetPlayerList() {return PlayerUnitList;}
 
     void Update()
     {
-        if (UnitToDoActions != null && !AbleToMove && !AbleToAttack)
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
-                UnitToDoActions = null;
-                AbleToChangeUnit = true;
-            }
-        }
-        if (AbleToMove)
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
-               StoppedMoving = true;
-               AbleToMove = false;
-            }
-        }
-        if (AbleToAttack)
-        {
-            if (Input.GetMouseButtonDown(1))
-            {
-               AbleToAttack = false;
-            }
-        }
+       
     }
 }
