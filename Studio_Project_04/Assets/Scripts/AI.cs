@@ -38,6 +38,7 @@ public class AI : MonoBehaviour {
 	Vector3 TargetMovement;
 
 	List<Nodes> m_visited = new List<Nodes>();
+	List<Nodes> m_path = new List<Nodes>();
 	Nodes PrevNode;
 	Nodes CurrNode;
 
@@ -52,6 +53,9 @@ public class AI : MonoBehaviour {
 
 		if (_unit == null) {
 			Destroy (this.gameObject);
+		} else {
+			HP = _unit.getHP ();
+			AP = _unit.getAP ();
 		}
 
 		CurrNode = FindObjectOfType<GridSystem> ().GetNode (Random.Range (0, FindObjectOfType<GridSystem> ().getRows ()),

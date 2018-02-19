@@ -29,3 +29,4 @@ C:\Users\For work\Downloads\SP4\Studio_Project_04\Temp\bin\Debug\UnityEngine.VR.
 C:\Users\For work\Downloads\SP4\Studio_Project_04\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
 C:\Users\For work\Downloads\SP4\Studio_Project_04\obj\Debug\Assembly-CSharp.dll
 C:\Users\For work\Downloads\SP4\Studio_Project_04\obj\Debug\Assembly-CSharp.pdb
+C:\Users\Froust Lim\Documents\SP4\Studio_Project_04\obj\Debug\Assembly-CSharp.csprojResolveAssemblyReference.cache
