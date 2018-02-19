@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\AI.cs" />
      <Compile Include="Assets\Scripts\Actions.cs" />
      <Compile Include="Assets\Scripts\CameraControl.cs" />
+     <Compile Include="Assets\Scripts\CameraFollow.cs" />
      <Compile Include="Assets\Scripts\Databases\ArmorDatabase.cs" />
      <Compile Include="Assets\Scripts\Databases\UnitDatabase.cs" />
      <Compile Include="Assets\Scripts\Databases\WeaponDatabase.cs" />
@@ -57,6 +58,7 @@
      <Compile Include="Assets\Scripts\GridSystem.cs" />
      <Compile Include="Assets\Scripts\MainMenu.cs" />
      <Compile Include="Assets\Scripts\Nodes.cs" />
+     <Compile Include="Assets\Scripts\OpenControl.cs" />
      <Compile Include="Assets\Scripts\TurnManager.cs" />
      <Compile Include="Assets\Scripts\UI Nonsense Scripts\FillingUI.cs" />
      <Compile Include="Assets\Scripts\UnitManager.cs" />
