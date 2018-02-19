@@ -1,0 +1,14 @@
+[
+  {
+    "id": 0,
+    "title": "Health Potion",
+    "value": 25,
+    "type": "Consumable",
+    "modifier": "hp",
+    "modifier_value": 50,
+    "description": "Restores 50 HP.",
+    "stackable": true,
+    "rarity": "Common",
+    "icon": "health_potion"
+  }
+]
