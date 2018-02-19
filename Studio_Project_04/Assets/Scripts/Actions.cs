@@ -15,7 +15,6 @@ public class Actions : MonoBehaviour
 
     public void StartAttack()
 	{
-		playerManager.SetOpenMenu (false);
         // Check if unit is available and if unit can move
 		if (playerManager.GetSelectedUnit() != null && !playerManager.GetAbleToAttack())
         {
@@ -27,7 +26,6 @@ public class Actions : MonoBehaviour
     // Start moving the selected unit
     public void StartMoving ()
 	{
-		playerManager.SetOpenMenu (false);
 		// Check if unit is available and if unit can move
 		if (playerManager.GetSelectedUnit () != null && !playerManager.GetAbleToMove())
 		{
@@ -41,7 +39,6 @@ public class Actions : MonoBehaviour
 	// Skip current turn
 	public void SkipTurn ()
 	{
-		playerManager.SetOpenMenu (false);
 		// Check if unit is available and if player can change to control another unit
 		if (playerManager.GetSelectedUnit () != null)
 		{
@@ -53,8 +50,8 @@ public class Actions : MonoBehaviour
 
     void Update()
     {
-		if (playerManager.GetSelectedUnit () &&
-			playerManager.GetOpenMenu () && 
+		
+		if (playerManager.GetSelectedUnit () && playerManager.GetSelectedUnit ().menuOpen == true && 
 			!moving && !playerManager.GetAbleToAttack ())
 		{
 			foreach (Transform child in transform)
@@ -62,7 +59,7 @@ public class Actions : MonoBehaviour
 				child.gameObject.SetActive (true);
 			}
 		} 
-		else if (!playerManager.GetOpenMenu () || moving || 
+		else if (!playerManager.GetSelectedUnit ().menuOpen || moving || 
 			playerManager.GetAbleToAttack () || !TurnManager.Instance.IsPlayerTurn ())
 		{
 			foreach (Transform child in transform)

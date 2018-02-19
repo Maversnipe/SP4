@@ -69,8 +69,9 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		PlayerManager.Instance.SetAbleToAttack (false);
 		// Set stopped moving to false
 		PlayerManager.Instance.SetStopMoving (false);
-		// Set for menu to be open
-		PlayerManager.Instance.SetOpenMenu (true);
+
+		// Center the camera into the middle of the Grid
+		CameraReset ();
 	}
 
 	// Exit Player's Turn
@@ -88,8 +89,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		PlayerManager.Instance.SetAbleToAttack (false);
 		// Set stopped moving to false
 		PlayerManager.Instance.SetStopMoving (false);
-		// Set for menu to be closed
-		PlayerManager.Instance.SetOpenMenu (false);
 
 		// Start Next AI's Turn
 		NextTurn();
@@ -113,10 +112,15 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		}
 		else
 		{
-			Debug.Log ("HIHIHI");
 			// Start Player's Turn
 			EnterPlayerTurn ();
 		}
+	}
+
+	void CameraReset()
+	{
+		Camera.main.transform.position = new Vector3 (GridSystem.Instance.GetWidth () / 2.0f, 
+			Camera.main.transform.position.y, GridSystem.Instance.GetHeight () / 2.0f); 
 	}
 
 	// Set & Get Curr Unit

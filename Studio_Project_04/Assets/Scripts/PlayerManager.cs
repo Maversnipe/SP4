@@ -9,8 +9,6 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	private bool AbleToAttack;
 	// Determine if can move selected unit
 	private bool StoppedMoving;
-	// Determine if menu can open
-	private bool OpenMenu;
 	// Represents the selected Unit
 	private Units selectedUnit;
 	// Represents the list of player units in the current battle
@@ -25,8 +23,6 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		AbleToAttack = false;
 		// Set stopped moving to false
 		StoppedMoving = false;
-		// Set for menu to be closed
-		OpenMenu = false;
 		// Set the selected unit to NULL first
 		selectedUnit = 	null;
 	}
@@ -38,26 +34,29 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		{ // To deselect the selected unit
 			if (Input.GetMouseButtonDown(1))
 			{
+				selectedUnit.transform.GetChild (0).gameObject.SetActive (false);
+				selectedUnit.menuOpen = false;
 				selectedUnit.TurnEnd ();
 				selectedUnit = null;
-				OpenMenu = false;
 			}
 		}
 		if (AbleToMove)
 		{ // If move is clicked, you can deselect move 
 			if (Input.GetMouseButtonDown(1))
 			{
+				selectedUnit.transform.GetChild (0).gameObject.SetActive (true);
+				selectedUnit.menuOpen = true;
 				StoppedMoving = true;
 				AbleToMove = false;
-				OpenMenu = true;
 			}
 		}
 		if (AbleToAttack)
 		{ // If attack is clicked, you can deselect attack
 			if (Input.GetMouseButtonDown(1))
 			{
+				selectedUnit.transform.GetChild (0).gameObject.SetActive (true);
+				selectedUnit.menuOpen = true;
 				AbleToAttack = false;
-				OpenMenu = true;
 			}
 		}
 	}
@@ -83,9 +82,16 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// Set to not be able to attack
 		AbleToAttack = false;
 		// Set stopped moving to false
-		StoppedMoving = false;
+		StoppedMoving = true;
 		// Set for menu to be open
-		OpenMenu = true;
+		if (selectedUnit)
+		{
+			selectedUnit.menuOpen = true;
+		}
+//		else
+//		{
+//			selectedUnit.menuOpen = false;
+//		}
 	}
 
 	// Update the list of player units
@@ -111,7 +117,4 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	public bool GetStopMoving() {return StoppedMoving;}
 	public void SetStopMoving(bool _stopMove) {StoppedMoving = _stopMove;}
 
-	// Set & Get Unit Menu Open
-	public bool GetOpenMenu() {return OpenMenu;}
-	public void SetOpenMenu(bool _menu) {OpenMenu = _menu;}
 }

@@ -14,6 +14,8 @@ public class GridSystem : GenericSingleton<GridSystem>
 
 	// 2D Array of GameObjects(Grounds)
 	private GameObject[,] Grid;
+	private float width;
+	private float height;
 
 	void Awake()
 	{
@@ -40,6 +42,8 @@ public class GridSystem : GenericSingleton<GridSystem>
 				Grid [x, z] = GridGround;
 			}
 		}
+		width = (Rows - 1) + (0.2f * (Rows - 1));
+		height = (Columns - 1) + (0.2f * (Columns - 1));
 	}
 
 	public GameObject [,] GetGrid ()
@@ -49,17 +53,19 @@ public class GridSystem : GenericSingleton<GridSystem>
 
 	public Nodes GetNode(int _X, int _Z)
 	{
-		//Debug.Log ("X: " + Grid [_X, _Z].GetComponent <Nodes> ().GetXIndex () + " Z: " + Grid [_X, _Z].GetComponent <Nodes> ().GetZIndex ());
 		return Grid [_X, _Z].GetComponent <Nodes>();
 	}
 
-	public int getRows()
+	public int GetRows()
 	{
 		return Rows;
 	}
 
-	public int getColumn()
+	public int GetColumn()
 	{
 		return Columns;
 	}
+
+	public float GetWidth() { return width; }
+	public float GetHeight() { return height; }
 }

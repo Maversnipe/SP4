@@ -20,6 +20,8 @@ public class Units : MonoBehaviour
 	float initiative; // This determines which unit will be able to take the first turn
 	[SerializeField]
 	FACTION theFaction;
+	[SerializeField]
+	private bool isPlayable; // To show if unit is playable
 
 	// Reference to the unit's Components
 	private Renderer rend;
@@ -34,13 +36,14 @@ public class Units : MonoBehaviour
 	private Nodes currNode;
 	private Nodes nextNode;
 
-	// To show if unit is playable
-	private bool isPlayable;
 
 	// Unit's ID
 	private int ID;
 	private static int UnitCount = 5;
 	private float counter = 0.0f;
+
+	[SerializeField]
+	public bool menuOpen;
 
 	void Start ()
 	{
@@ -49,7 +52,7 @@ public class Units : MonoBehaviour
 		DefaultColor = rend.material.color;
 		// Code Optimising - Get UnitManager instance once only
 		turnManager = TurnManager.Instance;
-
+		menuOpen = false;
 		// Set a random initial position for unit
 		currNode = GridSystem.Instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
 		//currNode = GridSystem.Instance.GetNode(nodeX, nodeZ);
@@ -58,11 +61,6 @@ public class Units : MonoBehaviour
 		// Set Unit's ID
 		ID = UnitCount;
 		++UnitCount;
-
-		if (ID % 2 == 0)
-			isPlayable = true;
-		else
-			isPlayable = false;
 
 		// Add unit to unit manager
 		UnitManager.Instance.AddUnit (this);
@@ -78,7 +76,8 @@ public class Units : MonoBehaviour
 			if(this.isPlayable)
 			{
 				PlayerManager.Instance.ChangeUnit (this);
-				nextNode = null;
+				this.transform.GetChild (0).gameObject.SetActive (true);
+				//nextNode = null;
 			}
 		}
 	}
@@ -122,7 +121,6 @@ public class Units : MonoBehaviour
 				// Move the unit to clicked Node position
 				if (PlayerManager.Instance.GetAbleToMove () && !PlayerManager.Instance.GetStopMoving ())
 				{
-					Debug.Log ("Oh hi");
 					// Movement section
 					Vector3 targetPos = new Vector3 (nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
 					Vector3 dir = targetPos - transform.position;
@@ -143,9 +141,9 @@ public class Units : MonoBehaviour
 		{
 			if (this == turnManager.GetCurrUnit ())
 			{
-				// Input AI Code
+				// TODO: Input AI Code
 				counter += Time.deltaTime;
-				Debug.Log (counter);
+
 				if (counter >= 5.0f)
 				{
 					this.TurnEnd ();
@@ -170,6 +168,10 @@ public class Units : MonoBehaviour
 	// The reset for the end of each Unit's turn
 	public void TurnEnd()
 	{
+		if (this.isPlayable)
+		{ // If it is a playable unit
+			this.transform.GetChild (0).gameObject.SetActive (false);
+		}
 		// Set Color back to default
 		rend.material.color = DefaultColor;
 

@@ -64,30 +64,30 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase> {
 		Database.Add (new Weapon ("Silver Sword", 8, DamageTypes.SLASH, WeaponType.MELEE, 1));
 
 		// Pierce Damage Type
-		Database.Add (new Weapon ("Wooden Lance", 9, DamageTypes.PIERCE, WeaponType.MELEE, 1));
-		Database.Add (new Weapon ("Iron Lance", 10, DamageTypes.PIERCE, WeaponType.MELEE, 1));
-		Database.Add (new Weapon ("Steel Lance", 11, DamageTypes.PIERCE, WeaponType.MELEE, 1));
-		Database.Add (new Weapon ("Silver Lance", 12, DamageTypes.PIERCE, WeaponType.MELEE, 1));
+		Database.Add (new Weapon ("Wooden Lance", 5, DamageTypes.PIERCE, WeaponType.MELEE, 1));
+		Database.Add (new Weapon ("Iron Lance", 6, DamageTypes.PIERCE, WeaponType.MELEE, 1));
+		Database.Add (new Weapon ("Steel Lance", 7, DamageTypes.PIERCE, WeaponType.MELEE, 1));
+		Database.Add (new Weapon ("Silver Lance", 8, DamageTypes.PIERCE, WeaponType.MELEE, 1));
 
 		// Blunt Damage Type
-		Database.Add (new Weapon ("Wooden Hammer", 13, DamageTypes.BLUNT, WeaponType.MELEE, 1));
-		Database.Add (new Weapon ("Iron Hammer", 14, DamageTypes.BLUNT, WeaponType.MELEE, 1));
-		Database.Add (new Weapon ("Steel Hammer", 15, DamageTypes.BLUNT, WeaponType.MELEE, 1));
-		Database.Add (new Weapon ("Silver Hammer", 16, DamageTypes.BLUNT, WeaponType.MELEE, 1));
+		Database.Add (new Weapon ("Wooden Hammer", 5, DamageTypes.BLUNT, WeaponType.MELEE, 1));
+		Database.Add (new Weapon ("Iron Hammer", 6, DamageTypes.BLUNT, WeaponType.MELEE, 1));
+		Database.Add (new Weapon ("Steel Hammer", 7, DamageTypes.BLUNT, WeaponType.MELEE, 1));
+		Database.Add (new Weapon ("Silver Hammer", 8, DamageTypes.BLUNT, WeaponType.MELEE, 1));
 
 		// -----  Ranged Weapon Type ----- 
 
 		// Slash Damage Type
-		Database.Add (new Weapon ("Hachet", 1, DamageTypes.SLASH, WeaponType.RANGED, 2));
-		Database.Add (new Weapon ("Hand Axe", 2, DamageTypes.SLASH, WeaponType.RANGED, 2));
+		Database.Add (new Weapon ("Hachet", 2, DamageTypes.SLASH, WeaponType.RANGED, 2));
+		Database.Add (new Weapon ("Hand Axe", 3, DamageTypes.SLASH, WeaponType.RANGED, 2));
 
 		// Pierce Damage Type
-		Database.Add (new Weapon ("Bow", 4, DamageTypes.PIERCE, WeaponType.RANGED, 4));
-		Database.Add (new Weapon ("Cross Bow", 5, DamageTypes.PIERCE, WeaponType.RANGED, 4));
+		Database.Add (new Weapon ("Bow", 2, DamageTypes.PIERCE, WeaponType.RANGED, 2));
+		Database.Add (new Weapon ("Cross Bow", 3, DamageTypes.PIERCE, WeaponType.RANGED, 2));
 
 		// Blunt Damage Type
-		Database.Add (new Weapon ("Sling Shot", 7, DamageTypes.BLUNT, WeaponType.RANGED, 2));
-		Database.Add (new Weapon ("Boomerang", 8, DamageTypes.BLUNT, WeaponType.RANGED, 2)); // Have to move back to player
+		Database.Add (new Weapon ("Sling Shot", 2, DamageTypes.BLUNT, WeaponType.RANGED, 2));
+		Database.Add (new Weapon ("Boomerang", 3, DamageTypes.BLUNT, WeaponType.RANGED, 2)); // Have to move back to player
 	}
 	
 	// Update is called once per frame

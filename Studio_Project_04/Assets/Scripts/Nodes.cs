@@ -21,6 +21,9 @@ public class Nodes : MonoBehaviour
 	// Reference to the UnitManager's instance
 	private PlayerManager playerManager;
 
+	// Reference to the unit currently on the node
+	private Unit _OccupiedBy;
+
 	void Start ()
 	{
 		// Code Optimising - Get Renderer Component once only
@@ -102,7 +105,20 @@ public class Nodes : MonoBehaviour
 		Z = _z;
 	}
 
+	// Sets the unit's reference if the node is currently being taken
+	public void SetOccupied(Unit n_NewUnit)
+	{
+		_OccupiedBy = n_NewUnit;
+	}
+
+	// Resets the unit reference to null
+	public void SetOccupiedNULL()
+	{
+		_OccupiedBy = null;
+	}
+
 	// Get grid's index
 	public int GetXIndex() {return X;}
 	public int GetZIndex() {return Z;}
+	public Unit GetOccupied() {return _OccupiedBy;}
 }
