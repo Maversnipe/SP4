@@ -26,9 +26,11 @@ public class AI : MonoBehaviour {
 	[SerializeField]
 	public EnemyStrategy Personality;
 
+	// TO BE CHANGED TO PRIVATE LATER
 	[SerializeField]
 	int HP;
 
+	// TO BE CHANGED TO PRIVATE LATER
 	[SerializeField]
 	int AP;
 
@@ -61,6 +63,7 @@ public class AI : MonoBehaviour {
 		CurrNode = FindObjectOfType<GridSystem> ().GetNode (Random.Range (0, FindObjectOfType<GridSystem> ().getRows ()),
 															Random.Range (0, FindObjectOfType<GridSystem> ().getColumn ()));
 		m_visited.Add (CurrNode);
+		CurrNode.SetOccupied (_unit);
 
 		this.transform.position = CurrNode.transform.position;
 		TargetMovement = this.transform.position;
@@ -114,7 +117,8 @@ public class AI : MonoBehaviour {
 		int Choice = Random.Range (1, 5);
 		switch (Choice) {
 		case(1): // Up
-			if (CurrNode.GetZIndex () == FindObjectOfType<GridSystem> ().getColumn () - 1) {
+			if (CurrNode.GetZIndex () == FindObjectOfType<GridSystem> ().getColumn () - 1
+				|| CurrNode.GetOccupied() == null) {
 				return;
 			}
 			PrevNode = CurrNode;
@@ -123,16 +127,19 @@ public class AI : MonoBehaviour {
 			for (int i = 0; i < m_visited.Count; i++) {
 				//Checks if the current random node was visited before.
 				if (CurrNode.GetXIndex () == m_visited [i].GetXIndex () &&
-				   CurrNode.GetZIndex () == m_visited [i].GetZIndex ()) {
+				    CurrNode.GetZIndex () == m_visited [i].GetZIndex ()) {
 					CurrNode = PrevNode;
 					return;
 				}
 			}
 
 			m_visited.Add (CurrNode);
+			PrevNode.SetOccupiedNULL ();
+			CurrNode.SetOccupied (_unit);
 			break;
 		case(2): // Right
-			if (CurrNode.GetXIndex () == FindObjectOfType<GridSystem> ().getRows () - 1) {
+			if (CurrNode.GetXIndex () == FindObjectOfType<GridSystem> ().getRows () - 1
+				|| CurrNode.GetOccupied() == null) {
 				return;
 			}
 
@@ -149,9 +156,12 @@ public class AI : MonoBehaviour {
 			}
 
 			m_visited.Add (CurrNode);
+			PrevNode.SetOccupiedNULL ();
+			CurrNode.SetOccupied (_unit);
 			break;
 		case(3): // Down
-			if (CurrNode.GetZIndex () == 0) {
+			if (CurrNode.GetZIndex () == 0
+				|| CurrNode.GetOccupied() == null) {
 				return;
 			}
 
@@ -168,9 +178,12 @@ public class AI : MonoBehaviour {
 			}
 
 			m_visited.Add (CurrNode);
+			PrevNode.SetOccupiedNULL ();
+			CurrNode.SetOccupied (_unit);
 			break;
 		case(4): // Left
-			if (CurrNode.GetXIndex () == 0) {
+			if (CurrNode.GetXIndex () == 0
+				|| CurrNode.GetOccupied() == null) {
 				return;
 			}
 
@@ -187,6 +200,8 @@ public class AI : MonoBehaviour {
 			}
 
 			m_visited.Add (CurrNode);
+			PrevNode.SetOccupiedNULL ();
+			CurrNode.SetOccupied (_unit);
 			break;
 		}
 		AP--;
@@ -195,5 +210,15 @@ public class AI : MonoBehaviour {
 	void StrategicAction()
 	{
 
+	}
+
+	void BFS(Nodes Start, Nodes End)
+	{
+		
+	}
+
+	void DFS()
+	{
+		
 	}
 }
