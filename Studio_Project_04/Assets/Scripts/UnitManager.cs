@@ -8,11 +8,6 @@ public class UnitManager : GenericSingleton<UnitManager>
 	private List<Units> AIUnitList = new List<Units>();
 	private List<Units> PlayerUnitList = new List<Units>();
 
-
-	void Awake ()
-	{
-	}
-
 	// Add the unit into the list using GameObject
 	public void AddUnit(GameObject GO)
 	{
@@ -54,6 +49,13 @@ public class UnitManager : GenericSingleton<UnitManager>
 		foreach (var GO in PlayerUnitList)
 		{
 			if (GO.GetID () == _unitID)
+			{
+				return GO;
+			}
+		}
+		foreach (var GO in AIUnitList)
+		{
+			if(GO.GetID () == _unitID)
 			{
 				return GO;
 			}

@@ -40,6 +40,7 @@ public class Units : MonoBehaviour
 	// Unit's ID
 	private int ID;
 	private static int UnitCount = 5;
+	private float counter = 0.0f;
 
 	void Start ()
 	{
@@ -50,15 +51,18 @@ public class Units : MonoBehaviour
 		turnManager = TurnManager.Instance;
 
 		// Set a random initial position for unit
-		//currNode = GridSystem._instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
-		currNode = GridSystem.Instance.GetNode(nodeX, nodeZ);
+		currNode = GridSystem.Instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
+		//currNode = GridSystem.Instance.GetNode(nodeX, nodeZ);
 		transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
 
 		// Set Unit's ID
 		ID = UnitCount;
 		++UnitCount;
 
-		isPlayable = true;
+		if (ID % 2 == 0)
+			isPlayable = true;
+		else
+			isPlayable = false;
 
 		// Add unit to unit manager
 		UnitManager.Instance.AddUnit (this);
@@ -67,83 +71,115 @@ public class Units : MonoBehaviour
 	// Run only when Mouse click onto the unit
 	void OnMouseDown()
 	{
-//		if (turnManager.GetAbleToChangeUnit ())
-//		{
-//			Debug.Log ("Unit Selected.");
-//			turnManager.SetAbleToChangeUnit (false);
-//			//turnManager.SetUnitToDoActions (this.gameObject);
-//			Camera.main.transform.position = new Vector3(turnManager.GetCurrUnit ().transform.position.x, Camera.main.transform.position.y, turnManager.GetCurrUnit().transform.position.z);
-//			turnManager.SetOpenMenu (true);
-//			// Reset variables
-//			nextNode = null;
-//			turnManager.SetStopMoving (false);
-//		}
+		// If it is Player's turn
+		if(turnManager.IsPlayerTurn ())
+		{
+			// If can be played
+			if(this.isPlayable)
+			{
+				PlayerManager.Instance.ChangeUnit (this);
+				nextNode = null;
+			}
+		}
 	}
 
 	// Run only when Mouse cursor move into the unit collision box
 	void OnMouseEnter()
 	{
-//		if (turnManager.GetAbleToChangeUnit ())
-//		{
-//			// Change Color of unit to HoverColor
-//			rend.material.color = HoverColor;
-//		}
+		// If it is Player's turn
+		if (turnManager.IsPlayerTurn ())
+		{
+			if (this.isPlayable)
+			{
+				// Change Color of unit to HoverColor
+				rend.material.color = HoverColor;
+			}
+		}
 	}
 
 	// Run only when Mouse cursor move out of the unit collision box
 	void OnMouseExit()
 	{
-		if (turnManager.GetAbleToChangeUnit ())
+		// If it is Player's turn
+		if (turnManager.IsPlayerTurn ())
 		{
-			// Change Color of unit back to DefaultColor
-			rend.material.color = DefaultColor;
+			if (this.isPlayable && !PlayerManager.Instance.GetSelectedUnit ())
+			{
+				// Change Color of unit back to DefaultColor
+				rend.material.color = DefaultColor;
+			}
 		}
 	}
 
 	void Update()
 	{
-		if (nextNode == null)
-			return;
-		
-        // Move the unit to clicked Node position
-		if (!turnManager.GetAbleToMove () && !turnManager.GetStopMoving ())
+		if(this.isPlayable)
 		{
-			// Movement section
-			Vector3 targetPos = new Vector3(nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
-			Vector3 dir = targetPos - transform.position;
-			transform.Translate (dir.normalized * speed * Time.deltaTime, Space.World);
-
-			// Reset section
-			if (Vector3.Distance (transform.position, targetPos) <= 0.2f)
+			if (turnManager.IsPlayerTurn ())
 			{
-				// Reset variables
-				transform.position = targetPos;
-				TurnEnd ();
-				TurnManager.Instance.NextTurn ();
+				if (nextNode == null)
+					return;
+				// Move the unit to clicked Node position
+				if (PlayerManager.Instance.GetAbleToMove () && !PlayerManager.Instance.GetStopMoving ())
+				{
+					Debug.Log ("Oh hi");
+					// Movement section
+					Vector3 targetPos = new Vector3 (nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
+					Vector3 dir = targetPos - transform.position;
+					transform.Translate (dir.normalized * speed * Time.deltaTime, Space.World);
+
+					// Reset section
+					if (Vector3.Distance (transform.position, targetPos) <= 0.2f)
+					{
+						// Reset variables
+						transform.position = targetPos;
+						TurnEnd ();
+						PlayerManager.Instance.ChangeUnit (null);
+					}
+				}
+			}
+		}
+		else 
+		{
+			if (this == turnManager.GetCurrUnit ())
+			{
+				// Input AI Code
+				counter += Time.deltaTime;
+				Debug.Log (counter);
+				if (counter >= 5.0f)
+				{
+					this.TurnEnd ();
+					TurnManager.Instance.NextTurn ();
+					counter = 0.0f;
+				}
 			}
 		}
 	}
 
+	// Init for the start of each Unit's turn
 	public void TurnStart()
 	{
-		// Change camera's position to where the unit is located
-		Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
-		turnManager.SetOpenMenu (true);
-		// Reset variables
+		// Reset nextNode to null
 		nextNode = null;
-		turnManager.SetStopMoving (false);
-
+		// Set object to be highlighted
 		rend.material.color = HoverColor;
+		// Set Camera position to be the Unit's position
+		Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
 	}
 
+	// The reset for the end of each Unit's turn
 	public void TurnEnd()
 	{
-		turnManager.SetOpenMenu (false);
+		// Set Color back to default
 		rend.material.color = DefaultColor;
 
-		turnManager.SetStopMoving (true);
-		currNode = nextNode;
-		nextNode = null;
+		// If nextNode is not null, update currNode to be nextNode
+		// And null nextNode
+		if (nextNode)
+		{
+			currNode = nextNode;
+			nextNode = null;
+		}
 	}
 
 

@@ -48,16 +48,19 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\AI.cs" />
      <Compile Include="Assets\Scripts\Actions.cs" />
-     <Compile Include="Assets\Scripts\ArmorDatabase.cs" />
      <Compile Include="Assets\Scripts\CameraControl.cs" />
+     <Compile Include="Assets\Scripts\Databases\ArmorDatabase.cs" />
+     <Compile Include="Assets\Scripts\Databases\UnitDatabase.cs" />
+     <Compile Include="Assets\Scripts\Databases\WeaponDatabase.cs" />
      <Compile Include="Assets\Scripts\EnemyUpdate.cs" />
      <Compile Include="Assets\Scripts\GenericSingleton.cs" />
      <Compile Include="Assets\Scripts\GridSystem.cs" />
+     <Compile Include="Assets\Scripts\MainMenu.cs" />
      <Compile Include="Assets\Scripts\Nodes.cs" />
+     <Compile Include="Assets\Scripts\PlayerManager.cs" />
      <Compile Include="Assets\Scripts\TurnManager.cs" />
      <Compile Include="Assets\Scripts\UnitManager.cs" />
      <Compile Include="Assets\Scripts\Units.cs" />
-     <Compile Include="Assets\Scripts\WeaponDatabase.cs" />
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>

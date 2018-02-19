@@ -9,14 +9,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	private Queue<int> _queueOfUnits = new Queue<int>();
 	private Units currUnit;
 
-	// Determine if can change selected unit
-	private bool AbleToChangeUnit = true;
-	// Determine if can move selected unit
-	private bool AbleToMove = false;
-	private bool AbleToAttack = false;
-	// Determine if can move selected unit
-	private bool StoppedMoving = false;
-	private bool OpenMenu = false;
 	// Determine if it is player's turn or not
 	private bool PlayerTurn = false;
 
@@ -37,18 +29,15 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 			// Push the unit into the queue
 			_queueOfUnits.Enqueue (theUnit.GetID ());
+
 		}
 
 		// Player will always start first for each battle
 		EnterPlayerTurn ();
 
-
-
-//		int Num = _queueOfUnits.Dequeue ();
-//		currUnit = UnitManager.Instance.GetUnit (_queueOfUnits.Dequeue ());
-//
-//		_queueOfUnits.Enqueue (currUnit.GetID ());
-//		currUnit.TurnStart ();
+		// Add player to back of queue list
+		// Player is represented as -1 in the queue
+		_queueOfUnits.Enqueue(-1);
 	}
 
 	// Update is called once per frame
@@ -56,38 +45,13 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		// Enter Player Update only if it is Player's turn
 		if(PlayerTurn)
 		{
-			PlayerUpdate ();
+			// Update Player
+			PlayerManager.Instance.UpdatePlayerUnits();
 		}
-
-		if (currUnit != null && !AbleToMove && !AbleToAttack)
+		else
 		{
-			if (Input.GetMouseButtonDown(1))
-			{
-				currUnit = null;
-				AbleToChangeUnit = true;
-			}
+			// Update Enemy
 		}
-		if (AbleToMove)
-		{ 
-			if (Input.GetMouseButtonDown(1))
-			{
-				StoppedMoving = true;
-				AbleToMove = false;
-			}
-		}
-		if (AbleToAttack)
-		{
-			if (Input.GetMouseButtonDown(1))
-			{
-				AbleToAttack = false;
-			}
-		}
-	}
-
-	// Player's Update
-	public void PlayerUpdate()
-	{
-		
 	}
 
 	// Enter Player's turn
@@ -95,11 +59,18 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	{
 		// Set player's turn to true
 		PlayerTurn = true;
-		// Remove player from front of queue list
-		_queueOfUnits.Dequeue ();
 		// Set currUnit to null so that can switch to different unit's
 		// according to which unit player clicks on
 		currUnit = null;
+
+		// Set to not be able to move unit
+		PlayerManager.Instance.SetAbleToMove (false);
+		// Set to not be able to attack
+		PlayerManager.Instance.SetAbleToAttack (false);
+		// Set stopped moving to false
+		PlayerManager.Instance.SetStopMoving (false);
+		// Set for menu to be open
+		PlayerManager.Instance.SetOpenMenu (true);
 	}
 
 	// Exit Player's Turn
@@ -108,41 +79,51 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		// Set player's turn to false
 		PlayerTurn = false;
 
-		// Add player to back of queue list
-		// Player is represented as -1 in the queue
-		_queueOfUnits.Enqueue(-1);
+		// Set the selected unit to null
+		PlayerManager.Instance.SetSelectedUnit (null);
+	
+		// Set to not be able to move unit
+		PlayerManager.Instance.SetAbleToMove (false);
+		// Set to not be able to attack
+		PlayerManager.Instance.SetAbleToAttack (false);
+		// Set stopped moving to false
+		PlayerManager.Instance.SetStopMoving (false);
+		// Set for menu to be closed
+		PlayerManager.Instance.SetOpenMenu (false);
+
+		// Start Next AI's Turn
+		NextTurn();
 	}
 
 	// Set the next unit's turn
 	public void NextTurn()
 	{		
-		// Next turn's unit
-		currUnit = UnitManager.Instance.GetUnit (_queueOfUnits.Dequeue ());
-		_queueOfUnits.Enqueue (currUnit.GetID ());
-		currUnit.TurnStart ();
+		// Get the next turn's unit ID
+		int Num = _queueOfUnits.Dequeue ();
+		// Put next turn's unit ID at back of queue
+		_queueOfUnits.Enqueue (Num);
+
+		// Check if the next unit is supposed to be player
+		if (Num != -1)
+		{
+			// Set next turn's unit
+			currUnit = UnitManager.Instance.GetUnit (Num);
+			// Start next turn's unit's turn
+			currUnit.TurnStart ();
+		}
+		else
+		{
+			Debug.Log ("HIHIHI");
+			// Start Player's Turn
+			EnterPlayerTurn ();
+		}
 	}
 
 	// Set & Get Curr Unit
 	public Units GetCurrUnit() {return currUnit;}
 	public void SetCurrUnit(Units _nextUnit) {currUnit = _nextUnit;}
 
-	// Set & Get Unit Can Change
-	public bool GetAbleToChangeUnit() {return AbleToChangeUnit;}
-	public void SetAbleToChangeUnit(bool _canChange) {AbleToChangeUnit = _canChange;}
-
-	// Set & Get Unit Can Move
-	public bool GetAbleToMove() {return AbleToMove;}
-	public void SetAbleToMove(bool _canMove) {AbleToMove = _canMove;}
-
-	// Set & Get Unit Can Attack
-	public bool GetAbleToAttack() {return AbleToAttack;}
-	public void SetAbleToAttack(bool _canAttack) {AbleToAttack = _canAttack;}
-
-	// Set & Get Unit Stop Moving
-	public bool GetStopMoving() {return StoppedMoving;}
-	public void SetStopMoving(bool _stopMove) {StoppedMoving = _stopMove;}
-
-	// Set & Get Unit Menu Open
-	public bool GetOpenMenu() {return OpenMenu;}
-	public void SetOpenMenu(bool _menu) {OpenMenu = _menu;}
+	// Set & Get Player's Turn
+	public bool IsPlayerTurn() {return PlayerTurn;}
+	public void SetPlayerTurn(bool _turn) {PlayerTurn = _turn;}
 }

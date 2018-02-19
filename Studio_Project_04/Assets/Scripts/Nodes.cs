@@ -19,7 +19,7 @@ public class Nodes : MonoBehaviour
 	private Renderer rend;
 
 	// Reference to the UnitManager's instance
-	private TurnManager turnManager;
+	private PlayerManager playerManager;
 
 	void Start ()
 	{
@@ -28,17 +28,17 @@ public class Nodes : MonoBehaviour
 		HoverAlpha = HoverColor.a;
 		rend.material.color = HoverColor;
 		// Code Optimising - Get UnitManager instance once only
-		turnManager = TurnManager.Instance;
+		playerManager = PlayerManager.Instance;
 	}
 
 	// Run only when Mouse click onto the unit
 	void OnMouseDown()
 	{
 		// Check if unit is available and if unit can move
-		if (turnManager.GetCurrUnit () != null && turnManager.GetAbleToMove())
+		if (playerManager.GetSelectedUnit () != null && playerManager.GetAbleToMove())
 		{
 			// Get information from Units class
-			Units selectedUnitClass = turnManager.GetCurrUnit ().GetComponent<Units> ();
+			Units selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Units> ();
 			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 			// Limits move range to one grid from the player current node
@@ -48,7 +48,6 @@ public class Nodes : MonoBehaviour
 				(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X))
 			{
 				Debug.Log ("Node Selected.");
-				turnManager.SetAbleToMove (false);
 
 				// Set selected unit's target to this node's position
 				if (selectedUnitClass != null)
@@ -66,9 +65,9 @@ public class Nodes : MonoBehaviour
 	void OnMouseEnter()
 	{
 		// Check if unit is available and if unit can move
-		if (turnManager.GetCurrUnit () != null && turnManager.GetAbleToMove ())
+		if (playerManager.GetSelectedUnit () != null && playerManager.GetAbleToMove ())
 		{
-			Units selectedUnitClass = turnManager.GetCurrUnit ();
+			Units selectedUnitClass = playerManager.GetSelectedUnit ();
 			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 			// Limits move range to one grid from the player current node
@@ -88,7 +87,7 @@ public class Nodes : MonoBehaviour
 	void OnMouseExit()
 	{
 		// Check if unit is available and if unit can move
-		if (turnManager.GetCurrUnit () != null && turnManager.GetAbleToMove())
+		if (playerManager.GetSelectedUnit () != null && playerManager.GetAbleToMove())
 		{
 			// Change Visibility of Node back to translucent
 			HoverColor.a = HoverAlpha;

@@ -5,33 +5,35 @@ using UnityEngine;
 public class Actions : MonoBehaviour
 {
 	// Reference to the UnitManager's instance
-	private TurnManager turnManager;
+	private PlayerManager playerManager;
 
-    public bool moving;
+	public bool moving;
 	void Start()
 	{
-		turnManager = TurnManager.Instance;	
+		playerManager = PlayerManager.Instance;	
 	}
 
     public void StartAttack()
-    {
+	{
+		playerManager.SetOpenMenu (false);
         // Check if unit is available and if unit can move
-		if (turnManager.GetCurrUnit() != null && !turnManager.GetAbleToAttack())
+		if (playerManager.GetSelectedUnit() != null && !playerManager.GetAbleToAttack())
         {
             Debug.Log("Started attack.");
-			turnManager.SetAbleToAttack(true);
+			playerManager.SetAbleToAttack(true);
         }
     }
 
     // Start moving the selected unit
     public void StartMoving ()
 	{
+		playerManager.SetOpenMenu (false);
 		// Check if unit is available and if unit can move
-		if (turnManager.GetCurrUnit () != null && !turnManager.GetAbleToMove())
+		if (playerManager.GetSelectedUnit () != null && !playerManager.GetAbleToMove())
 		{
 			Debug.Log ("Started moving.");
-			turnManager.SetStopMoving(false);
-			turnManager.SetAbleToMove(true);
+			playerManager.SetStopMoving(false);
+			playerManager.SetAbleToMove(true);
             moving = true;
 		}
 	}
@@ -39,42 +41,47 @@ public class Actions : MonoBehaviour
 	// Skip current turn
 	public void SkipTurn ()
 	{
+		playerManager.SetOpenMenu (false);
 		// Check if unit is available and if player can change to control another unit
-		if (turnManager.GetCurrUnit () != null)
+		if (playerManager.GetSelectedUnit () != null)
 		{
 			Debug.Log ("Skipped turn.");
-			turnManager.GetCurrUnit ().TurnEnd ();
-			turnManager.NextTurn ();
+			playerManager.GetSelectedUnit ().TurnEnd ();
+			TurnManager.Instance.ExitPlayerTurn ();
 		}
 	}
 
     void Update()
     {
-		if(turnManager.GetOpenMenu() && !moving && !turnManager.GetAbleToAttack())
-        {
-            foreach (Transform child in transform)
-            {
-                child.gameObject.SetActive(true);
-            }
-        }
-		else if(!turnManager.GetOpenMenu() || moving || turnManager.GetAbleToAttack())
-        {
-            foreach (Transform child in transform)
-            {
-                child.gameObject.SetActive(false);
-            }
-        }
+		if (playerManager.GetSelectedUnit () &&
+			playerManager.GetOpenMenu () && 
+			!moving && !playerManager.GetAbleToAttack ())
+		{
+			foreach (Transform child in transform)
+			{
+				child.gameObject.SetActive (true);
+			}
+		} 
+		else if (!playerManager.GetOpenMenu () || moving || 
+			playerManager.GetAbleToAttack () || !TurnManager.Instance.IsPlayerTurn ())
+		{
+			foreach (Transform child in transform)
+			{
+				child.gameObject.SetActive (false);
+			}
+		}
 
-		if (turnManager.GetStopMoving())
-        {
-            moving = false;
-        }
+		if (playerManager.GetStopMoving ())
+		{
+			moving = false;
+		}
 
-		if(!turnManager.GetAbleToChangeUnit())
-        {
-            Vector3 temp = new Vector3(turnManager.GetCurrUnit().transform.position.x, transform.position.y, turnManager.GetCurrUnit().transform.position.z);
-            transform.position = Camera.main.WorldToScreenPoint(temp);
-        }
+
+//		if(!playerManager.GetAbleToChangeUnit())
+//        {
+//			Vector3 temp = new Vector3(playerManager.GetSelectedUnit().transform.position.x, transform.position.y, playerManager.GetSelectedUnit().transform.position.z);
+//            transform.position = Camera.main.WorldToScreenPoint(temp);
+//        }
     }
 
 }
