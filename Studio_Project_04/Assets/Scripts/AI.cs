@@ -40,9 +40,10 @@ public class AI : MonoBehaviour {
 	Vector3 TargetMovement;
 
 	List<Nodes> m_visited = new List<Nodes>();
-	List<Nodes> m_path = new List<Nodes>();
 	Nodes PrevNode;
 	Nodes CurrNode;
+
+	GameObject EnemyTarget;
 
 	// Use this for initialization
 	void Start () {
@@ -61,9 +62,9 @@ public class AI : MonoBehaviour {
 		}
 
 		CurrNode = FindObjectOfType<GridSystem> ().GetNode (Random.Range (0, FindObjectOfType<GridSystem> ().GetRows ()),
-															Random.Range (0, FindObjectOfType<GridSystem> ().GetColumn ()));
+			Random.Range (FindObjectOfType<GridSystem> ().GetColumn () - 2, FindObjectOfType<GridSystem> ().GetColumn ()));
 		m_visited.Add (CurrNode);
-		CurrNode.SetOccupied (_unit);
+		CurrNode.SetOccupied (this.gameObject);
 
 		this.transform.position = CurrNode.transform.position;
 		TargetMovement = this.transform.position;
@@ -104,7 +105,84 @@ public class AI : MonoBehaviour {
 
 	void AggressiveAction()
 	{
+		if (EnemyTarget == null) {
 
+			GameObject Temp = null;
+
+			for (int x = 0; x < FindObjectOfType<GridSystem> ().GetRows (); ++x) {
+				for (int z = 0; z < FindObjectOfType<GridSystem> ().GetColumn (); ++z) {
+					if (FindObjectOfType<GridSystem> ().GetNode (x, z).GetOccupied () != null &&
+					    FindObjectOfType<GridSystem> ().GetNode (x, z).GetOccupied ().tag == "PlayerUnit") {
+						if (Temp == null) {
+							Temp = FindObjectOfType<GridSystem> ().GetNode (x, z).GetOccupied ();
+						} else {
+							if ((FindObjectOfType<GridSystem> ().GetNode (x, z).GetOccupied ().transform.position - CurrNode.transform.position).magnitude > (Temp.transform.position - CurrNode.transform.position).magnitude) {
+								Temp = FindObjectOfType<GridSystem> ().GetNode (x, z).GetOccupied ();
+							}
+						}
+					}
+				}
+			}
+
+			EnemyTarget = Temp;
+		} else {
+			if (((FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex (), CurrNode.GetZIndex () + 1).GetOccupied() == EnemyTarget) && CurrNode.GetZIndex () != FindObjectOfType<GridSystem> ().GetColumn() - 1) // Up Check
+				|| ((FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex () + 1, CurrNode.GetZIndex ()).GetOccupied() == EnemyTarget) && CurrNode.GetXIndex () != FindObjectOfType<GridSystem> ().GetRows() - 1) // Right Check
+				|| ((FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex (), CurrNode.GetZIndex () - 1).GetOccupied() == EnemyTarget) && CurrNode.GetZIndex () != 0) // Down Check
+				|| ((FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex () - 1, CurrNode.GetZIndex ()).GetOccupied() == EnemyTarget) && CurrNode.GetXIndex () != 0)) // Left Check
+			{
+				EnemyTarget.GetComponent<Units> ().SetHP (EnemyTarget.GetComponent<Units> ().GetHP () - 1);
+			}
+			else
+			{
+				float UpMag = (CurrNode.transform.position - EnemyTarget.transform.position).magnitude,
+				RightMag = (CurrNode.transform.position - EnemyTarget.transform.position).magnitude,
+				DownMag = (CurrNode.transform.position - EnemyTarget.transform.position).magnitude,
+				LeftMag = (CurrNode.transform.position - EnemyTarget.transform.position).magnitude;
+
+				if (CurrNode.GetZIndex () != FindObjectOfType<GridSystem> ().GetColumn() - 1) {
+					UpMag = (FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex(), CurrNode.GetZIndex() + 1).transform.position - EnemyTarget.transform.position).magnitude;
+				}
+				if (CurrNode.GetXIndex () != FindObjectOfType<GridSystem> ().GetRows() - 1) {
+					RightMag = (FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex() + 1, CurrNode.GetZIndex()).transform.position - EnemyTarget.transform.position).magnitude;
+				}
+				if (CurrNode.GetZIndex () != 0) {
+					DownMag = (FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex(), CurrNode.GetZIndex() - 1).transform.position - EnemyTarget.transform.position).magnitude;
+				}
+				if (CurrNode.GetXIndex () != 0) {
+					LeftMag = (FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex() - 1, CurrNode.GetZIndex()).transform.position - EnemyTarget.transform.position).magnitude;
+				}
+
+				float Closest = Mathf.Min (UpMag, RightMag, DownMag, LeftMag);
+
+				if (UpMag == Closest) {
+
+					//print (UpMag + " vs " + Closest);
+					CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex(), CurrNode.GetZIndex() + 1);
+					print (UpMag);
+				}
+
+				else if (RightMag == Closest) {
+					//print (RightMag + " vs " + Closest);
+					CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex() + 1, CurrNode.GetZIndex());
+					print (RightMag);
+				}
+
+				else if (DownMag == Closest) {
+					//print (DownMag + " vs " + Closest);
+					CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex(), CurrNode.GetZIndex() - 1);
+					print (DownMag);
+				}
+
+				else if (LeftMag == Closest) {
+					//print (LeftMag + " vs " + Closest);
+					CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex() - 1, CurrNode.GetZIndex());
+					print (LeftMag);
+				}
+			}
+
+			AP--;
+		}
 	}
 
 	void DefensiveAction()
@@ -135,7 +213,7 @@ public class AI : MonoBehaviour {
 
 			m_visited.Add (CurrNode);
 			PrevNode.SetOccupiedNULL ();
-			CurrNode.SetOccupied (_unit);
+			CurrNode.SetOccupied (this.gameObject);
 			break;
 		case(2): // Right
 			if (CurrNode.GetXIndex () == FindObjectOfType<GridSystem> ().GetRows () - 1
@@ -157,7 +235,7 @@ public class AI : MonoBehaviour {
 
 			m_visited.Add (CurrNode);
 			PrevNode.SetOccupiedNULL ();
-			CurrNode.SetOccupied (_unit);
+			CurrNode.SetOccupied (this.gameObject);
 			break;
 		case(3): // Down
 			if (CurrNode.GetZIndex () == 0
@@ -179,7 +257,7 @@ public class AI : MonoBehaviour {
 
 			m_visited.Add (CurrNode);
 			PrevNode.SetOccupiedNULL ();
-			CurrNode.SetOccupied (_unit);
+			CurrNode.SetOccupied (this.gameObject);
 			break;
 		case(4): // Left
 			if (CurrNode.GetXIndex () == 0
@@ -201,7 +279,7 @@ public class AI : MonoBehaviour {
 
 			m_visited.Add (CurrNode);
 			PrevNode.SetOccupiedNULL ();
-			CurrNode.SetOccupied (_unit);
+			CurrNode.SetOccupied (this.gameObject);
 			break;
 		}
 		AP--;
@@ -209,10 +287,10 @@ public class AI : MonoBehaviour {
 
 	void StrategicAction()
 	{
-
+		
 	}
 
-	void BFS(Nodes Start, Nodes End)
+	void PathCheck(Nodes Start, Nodes End)
 	{
 		
 	}

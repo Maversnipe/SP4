@@ -22,7 +22,7 @@ public class Nodes : MonoBehaviour
 	private PlayerManager playerManager;
 
 	// Reference to the unit currently on the node
-	private Unit _OccupiedBy;
+	private GameObject _OccupiedBy;
 
 	void Start ()
 	{
@@ -106,7 +106,7 @@ public class Nodes : MonoBehaviour
 	}
 
 	// Sets the unit's reference if the node is currently being taken
-	public void SetOccupied(Unit n_NewUnit)
+	public void SetOccupied(GameObject n_NewUnit)
 	{
 		_OccupiedBy = n_NewUnit;
 	}
@@ -120,5 +120,5 @@ public class Nodes : MonoBehaviour
 	// Get grid's index
 	public int GetXIndex() {return X;}
 	public int GetZIndex() {return Z;}
-	public Unit GetOccupied() {return _OccupiedBy;}
+	public GameObject GetOccupied() {return _OccupiedBy;}
 }

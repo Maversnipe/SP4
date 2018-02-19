@@ -43,6 +43,9 @@ public class Units : MonoBehaviour
 	private float counter = 0.0f;
 
 	[SerializeField]
+	private int HP;
+
+	[SerializeField]
 	public bool menuOpen;
 
 	void Start ()
@@ -55,6 +58,7 @@ public class Units : MonoBehaviour
 		menuOpen = false;
 		// Set a random initial position for unit
 		currNode = GridSystem.Instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
+		currNode.SetOccupied (this.gameObject);
 		//currNode = GridSystem.Instance.GetNode(nodeX, nodeZ);
 		transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
 
@@ -204,4 +208,8 @@ public class Units : MonoBehaviour
 	// Get & Set Unit's Initiative
 	public float GetInitiative() {return initiative;}
 	public void SetInitiative(float _initiative) {initiative = _initiative;}
+
+	// Get & Set HP
+	public int GetHP() {return HP;}
+	public void SetHP(int n_HP) {HP = n_HP;}
 }
