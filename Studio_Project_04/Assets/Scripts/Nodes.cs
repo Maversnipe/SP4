@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Nodes : MonoBehaviour
 {
@@ -37,28 +38,52 @@ public class Nodes : MonoBehaviour
 	// Run only when Mouse click onto the unit
 	void OnMouseDown()
 	{
-		// Check if unit is available and if unit can move
-		if (playerManager.GetSelectedUnit () != null && playerManager.GetAbleToMove())
+		// Check if unit is available
+		if (playerManager.GetSelectedUnit () != null)
 		{
-			// Get information from Units class
-			Units selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Units> ();
-			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
-
-			// Limits move range to one grid from the player current node
-			if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
-				(unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
-				(unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
-				(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X))
+			// if unit can move
+			if (playerManager.GetAbleToMove ())
 			{
-				Debug.Log ("Node Selected.");
+				// Get information from Units class
+				Units selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Units> ();
+				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
-				// Set selected unit's target to this node's position
-				if (selectedUnitClass != null)
-					selectedUnitClass.SetNextNode (this);
+				// Limits move range to one grid from the player current node
+				if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
+				   (unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
+				   (unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
+				   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)) {
+					Debug.Log ("Node Selected.");
 
-				// Change Visibility of Node back to translucent
-				HoverColor.a = HoverAlpha;
-				rend.material.color = HoverColor;
+					// Set selected unit's target to this node's position
+					if (selectedUnitClass != null)
+						selectedUnitClass.SetNextNode (this);
+
+					// Change Visibility of Node back to translucent
+					HoverColor.a = HoverAlpha;
+					rend.material.color = HoverColor;
+				}
+			}
+
+			// if unit can attack
+			if (playerManager.GetAbleToAttack ())
+			{
+				// Get information from Units class
+				Units selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Units> ();
+				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
+
+				// Limits move range to one grid from the player current node
+				if (this.GetOccupied ())
+				{
+					if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
+					   (unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
+					   (unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
+					   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)) {
+						Destroy (this.GetOccupied ());
+
+						SceneManager.LoadScene ("SceneCleared");
+					}
+				}
 			}
 		}
 	}
@@ -67,21 +92,44 @@ public class Nodes : MonoBehaviour
 	// Visual feedback for player, show that he/she can clicked on these nodes
 	void OnMouseEnter()
 	{
-		// Check if unit is available and if unit can move
-		if (playerManager.GetSelectedUnit () != null && playerManager.GetAbleToMove ())
+		// Check if unit is available
+		if (playerManager.GetSelectedUnit () != null)
 		{
-			Units selectedUnitClass = playerManager.GetSelectedUnit ();
-			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
-
-			// Limits move range to one grid from the player current node
-			if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
-				(unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
-				(unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
-				(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X))
+			// if unit can move
+			if (playerManager.GetAbleToMove ()) 
 			{
-				// Change Visibility of Node to opague
-				HoverColor.a = 1.0f;
-				rend.material.color = HoverColor;
+				Units selectedUnitClass = playerManager.GetSelectedUnit ();
+				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
+
+				// Limits move range to one grid from the player current node
+				if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
+				   (unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
+				   (unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
+				   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)) {
+					// Change Visibility of Node to opague
+					HoverColor.a = 1.0f;
+					rend.material.color = HoverColor;
+				}
+			}
+			// if unit can attack
+			if (playerManager.GetAbleToAttack ())
+			{
+				// Get information from Units class
+				Units selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Units> ();
+				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
+
+				// Limits move range to one grid from the player current node
+				if (this.GetOccupied ())
+				{
+					if(unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z)
+						Debug.Log ("Right Node Occupied.");
+					if(unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z)
+						Debug.Log ("Left Node Occupied.");
+					if(unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X)
+						Debug.Log ("Up Node Occupied.");
+					if(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)
+						Debug.Log ("Down Node Occupied.");
+				}
 			}
 		}
 	}

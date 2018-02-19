@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Units : MonoBehaviour
 {
@@ -123,6 +124,9 @@ public class Units : MonoBehaviour
 
 	void Update()
 	{
+		if(Input.GetKeyDown("q"))
+			SceneManager.LoadScene ("SceneDefeated");
+		
 		if(this.isPlayable)
 		{
 			if (turnManager.IsPlayerTurn ())
