@@ -49,6 +49,13 @@ public class Units : MonoBehaviour
 	{
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
+
+		// if player, set to blue color, else red color
+		if (isPlayable)
+			rend.material.color = Color.blue;
+		else
+			rend.material.color = Color.red;
+		
 		DefaultColor = rend.material.color;
 		// Code Optimising - Get UnitManager instance once only
 		turnManager = TurnManager.Instance;
