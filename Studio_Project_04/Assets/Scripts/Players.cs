@@ -32,6 +32,11 @@ public class Players : MonoBehaviour
 
 	void Start ()
 	{
+		//Gathers the name from the Unit Variable
+		Stats = GetComponent<UnitVariables> ();
+		//Gathers the stats from the Json File
+		Stats = UnitDatabase.Instance.FetchUnitByName (Stats.Name);
+
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
 		DefaultColor = rend.material.color;

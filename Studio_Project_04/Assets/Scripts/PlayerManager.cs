@@ -173,4 +173,69 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Set & Get Unit Stop Moving
 	public bool GetIsMoving() {return isMoving;}
 	public void SetIsMoving(bool _stopMove) {isMoving = _stopMove;}
+
+	// Calculation of Damage Value for attacking
+	public int CalculateDamage(Players player, AI enemy)
+	{
+		Weapon weapon = player.getStats ()._weapon;
+		Armor armor = enemy.GetStats ()._armor;
+		int damageDeal = 1;
+
+		if (weapon.Type == "Slash")
+		{
+			// Strong against
+			if (armor.Type == "Light")
+			{
+				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
+			}
+			// Weak against
+			else if (armor.Type == "Heavy")
+			{
+				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
+			}
+			// Normal
+			else
+			{
+				damageDeal = Mathf.Max(1, weapon.Attack - armor.Defence);
+			}
+		}
+		else if (weapon.Type == "Pierce")
+		{
+			// Strong against
+			if (armor.Type == "Medium")
+			{
+				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
+			}
+			// Weak against
+			else if (armor.Type == "Light")
+			{
+				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
+			}
+			// Normal
+			else
+			{
+				damageDeal = Mathf.Max(1, weapon.Attack - armor.Defence);
+			}
+		}
+		else if (weapon.Type == "Blunt")
+		{
+			// Strong against
+			if (armor.Type == "Heavy")
+			{
+				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
+			}
+			// Weak against
+			else if (armor.Type == "Medium")
+			{
+				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
+			}
+			// Normal
+			else
+			{
+				damageDeal = Mathf.Max(1, weapon.Attack - armor.Defence);
+			}
+		}
+
+		return damageDeal;
+	}
 }
