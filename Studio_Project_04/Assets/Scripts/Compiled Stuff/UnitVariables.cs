@@ -40,7 +40,7 @@ public class UnitVariables : MonoBehaviour {
 		this._armor = ArmorDatabase.Instance.FetchArmorByName (armor);
 	}
 
-	public void Debug(UnitVariables RealStats)
+	public void Copy(UnitVariables RealStats)
 	{
 		this.Name = RealStats.Name;
 		this.HP = RealStats.HP;
