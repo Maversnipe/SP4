@@ -38,6 +38,9 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		// Add player to back of queue list
 		// Player is represented as -1 in the queue
 		_queueOfUnits.Enqueue(-1);
+
+		GameObject startbutton = GameObject.FindGameObjectWithTag ("StartBattleButton");
+		startbutton.SetActive (false);
 	}
 
 	// Update is called once per frame
