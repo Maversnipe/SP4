@@ -96,41 +96,32 @@ public class Players : MonoBehaviour
 	{
 		if(Input.GetKeyDown("q"))
 			SceneManager.LoadScene ("SceneDefeated");
+
+		if (PlayerManager.Instance.GetSelectedUnit () != this)
+			return;
+		
 		if (turnManager.IsPlayerTurn ())
-		{
-			if (nextNode == null)
-				return;
-			// Move the unit to clicked Node position
-			if (PlayerManager.Instance.GetAbleToMove () && PlayerManager.Instance.GetIsMoving ())
-			{
-				// Movement section
-				Vector3 targetPos = new Vector3 (nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
-				Vector3 dir = targetPos - transform.position;
-				transform.Translate (dir.normalized * 5 * Time.deltaTime, Space.World);
+			return;
 
-				// Reset section
-				if (Vector3.Distance (transform.position, targetPos) <= 0.2f)
-				{
-					// Reset variables
-					transform.position = targetPos;
-					TurnEnd ();
-					PlayerManager.Instance.ChangeUnit (null);
-				}
-			}
-		}
-		else 
-		{
-			if (this == turnManager.GetCurrUnit ())
-			{
-				// TODO: Input AI Code
-				counter += Time.deltaTime;
+		if (nextNode == null)
+			return;
 
-				if (counter >= 5.0f)
-				{
-					this.TurnEnd ();
-					TurnManager.Instance.NextTurn ();
-					counter = 0.0f;
-				}
+
+		// Move the unit to clicked Node position
+		if (PlayerManager.Instance.GetAbleToMove () && PlayerManager.Instance.GetIsMoving ())
+		{
+			// Movement section
+			Vector3 targetPos = new Vector3 (nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
+			Vector3 dir = targetPos - transform.position;
+			transform.Translate (dir.normalized * 5 * Time.deltaTime, Space.World);
+
+			// Reset section
+			if (Vector3.Distance (transform.position, targetPos) <= 0.2f)
+			{
+				// Reset variables
+				transform.position = targetPos;
+				TurnEnd ();
+				PlayerManager.Instance.ChangeUnit (null);
 			}
 		}
 	}
@@ -164,6 +155,7 @@ public class Players : MonoBehaviour
 		}
 	}
 
+	// BFS for unit
 
 	// Get & Set Current Node
 	public Nodes GetCurrNode() {return currNode;}
@@ -177,6 +169,6 @@ public class Players : MonoBehaviour
 	public int GetID() {return ID;}
 	public void SetID(int _id) {ID = _id;}
 
+	// Get Unit's Stats
 	public UnitVariables getStats() {return Stats;}
-	public void setStats(UnitVariables n_Stats) {Stats = n_Stats;}
 }

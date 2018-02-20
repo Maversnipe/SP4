@@ -32,7 +32,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 			// Push the AI unit into the queue
 			queueOfUnits.Enqueue (theAIUnit.GetID ());
-
 		}
 
 		// Player will always start first for each battle
