@@ -98,7 +98,7 @@ public class Nodes : MonoBehaviour
 			// if unit can move
 			if (playerManager.GetAbleToMove ()) 
 			{
-				Players selectedUnitClass = playerManager.GetSelectedUnit ();
+				Players selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Players> ();
 				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 				// Limits move range to one grid from the player current node
@@ -129,6 +129,10 @@ public class Nodes : MonoBehaviour
 						Debug.Log ("Up Node Occupied.");
 					if(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)
 						Debug.Log ("Down Node Occupied.");
+					
+					// Change Visibility of Node to opague
+					HoverColor.a = 1.0f;
+					rend.material.color = HoverColor;
 				}
 			}
 		}
@@ -138,11 +142,14 @@ public class Nodes : MonoBehaviour
 	void OnMouseExit()
 	{
 		// Check if unit is available and if unit can move
-		if (playerManager.GetSelectedUnit () != null && playerManager.GetAbleToMove())
+		if (playerManager.GetSelectedUnit () != null)
 		{
-			// Change Visibility of Node back to translucent
-			HoverColor.a = HoverAlpha;
-			rend.material.color = HoverColor;
+			if (playerManager.GetAbleToMove () || playerManager.GetAbleToAttack ()) 
+			{
+				// Change Visibility of Node back to translucent
+				HoverColor.a = HoverAlpha;
+				rend.material.color = HoverColor;
+			}
 		}
 	}
 
