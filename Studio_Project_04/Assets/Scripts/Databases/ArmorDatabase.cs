@@ -14,7 +14,7 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase>
 
 	// Use this for initialization
 	void Start () {
-        armorData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Armor.json"));
+        armorData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/UnitVariables.json"));
 
         ConstructArmorDatabase();
 

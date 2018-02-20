@@ -6,8 +6,9 @@ using UnityEngine;
 public class TurnManager : GenericSingleton<TurnManager> {
 	// List of the units in battle
 		// Identitfied by their 
-	private Queue<int> _queueOfUnits = new Queue<int>();
-	private Units currUnit;
+	private Queue<int> queueOfUnits = new Queue<int>();
+	private AI[] listOfAIUnits;
+	private AI currUnit;
 
 	// Determine if it is player's turn or not
 	private bool PlayerTurn = false;
@@ -15,20 +16,22 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	// This is called whenever the player starts a battle
 	public void StartBattle()
 	{
-		List<Units> listOfUnits = UnitManager.Instance.GetAIList ();
-		if (listOfUnits.Count == 0)
+		listOfAIUnits = FindObjectsOfType<AI> ();
+		if (listOfAIUnits.Count() == 0)
 			return;
+		Debug.Log ("The AI Count: " + listOfAIUnits.Count());
+
 
 		// Sort List based on each unit's initiative
 		// But if same initiative, sort by ID
-		listOfUnits = listOfUnits.OrderBy(x => x.GetInitiative()).ThenBy(x => x.GetID()).ToList ();
+		listOfAIUnits = listOfAIUnits.OrderBy(x => x.GetStats().Initiative).ThenBy(x => x.GetID()).ToArray ();
 
-		for(int i = 0; i < listOfUnits.Count; ++i)
-		{
-			Units theUnit = listOfUnits[i];
+		for(int i = 0; i < listOfAIUnits.Count(); ++i)
+		{ // Iterate through the list of AI
+			AI theAIUnit = listOfAIUnits[i];
 
-			// Push the unit into the queue
-			_queueOfUnits.Enqueue (theUnit.GetID ());
+			// Push the AI unit into the queue
+			queueOfUnits.Enqueue (theAIUnit.GetID ());
 
 		}
 
@@ -37,7 +40,7 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 		// Add player to back of queue list
 		// Player is represented as -1 in the queue
-		_queueOfUnits.Enqueue(-1);
+		queueOfUnits.Enqueue(-1);
 
 		GameObject startbutton = GameObject.FindGameObjectWithTag ("StartBattleButton");
 		startbutton.SetActive (false);
@@ -70,8 +73,8 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		PlayerManager.Instance.SetAbleToMove (false);
 		// Set to not be able to attack
 		PlayerManager.Instance.SetAbleToAttack (false);
-		// Set stopped moving to false
-		PlayerManager.Instance.SetStopMoving (false);
+		// Set is moving to false
+		PlayerManager.Instance.SetIsMoving (false);
 
 		// Center the camera into the middle of the Grid
 		CameraReset ();
@@ -90,8 +93,8 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		PlayerManager.Instance.SetAbleToMove (false);
 		// Set to not be able to attack
 		PlayerManager.Instance.SetAbleToAttack (false);
-		// Set stopped moving to false
-		PlayerManager.Instance.SetStopMoving (false);
+		// Set is moving to false
+		PlayerManager.Instance.SetIsMoving (false);
 
 		// Start Next AI's Turn
 		NextTurn();
@@ -101,15 +104,15 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	public void NextTurn()
 	{		
 		// Get the next turn's unit ID
-		int Num = _queueOfUnits.Dequeue ();
+		int Num = queueOfUnits.Dequeue ();
 		// Put next turn's unit ID at back of queue
-		_queueOfUnits.Enqueue (Num);
+		queueOfUnits.Enqueue (Num);
 
 		// Check if the next unit is supposed to be player
 		if (Num != -1)
 		{
 			// Set next turn's unit
-			currUnit = UnitManager.Instance.GetUnit (Num);
+			currUnit = FindAIUnit(Num);
 			// Start next turn's unit's turn
 			currUnit.TurnStart ();
 		}
@@ -120,15 +123,28 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		}
 	}
 
+	// Set camera to the position in the middle of the grid
 	void CameraReset()
 	{
 		Camera.main.transform.position = new Vector3 (GridSystem.Instance.GetWidth () / 2.0f, 
 			Camera.main.transform.position.y, GridSystem.Instance.GetHeight () / 2.0f); 
 	}
 
+	// Find AI Unit based on its ID
+	public AI FindAIUnit(int _id)
+	{
+		for (int i = 0; i < listOfAIUnits.Count (); ++i) 
+		{
+			if (listOfAIUnits [i].GetID () == _id)
+				return listOfAIUnits [i];
+		}
+
+		return null;
+	}
+
 	// Set & Get Curr Unit
-	public Units GetCurrUnit() {return currUnit;}
-	public void SetCurrUnit(Units _nextUnit) {currUnit = _nextUnit;}
+	public AI GetCurrUnit() {return currUnit;}
+	public void SetCurrUnit(AI _nextUnit) {currUnit = _nextUnit;}
 
 	// Set & Get Player's Turn
 	public bool IsPlayerTurn() {return PlayerTurn;}

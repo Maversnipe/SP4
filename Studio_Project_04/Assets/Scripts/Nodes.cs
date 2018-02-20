@@ -45,7 +45,7 @@ public class Nodes : MonoBehaviour
 			if (playerManager.GetAbleToMove ())
 			{
 				// Get information from Units class
-				Units selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Units> ();
+				Players selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Players> ();
 				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 				// Limits move range to one grid from the player current node
@@ -69,7 +69,7 @@ public class Nodes : MonoBehaviour
 			if (playerManager.GetAbleToAttack ())
 			{
 				// Get information from Units class
-				Units selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Units> ();
+				Players selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Players> ();
 				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 				// Limits move range to one grid from the player current node
@@ -98,7 +98,7 @@ public class Nodes : MonoBehaviour
 			// if unit can move
 			if (playerManager.GetAbleToMove ()) 
 			{
-				Units selectedUnitClass = playerManager.GetSelectedUnit ();
+				Players selectedUnitClass = playerManager.GetSelectedUnit ();
 				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 				// Limits move range to one grid from the player current node
@@ -115,7 +115,7 @@ public class Nodes : MonoBehaviour
 			if (playerManager.GetAbleToAttack ())
 			{
 				// Get information from Units class
-				Units selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Units> ();
+				Players selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Players> ();
 				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 				// Limits move range to one grid from the player current node

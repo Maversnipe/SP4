@@ -10,9 +10,6 @@ public class OpenControl : MonoBehaviour {
 	Vector3 TargetPosition;
 
 	[SerializeField]
-	GameObject Cursor;
-
-	[SerializeField]
 	GameObject MovePoint;
 
 	GameObject MovePointRef;

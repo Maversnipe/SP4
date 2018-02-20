@@ -1,0 +1,11 @@
+[
+  {
+    "name": "Trainee",
+    "hp": 20,
+    "ap": 7,
+    "initiative": 9,
+    "id": 0,
+    "weapon": "sword",
+    "armor": "leather_armor"
+  }
+]

@@ -4,117 +4,173 @@ using UnityEngine;
 
 public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Determine if can move selected unit
-	private bool AbleToMove;
+	private bool ableToMove;
 	// Determine if can use selected unit top attack
-	private bool AbleToAttack;
-	// Determine if can move selected unit
-	private bool StoppedMoving;
+	private bool ableToAttack;
+	// Determine if unit is moving
+	private bool isMoving;
 	// Represents the selected Unit
-	private Units selectedUnit;
-	// Represents the list of player units in the current battle
-	List<Units> ThePlayers;
+	private Players selectedPlayer;
 
 	// Use this for initialization
-	void Start () 
+	void Start ()
 	{
 		// Set to not be able to move unit
-		AbleToMove = false;
+		ableToMove = false;
 		// Set to not be able to attack
-		AbleToAttack = false;
+		ableToAttack = false;
 		// Set stopped moving to false
-		StoppedMoving = false;
+		isMoving = false;
 		// Set the selected unit to NULL first
-		selectedUnit = 	null;
+		selectedPlayer =  null;
 	}
-	
-	// Update Player Units during Player's turn
-	public void UpdatePlayerUnits () 
+
+	// Update Player during Player's turn
+	public void UpdatePlayerUnits ()
 	{
-		if (selectedUnit != null && !AbleToMove && !AbleToAttack)
-		{ // To deselect the selected unit
-			if (Input.GetMouseButtonDown(1))
-			{
-				selectedUnit.transform.GetChild (0).gameObject.SetActive (false);
-				selectedUnit.menuOpen = false;
-				selectedUnit.TurnEnd ();
-				selectedUnit = null;
-			}
+		// Exit function if it is not player's turn
+		if (!TurnManager.Instance.IsPlayerTurn ())
+			return;
+		// Check if there is a unit selected
+		if (selectedPlayer)
+		{
+			// Only update menu when selected unit is not null
+			UpdateMenu();
+
+			// Update the unit's movement
 		}
-		if (AbleToMove)
-		{ // If move is clicked, you can deselect move 
-			if (Input.GetMouseButtonDown(1))
-			{
-				selectedUnit.transform.GetChild (0).gameObject.SetActive (true);
-				selectedUnit.menuOpen = true;
-				StoppedMoving = true;
-				AbleToMove = false;
-			}
-		}
-		if (AbleToAttack)
-		{ // If attack is clicked, you can deselect attack
-			if (Input.GetMouseButtonDown(1))
-			{
-				selectedUnit.transform.GetChild (0).gameObject.SetActive (true);
-				selectedUnit.menuOpen = true;
-				AbleToAttack = false;
-			}
-		}
+
 	}
 
 	// If Player selects another unit
-	public void ChangeUnit(Units newUnit)
+	public void ChangeUnit(Players newUnit)
 	{
-		if (selectedUnit)
+		if (selectedPlayer)
 		{
 			// To reset the values for the unit
-			selectedUnit.TurnEnd ();
+			selectedPlayer.TurnEnd ();
 		}
 		// Set to the new selected unit
-		selectedUnit = newUnit;
-		if (selectedUnit)
+		selectedPlayer = newUnit;
+		if (selectedPlayer)
 		{
 			// Init the new selected unit
-			selectedUnit.TurnStart ();
+			selectedPlayer.TurnStart ();
 		}
 
 		// Set to not be able to move unit
-		AbleToMove = false;
+		ableToMove = false;
 		// Set to not be able to attack
-		AbleToAttack = false;
-		// Set stopped moving to false
-		StoppedMoving = true;
+		ableToAttack = false;
+		// Set unit is moving to false
+		isMoving = false;
 		// Set for menu to be open
-		if (selectedUnit)
+		if (selectedPlayer)
 		{
-			selectedUnit.menuOpen = true;
+			selectedPlayer.menuOpen = true;
 		}
-//		else
-//		{
-//			selectedUnit.menuOpen = false;
-//		}
 	}
 
-	// Update the list of player units
-	public void SetPlayerUnits()
+	// Update the menu for each unit
+	public void UpdateMenu()
 	{
-		// Set list to the new list
-		ThePlayers = UnitManager.Instance.GetPlayerList ();
+		// Only render the unit's menu if no action is selected
+		// And if the unit is not moving
+		if(selectedPlayer.menuOpen && !ableToAttack && !isMoving)
+		{
+			// This makes the Canvas in the unit to be active
+			selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
+
+		}
+		else if(!selectedPlayer.menuOpen || isMoving || ableToAttack)
+		{
+			// This makes the Canvas in the unit to be inactive
+			selectedPlayer.transform.GetChild (0).gameObject.SetActive (false);
+		}
+
+		// Check for deselection at the end
+		DeselectActions ();
+	}
+
+	// For deselecting an action
+	public void DeselectActions()
+	{
+		if (!ableToMove && !ableToAttack)
+		{ // To deselect the selected unit
+			if (Input.GetMouseButtonDown(1))
+			{
+				selectedPlayer.transform.GetChild (0).gameObject.SetActive (false);
+				selectedPlayer.menuOpen = false;
+				selectedPlayer.TurnEnd ();
+				selectedPlayer = null;
+			}
+		}
+		if (ableToMove)
+		{ // If move is clicked, you can deselect move
+			if (Input.GetMouseButtonDown(1))
+			{
+				selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
+				selectedPlayer.menuOpen = true;
+				isMoving = true;
+				ableToMove = false;
+			}
+		}
+		if (ableToAttack)
+		{ // If attack is clicked, you can deselect attack
+			if (Input.GetMouseButtonDown(1))
+			{
+				selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
+				selectedPlayer.menuOpen = true;
+				ableToAttack = false;
+			}
+		}
+	}
+
+	// Set the selected unit to be able to move
+	public void StartMoving()
+	{
+		// Check if unit is available and if unit can move
+		if(selectedPlayer && !ableToMove)
+		{
+			isMoving = true;
+			ableToMove = true;
+		}
+	}
+
+	// Set the selected unit to be able to attack
+	public void StartAttacking()
+	{
+		// Check if unit is available and if unit can attack
+		if(selectedPlayer && !ableToAttack)
+		{
+			ableToAttack = true;
+		}
+	}
+
+	// Skip current turn
+	public void SkipTurn()
+	{
+		// Check if unit is available and if unit can move
+		if(selectedPlayer)
+		{
+			selectedPlayer.TurnEnd ();
+			TurnManager.Instance.ExitPlayerTurn ();
+		}
 	}
 
 	// Set & Get Selected Unit
-	public Units GetSelectedUnit() {return selectedUnit;}
-	public void SetSelectedUnit(Units _nextUnit) {selectedUnit = _nextUnit;}
+	public Players GetSelectedUnit() {return selectedPlayer;}
+	public void SetSelectedUnit(Players _nextPlayerUnit) {selectedPlayer = _nextPlayerUnit;}
 
 	// Set & Get Unit Can Move
-	public bool GetAbleToMove() {return AbleToMove;}
-	public void SetAbleToMove(bool _canMove) {AbleToMove = _canMove;}
+	public bool GetAbleToMove() {return ableToMove;}
+	public void SetAbleToMove(bool _canMove) {ableToMove = _canMove;}
 
 	// Set & Get Unit Can Attack
-	public bool GetAbleToAttack() {return AbleToAttack;}
-	public void SetAbleToAttack(bool _canAttack) {AbleToAttack = _canAttack;}
+	public bool GetAbleToAttack() {return ableToAttack;}
+	public void SetAbleToAttack(bool _canAttack) {ableToAttack = _canAttack;}
 
 	// Set & Get Unit Stop Moving
-	public bool GetStopMoving() {return StoppedMoving;}
-	public void SetStopMoving(bool _stopMove) {StoppedMoving = _stopMove;}
-
+	public bool GetIsMoving() {return isMoving;}
+	public void SetIsMoving(bool _stopMove) {isMoving = _stopMove;}
 }

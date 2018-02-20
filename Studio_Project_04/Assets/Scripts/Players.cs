@@ -3,26 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class Units : MonoBehaviour
+public class Players : MonoBehaviour
 {
-	// To show if Unit is an ally or enemy
-	private enum FACTION
-	{
-		FACTION_ALLY,
-		FACTION_ENEMY,
-	}
-
 	// Serializable private variable defining Unit
 	[SerializeField]
 	Color HoverColor;
-	[SerializeField]
-	float speed = 5.0f;
-	[SerializeField]
-	float initiative; // This determines which unit will be able to take the first turn
-	[SerializeField]
-	FACTION theFaction;
-	[SerializeField]
-	private bool isPlayable; // To show if unit is playable
 
 	// Reference to the unit's Components
 	private Renderer rend;
@@ -37,14 +22,12 @@ public class Units : MonoBehaviour
 	private Nodes currNode;
 	private Nodes nextNode;
 
+	private UnitVariables Stats;
 
 	// Unit's ID
 	private int ID;
-	private static int UnitCount = 5;
+	private static int PlayerCount = 0;
 	private float counter = 0.0f;
-
-	[SerializeField]
-	private int HP;
 
 	[SerializeField]
 	public bool menuOpen;
@@ -54,11 +37,8 @@ public class Units : MonoBehaviour
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
 
-		// if player, set to blue color, else red color
-		if (isPlayable)
-			rend.material.color = Color.blue;
-		else
-			rend.material.color = Color.red;
+		// Set player to blue colour
+		rend.material.color = Color.blue;
 		
 		DefaultColor = rend.material.color;
 		// Code Optimising - Get UnitManager instance once only
@@ -71,11 +51,8 @@ public class Units : MonoBehaviour
 		transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
 
 		// Set Unit's ID
-		ID = UnitCount;
-		++UnitCount;
-
-		// Add unit to unit manager
-		UnitManager.Instance.AddUnit (this);
+		ID = PlayerCount;
+		++PlayerCount;
 	}
 
 	// Run only when Mouse click onto the unit
@@ -84,13 +61,9 @@ public class Units : MonoBehaviour
 		// If it is Player's turn
 		if(turnManager.IsPlayerTurn ())
 		{
-			// If can be played
-			if(this.isPlayable)
-			{
-				PlayerManager.Instance.ChangeUnit (this);
-				this.transform.GetChild (0).gameObject.SetActive (true);
-				//nextNode = null;
-			}
+			PlayerManager.Instance.ChangeUnit (this);
+			this.transform.GetChild (0).gameObject.SetActive (true);
+			//nextNode = null;
 		}
 	}
 
@@ -100,11 +73,8 @@ public class Units : MonoBehaviour
 		// If it is Player's turn
 		if (turnManager.IsPlayerTurn ())
 		{
-			if (this.isPlayable)
-			{
-				// Change Color of unit to HoverColor
-				rend.material.color = HoverColor;
-			}
+			// Change Color of unit to HoverColor
+			rend.material.color = HoverColor;
 		}
 	}
 
@@ -114,7 +84,7 @@ public class Units : MonoBehaviour
 		// If it is Player's turn
 		if (turnManager.IsPlayerTurn ())
 		{
-			if (this.isPlayable && !PlayerManager.Instance.GetSelectedUnit ())
+			if (!PlayerManager.Instance.GetSelectedUnit ())
 			{
 				// Change Color of unit back to DefaultColor
 				rend.material.color = DefaultColor;
@@ -126,29 +96,25 @@ public class Units : MonoBehaviour
 	{
 		if(Input.GetKeyDown("q"))
 			SceneManager.LoadScene ("SceneDefeated");
-		
-		if(this.isPlayable)
+		if (turnManager.IsPlayerTurn ())
 		{
-			if (turnManager.IsPlayerTurn ())
+			if (nextNode == null)
+				return;
+			// Move the unit to clicked Node position
+			if (PlayerManager.Instance.GetAbleToMove () && PlayerManager.Instance.GetIsMoving ())
 			{
-				if (nextNode == null)
-					return;
-				// Move the unit to clicked Node position
-				if (PlayerManager.Instance.GetAbleToMove () && !PlayerManager.Instance.GetStopMoving ())
-				{
-					// Movement section
-					Vector3 targetPos = new Vector3 (nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
-					Vector3 dir = targetPos - transform.position;
-					transform.Translate (dir.normalized * speed * Time.deltaTime, Space.World);
+				// Movement section
+				Vector3 targetPos = new Vector3 (nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
+				Vector3 dir = targetPos - transform.position;
+				transform.Translate (dir.normalized * 5 * Time.deltaTime, Space.World);
 
-					// Reset section
-					if (Vector3.Distance (transform.position, targetPos) <= 0.2f)
-					{
-						// Reset variables
-						transform.position = targetPos;
-						TurnEnd ();
-						PlayerManager.Instance.ChangeUnit (null);
-					}
+				// Reset section
+				if (Vector3.Distance (transform.position, targetPos) <= 0.2f)
+				{
+					// Reset variables
+					transform.position = targetPos;
+					TurnEnd ();
+					PlayerManager.Instance.ChangeUnit (null);
 				}
 			}
 		}
@@ -183,10 +149,9 @@ public class Units : MonoBehaviour
 	// The reset for the end of each Unit's turn
 	public void TurnEnd()
 	{
-		if (this.isPlayable)
-		{ // If it is a playable unit
-			this.transform.GetChild (0).gameObject.SetActive (false);
-		}
+		// If it is a playable unit
+		this.transform.GetChild (0).gameObject.SetActive (false);
+
 		// Set Color back to default
 		rend.material.color = DefaultColor;
 
@@ -208,19 +173,10 @@ public class Units : MonoBehaviour
 	public Nodes GetNextNode() {return nextNode;}
 	public void SetNextNode(Nodes _nextnode) {nextNode = _nextnode;}
 
-	// Get & Set if unit can be controlled
-	public bool IsPlayable() {return isPlayable;}
-	public void SetPlayable(bool _playable) {isPlayable = _playable;}
-
 	// Get & Set Unit's ID
 	public int GetID() {return ID;}
 	public void SetID(int _id) {ID = _id;}
 
-	// Get & Set Unit's Initiative
-	public float GetInitiative() {return initiative;}
-	public void SetInitiative(float _initiative) {initiative = _initiative;}
-
-	// Get & Set HP
-	public int GetHP() {return HP;}
-	public void SetHP(int n_HP) {HP = n_HP;}
+	public UnitVariables getStats() {return Stats;}
+	public void setStats(UnitVariables n_Stats) {Stats = n_Stats;}
 }
