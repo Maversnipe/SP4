@@ -17,14 +17,12 @@ public class AI : MonoBehaviour {
 	Vector3 TargetMovement;
 
 	private UnitVariables Stats;
-	private GridSystem GridRef;
 
 	// AI Unit's ID
 	private int ID;
 	private static int AICount = 0;
 	private float counter = 0.0f;
 
-	List<Nodes> m_visited = new List<Nodes>();
 	Nodes currNode;
 	Nodes nextNode;
 
@@ -33,25 +31,47 @@ public class AI : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		//Gathers the name from the Unit Variable
-		Stats = GetComponent<UnitVariables> ();
+		Stats = this.gameObject.GetComponent<UnitVariables> ();
 		//Gathers the stats from the Json File
-		Stats = UnitDatabase.Instance.FetchUnitByName (Stats.Name);
+		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (Stats.Name));
 
 		// Set AI Unit's ID
 		ID = AICount;
 		++AICount;
+
+		// Set the AI starting Position & occupies the current node
+		currNode = GridSystem.Instance.GetNode(Random.Range(0,GridSystem.Instance.GetRows()),Random.Range(0,GridSystem.Instance.GetColumn()));
+		//currNode = GridSystem.Instance.GetNode(0,0);
+		currNode.SetOccupied (this.gameObject);
+		this.transform.position = currNode.transform.position;
+		TargetMovement = this.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		// Used to see the variables change in real time in the inspector
-		GetComponent<UnitVariables> ().Debug (Stats);
+		GetComponent<UnitVariables> ().Copy (Stats);
 
-		// Updates the Grid Ref with the current grid
-		GridRef = FindObjectOfType<GridSystem> ();
 
 		if (Stats.AP != 0) {
+			print (this.gameObject.name + Stats.AP);
+			if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
+				switch (Personality) {
+				case(EnemyStrategy.AGGRESSIVE):
+					AggressiveAction ();
+					break;
+				case(EnemyStrategy.DEFENSIVE):
+					break;
+				case(EnemyStrategy.RANDOM):
+					RandomAction ();
+					break;
+				case(EnemyStrategy.STRATEGIC):
+					break;
+				}
 
+				TargetMovement = currNode.transform.position;
+			}
+		} else {
+			TurnEnd ();
 		}
 
 		this.transform.position += (TargetMovement - this.transform.position).normalized * 0.05f;
@@ -59,84 +79,93 @@ public class AI : MonoBehaviour {
 
 	void AggressiveAction()
 	{
-//		if (EnemyTarget == null) {
-//
-//			GameObject Temp = null;
-//
-//			for (int x = 0; x < FindObjectOfType<GridSystem> ().GetRows (); ++x) {
-//				for (int z = 0; z < FindObjectOfType<GridSystem> ().GetColumn (); ++z) {
-//					if (FindObjectOfType<GridSystem> ().GetNode (x, z).GetOccupied () != null &&
-//					    FindObjectOfType<GridSystem> ().GetNode (x, z).GetOccupied ().tag == "PlayerUnit") {
-//						if (Temp == null) {
-//							Temp = FindObjectOfType<GridSystem> ().GetNode (x, z).GetOccupied ();
-//						} else {
-//							if ((FindObjectOfType<GridSystem> ().GetNode (x, z).GetOccupied ().transform.position - CurrNode.transform.position).magnitude > (Temp.transform.position - CurrNode.transform.position).magnitude) {
-//								Temp = FindObjectOfType<GridSystem> ().GetNode (x, z).GetOccupied ();
-//							}
-//						}
-//					}
-//				}
-//			}
-//
-//			EnemyTarget = Temp;
-//		} else {
-//			if (((FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex (), CurrNode.GetZIndex () + 1).GetOccupied() == EnemyTarget) && CurrNode.GetZIndex () != FindObjectOfType<GridSystem> ().GetColumn() - 1) // Up Check
-//				|| ((FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex () + 1, CurrNode.GetZIndex ()).GetOccupied() == EnemyTarget) && CurrNode.GetXIndex () != FindObjectOfType<GridSystem> ().GetRows() - 1) // Right Check
-//				|| ((FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex (), CurrNode.GetZIndex () - 1).GetOccupied() == EnemyTarget) && CurrNode.GetZIndex () != 0) // Down Check
-//				|| ((FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex () - 1, CurrNode.GetZIndex ()).GetOccupied() == EnemyTarget) && CurrNode.GetXIndex () != 0)) // Left Check
-//			{
-//				EnemyTarget.GetComponent<Players> ().SetHP (EnemyTarget.GetComponent<Players> ().GetHP () - 1);
-//			}
-//			else
-//			{
-//				float UpMag = (CurrNode.transform.position - EnemyTarget.transform.position).magnitude,
-//				RightMag = (CurrNode.transform.position - EnemyTarget.transform.position).magnitude,
-//				DownMag = (CurrNode.transform.position - EnemyTarget.transform.position).magnitude,
-//				LeftMag = (CurrNode.transform.position - EnemyTarget.transform.position).magnitude;
-//
-//				if (CurrNode.GetZIndex () != FindObjectOfType<GridSystem> ().GetColumn() - 1) {
-//					UpMag = (FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex(), CurrNode.GetZIndex() + 1).transform.position - EnemyTarget.transform.position).magnitude;
-//				}
-//				if (CurrNode.GetXIndex () != FindObjectOfType<GridSystem> ().GetRows() - 1) {
-//					RightMag = (FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex() + 1, CurrNode.GetZIndex()).transform.position - EnemyTarget.transform.position).magnitude;
-//				}
-//				if (CurrNode.GetZIndex () != 0) {
-//					DownMag = (FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex(), CurrNode.GetZIndex() - 1).transform.position - EnemyTarget.transform.position).magnitude;
-//				}
-//				if (CurrNode.GetXIndex () != 0) {
-//					LeftMag = (FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex() - 1, CurrNode.GetZIndex()).transform.position - EnemyTarget.transform.position).magnitude;
-//				}
-//
-//				float Closest = Mathf.Min (UpMag, RightMag, DownMag, LeftMag);
-//
-//				if (UpMag == Closest) {
-//
-//					//print (UpMag + " vs " + Closest);
-//					CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex(), CurrNode.GetZIndex() + 1);
-//					print (UpMag);
-//				}
-//
-//				else if (RightMag == Closest) {
-//					//print (RightMag + " vs " + Closest);
-//					CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex() + 1, CurrNode.GetZIndex());
-//					print (RightMag);
-//				}
-//
-//				else if (DownMag == Closest) {
-//					//print (DownMag + " vs " + Closest);
-//					CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex(), CurrNode.GetZIndex() - 1);
-//					print (DownMag);
-//				}
-//
-//				else if (LeftMag == Closest) {
-//					//print (LeftMag + " vs " + Closest);
-//					CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex() - 1, CurrNode.GetZIndex());
-//					print (LeftMag);
-//				}
-//			}
-//
-//			AP--;
-//		}
+		if (EnemyTarget == null) {
+
+			GameObject Temp = null;
+
+			for (int x = 0; x < GridSystem.Instance.GetRows (); ++x) {
+				for (int z = 0; z < GridSystem.Instance.GetColumn (); ++z) {
+					if (GridSystem.Instance.GetNode (x, z).GetOccupied () != null &&
+						GridSystem.Instance.GetNode (x, z).GetOccupied ().tag == "PlayerUnit") {
+						if (Temp == null) {
+							Temp = GridSystem.Instance.GetNode (x, z).GetOccupied ();
+						} else {
+							if ((GridSystem.Instance.GetNode (x, z).GetOccupied ().transform.position - currNode.transform.position).magnitude > (Temp.transform.position - currNode.transform.position).magnitude) {
+								Temp = GridSystem.Instance.GetNode (x, z).GetOccupied ();
+							}
+						}
+					}
+				}
+			}
+
+			EnemyTarget = Temp;
+		} else {
+			
+			if ((currNode.GetZIndex() != GridSystem.Instance.GetColumn() - 1 && GridSystem.Instance.GetNode (currNode.GetXIndex (), currNode.GetZIndex () + 1).GetOccupied () == EnemyTarget)
+				|| (currNode.GetZIndex () != 0 && GridSystem.Instance.GetNode (currNode.GetXIndex (), currNode.GetZIndex () - 1).GetOccupied () == EnemyTarget)
+				|| (currNode.GetXIndex () != GridSystem.Instance.GetRows() - 1 && GridSystem.Instance.GetNode (currNode.GetXIndex () + 1, currNode.GetZIndex ()).GetOccupied () == EnemyTarget)
+				|| (currNode.GetXIndex () != 0 && GridSystem.Instance.GetNode (currNode.GetXIndex () - 1, currNode.GetZIndex ()).GetOccupied () == EnemyTarget)) {
+				EnemyTarget.GetComponent<UnitVariables> ().HP--;
+				print ("Player Hit");
+			} else {
+				float UpMag = (currNode.transform.position - EnemyTarget.transform.position).magnitude,
+				RightMag = (currNode.transform.position - EnemyTarget.transform.position).magnitude,
+				DownMag = (currNode.transform.position - EnemyTarget.transform.position).magnitude,
+				LeftMag = (currNode.transform.position - EnemyTarget.transform.position).magnitude;
+
+				if (currNode.GetZIndex () != GridSystem.Instance.GetColumn() - 1) {
+					UpMag = (GridSystem.Instance.GetNode (currNode.GetXIndex(), currNode.GetZIndex() + 1).transform.position - EnemyTarget.transform.position).magnitude;
+				}
+				if (currNode.GetXIndex () != GridSystem.Instance.GetRows() - 1) {
+					RightMag = (GridSystem.Instance.GetNode (currNode.GetXIndex() + 1, currNode.GetZIndex()).transform.position - EnemyTarget.transform.position).magnitude;
+				}
+				if (currNode.GetZIndex () != 0) {
+					DownMag = (GridSystem.Instance.GetNode (currNode.GetXIndex(), currNode.GetZIndex() - 1).transform.position - EnemyTarget.transform.position).magnitude;
+				}
+				if (currNode.GetXIndex () != 0) {
+					LeftMag = (GridSystem.Instance.GetNode (currNode.GetXIndex() - 1, currNode.GetZIndex()).transform.position - EnemyTarget.transform.position).magnitude;
+				}
+
+				float Closest = Mathf.Min (UpMag, RightMag, DownMag, LeftMag);
+
+				if (UpMag == Closest) {
+					if (GridSystem.Instance.GetNode (currNode.GetXIndex (), currNode.GetZIndex () + 1).GetOccupied() != null) {
+						Closest = Mathf.Min (RightMag, DownMag, LeftMag);
+					} else {
+						//print (UpMag + " vs " + Closest);
+						currNode.SetOccupiedNULL();
+						currNode = GridSystem.Instance.GetNode (currNode.GetXIndex(), currNode.GetZIndex() + 1);
+						currNode.SetOccupied (this.gameObject);
+						print ("Up Mag = " + UpMag);
+					}
+				}
+
+				if (RightMag == Closest) {
+					//print (RightMag + " vs " + Closest);
+					currNode.SetOccupiedNULL();
+					currNode = GridSystem.Instance.GetNode (currNode.GetXIndex() + 1, currNode.GetZIndex());
+					currNode.SetOccupied (this.gameObject);
+					print ("Right Mag = " + RightMag);
+				}
+
+				if (DownMag == Closest) {
+					//print (DownMag + " vs " + Closest);
+					currNode.SetOccupiedNULL();
+					currNode = GridSystem.Instance.GetNode (currNode.GetXIndex(), currNode.GetZIndex() - 1);
+					currNode.SetOccupied (this.gameObject);
+					print ("Down Mag = " + DownMag);
+				}
+
+				if (LeftMag == Closest) {
+					//print (LeftMag + " vs " + Closest);
+					currNode.SetOccupiedNULL();
+					currNode = GridSystem.Instance.GetNode (currNode.GetXIndex() - 1, currNode.GetZIndex());
+					currNode.SetOccupied (this.gameObject);
+					print ("Left Mag = " + LeftMag);
+				}
+			}
+			this.Stats.AP--;
+		}
 	}
 
 	void DefensiveAction()
@@ -240,16 +269,6 @@ public class AI : MonoBehaviour {
 	}
 
 	void StrategicAction()
-	{
-		
-	}
-
-	void PathCheck(Nodes Start, Nodes End)
-	{
-		
-	}
-
-	void DFS()
 	{
 		
 	}

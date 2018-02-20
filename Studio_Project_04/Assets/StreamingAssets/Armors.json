@@ -1,0 +1,19 @@
+[
+  {
+    "id": 0,
+    "title": "The Hax Sword",
+    "value": 696969,
+    "type": "Weapon",
+      "stats": {
+        "attack": 696969,
+        "strength": 6969,
+        "vitality": 6969,
+        "intelligence": 6969,
+        "dexterity": 6969
+    },
+    "description": "Hax sword of unlimited haxx",
+    "stackable": true,
+    "rarity": "Legendary",
+    "icon": "hax_sword"
+  }
+]

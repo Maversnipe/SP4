@@ -7,5 +7,15 @@
     "id": 0,
     "weapon": "sword",
     "armor": "leather_armor"
+  },
+
+  {
+    "name": "Mercenary",
+    "hp": 30,
+    "ap": 9,
+    "initiative": 11,
+    "id": 1,
+    "weapon": "sword",
+    "armor": "leather_armor"
   }
 ]

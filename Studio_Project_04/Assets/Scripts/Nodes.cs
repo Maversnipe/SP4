@@ -73,15 +73,25 @@ public class Nodes : MonoBehaviour
 				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 				// Limits move range to one grid from the player current node
-				if (this.GetOccupied ())
+				if (_OccupiedBy)
 				{
 					if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
 					   (unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
 					   (unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
-					   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)) {
-						Destroy (this.GetOccupied ());
+					   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X))
+					{
+						AI enemy = _OccupiedBy.GetComponent<AI> ();
+						int damageDeal = playerManager.CalculateDamage (selectedUnitClass, enemy);
 
-						SceneManager.LoadScene ("SceneCleared");
+						if (enemy.GetStats ().HP <= 0)
+						{
+							enemy.GetStats ().HP -= damageDeal;
+							Destroy (_OccupiedBy);
+						}
+						else
+							enemy.GetStats ().HP -= damageDeal;
+
+						//SceneManager.LoadScene ("SceneCleared");
 					}
 				}
 			}
@@ -98,7 +108,7 @@ public class Nodes : MonoBehaviour
 			// if unit can move
 			if (playerManager.GetAbleToMove ()) 
 			{
-				Players selectedUnitClass = playerManager.GetSelectedUnit ();
+				Players selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Players> ();
 				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 				// Limits move range to one grid from the player current node
@@ -119,7 +129,7 @@ public class Nodes : MonoBehaviour
 				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 				// Limits move range to one grid from the player current node
-				if (this.GetOccupied ())
+				if (_OccupiedBy)
 				{
 					if(unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z)
 						Debug.Log ("Right Node Occupied.");
@@ -129,6 +139,10 @@ public class Nodes : MonoBehaviour
 						Debug.Log ("Up Node Occupied.");
 					if(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)
 						Debug.Log ("Down Node Occupied.");
+					
+					// Change Visibility of Node to opague
+					HoverColor.a = 1.0f;
+					rend.material.color = HoverColor;
 				}
 			}
 		}
@@ -138,11 +152,14 @@ public class Nodes : MonoBehaviour
 	void OnMouseExit()
 	{
 		// Check if unit is available and if unit can move
-		if (playerManager.GetSelectedUnit () != null && playerManager.GetAbleToMove())
+		if (playerManager.GetSelectedUnit () != null)
 		{
-			// Change Visibility of Node back to translucent
-			HoverColor.a = HoverAlpha;
-			rend.material.color = HoverColor;
+			if (playerManager.GetAbleToMove () || playerManager.GetAbleToAttack ()) 
+			{
+				// Change Visibility of Node back to translucent
+				HoverColor.a = HoverAlpha;
+				rend.material.color = HoverColor;
+			}
 		}
 	}
 

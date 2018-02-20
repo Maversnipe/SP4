@@ -17,8 +17,6 @@ public class Players : MonoBehaviour
 	private TurnManager turnManager;
 
     // Nodes
-    public int nodeX;
-    public int nodeZ;
 	private Nodes currNode;
 	private Nodes nextNode;
 
@@ -34,12 +32,13 @@ public class Players : MonoBehaviour
 
 	void Start ()
 	{
+		//Gathers the name from the Unit Variable
+		Stats = GetComponent<UnitVariables> ();
+		//Gathers the stats from the Json File
+		Stats = UnitDatabase.Instance.FetchUnitByName (Stats.Name);
+
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
-
-		// Set player to blue colour
-		rend.material.color = Color.blue;
-		
 		DefaultColor = rend.material.color;
 		// Code Optimising - Get UnitManager instance once only
 		turnManager = TurnManager.Instance;
@@ -47,7 +46,6 @@ public class Players : MonoBehaviour
 		// Set a random initial position for unit
 		currNode = GridSystem.Instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
 		currNode.SetOccupied (this.gameObject);
-		//currNode = GridSystem.Instance.GetNode(nodeX, nodeZ);
 		transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
 
 		// Set Unit's ID
@@ -63,7 +61,6 @@ public class Players : MonoBehaviour
 		{
 			PlayerManager.Instance.ChangeUnit (this);
 			this.transform.GetChild (0).gameObject.SetActive (true);
-			//nextNode = null;
 		}
 	}
 
@@ -94,6 +91,7 @@ public class Players : MonoBehaviour
 
 	void Update()
 	{
+		// Cheat key to lose scene
 		if(Input.GetKeyDown("q"))
 			SceneManager.LoadScene ("SceneDefeated");
 
@@ -106,17 +104,35 @@ public class Players : MonoBehaviour
 		if (nextNode == null)
 			return;
 
+        // Checks if next Node has a unit inside
+        if (nextNode.GetOccupied() != null)
+        {
+            Debug.Log("Node is occupied by : " + nextNode.GetOccupied().name);
+            TurnEnd();
+            PlayerManager.Instance.ChangeUnit(null);
+            return;
+        }
 
-		// Move the unit to clicked Node position
-		if (PlayerManager.Instance.GetAbleToMove () && PlayerManager.Instance.GetIsMoving ())
+        // Move the unit to clicked Node position
+        if (PlayerManager.Instance.GetAbleToMove () && PlayerManager.Instance.GetIsMoving ())
 		{
 			// Movement section
 			Vector3 targetPos = new Vector3 (nextNode.transform.position.x, transform.position.y, nextNode.transform.position.z);
 			Vector3 dir = targetPos - transform.position;
 			transform.Translate (dir.normalized * 5 * Time.deltaTime, Space.World);
-
-			// Reset section
-			if (Vector3.Distance (transform.position, targetPos) <= 0.2f)
+            
+            // If node is reached
+            if (Vector3.Distance(transform.position, targetPos) <= 0.2f)
+            {
+                // Reset variables
+                transform.position = targetPos;
+                TurnEnd();
+                PlayerManager.Instance.ChangeUnit(null);
+            }
+        }
+		else 
+		{
+			if (this == turnManager.GetCurrUnit ())
 			{
 				// Reset variables
 				transform.position = targetPos;
@@ -150,7 +166,10 @@ public class Players : MonoBehaviour
 		// And null nextNode
 		if (nextNode)
 		{
+			//Debug.Log ("Before Move -> X: " + currNode.GetXIndex() + " Z: " + currNode.GetZIndex() + " Name: " + currNode.GetOccupied().name);
 			currNode = nextNode;
+			currNode.SetOccupied (this.gameObject);
+			//Debug.Log ("After Move -> X: " + currNode.GetXIndex() + " Z: " + currNode.GetZIndex() + " Name: " + currNode.GetOccupied().name);
 			nextNode = null;
 		}
 	}
