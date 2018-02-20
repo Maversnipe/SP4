@@ -17,8 +17,6 @@ public class Players : MonoBehaviour
 	private TurnManager turnManager;
 
     // Nodes
-    public int nodeX;
-    public int nodeZ;
 	private Nodes currNode;
 	private Nodes nextNode;
 
@@ -36,10 +34,6 @@ public class Players : MonoBehaviour
 	{
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
-
-		// Set player to blue colour
-		rend.material.color = Color.blue;
-		
 		DefaultColor = rend.material.color;
 		// Code Optimising - Get UnitManager instance once only
 		turnManager = TurnManager.Instance;
@@ -47,7 +41,6 @@ public class Players : MonoBehaviour
 		// Set a random initial position for unit
 		currNode = GridSystem.Instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
 		currNode.SetOccupied (this.gameObject);
-		//currNode = GridSystem.Instance.GetNode(nodeX, nodeZ);
 		transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
 
 		// Set Unit's ID
@@ -63,7 +56,6 @@ public class Players : MonoBehaviour
 		{
 			PlayerManager.Instance.ChangeUnit (this);
 			this.transform.GetChild (0).gameObject.SetActive (true);
-			//nextNode = null;
 		}
 	}
 
@@ -94,12 +86,20 @@ public class Players : MonoBehaviour
 
 	void Update()
 	{
+		// Cheat key to lose scene
 		if(Input.GetKeyDown("q"))
 			SceneManager.LoadScene ("SceneDefeated");
-		if (turnManager.IsPlayerTurn ())
-		{
+		
+		if (turnManager.IsPlayerTurn ()) {
 			if (nextNode == null)
 				return;
+			if (nextNode.GetOccupied () != null)
+			{
+				Debug.Log ("Node is occupied by : " + nextNode.GetOccupied ().name);
+				TurnEnd ();
+				PlayerManager.Instance.ChangeUnit (null);
+				return;
+			}
 			// Move the unit to clicked Node position
 			if (PlayerManager.Instance.GetAbleToMove () && PlayerManager.Instance.GetIsMoving ())
 			{
@@ -159,7 +159,10 @@ public class Players : MonoBehaviour
 		// And null nextNode
 		if (nextNode)
 		{
+			//Debug.Log ("Before Move -> X: " + currNode.GetXIndex() + " Z: " + currNode.GetZIndex() + " Name: " + currNode.GetOccupied().name);
 			currNode = nextNode;
+			currNode.SetOccupied (this.gameObject);
+			//Debug.Log ("After Move -> X: " + currNode.GetXIndex() + " Z: " + currNode.GetZIndex() + " Name: " + currNode.GetOccupied().name);
 			nextNode = null;
 		}
 	}
