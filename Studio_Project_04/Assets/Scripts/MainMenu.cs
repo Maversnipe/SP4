@@ -33,7 +33,7 @@ public class MainMenu : MonoBehaviour
 		}
 
 		if (FadeIn_Color.a >= 1 && Btn_Pressed == true) {
-			SceneManager.LoadScene ("SceneBase");
+			SceneManager.LoadScene ("SceneOpen");
 		}
 	}
 
