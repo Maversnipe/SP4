@@ -25,6 +25,19 @@ public class Nodes : MonoBehaviour
 	// Reference to the unit currently on the node
 	private GameObject _OccupiedBy;
 
+	/*=== For Player Movement ===*/
+	// To show if the tile can be selectable
+	private bool selectable;
+	// To show if the tile is on the path
+	private bool isPath;
+	// The colour of tile when it is selectable
+	private Color SelectableColor;
+	// The distance away from the current tile (For showing selectable tiles)
+		// Measured in num of tiles
+	private int dist;
+	// The Parent Node
+	private Nodes parent;
+
 	void Start ()
 	{
 		// Code Optimising - Get Renderer Component once only
@@ -33,6 +46,14 @@ public class Nodes : MonoBehaviour
 		rend.material.color = HoverColor;
 		// Code Optimising - Get UnitManager instance once only
 		playerManager = PlayerManager.Instance;
+		// Set selectable color
+		SelectableColor = Color.red;
+		SelectableColor.a = HoverAlpha;
+		// Set parent to null
+		parent = null;
+		// Set the dist to 0
+		dist = 0;
+
 	}
 
 	// Run only when Mouse click onto the unit
@@ -46,22 +67,18 @@ public class Nodes : MonoBehaviour
 			{
 				// Get information from Units class
 				Players selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Players> ();
-				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
-				// Limits move range to one grid from the player current node
-				if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
-				   (unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
-				   (unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
-				   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)) {
-					Debug.Log ("Node Selected.");
-
-					// Set selected unit's target to this node's position
+				// Check if the clicked node is selectable
+				if(this.selectable)
+				{
+					// Set the player's path
+					playerManager.SetPath (this);
+					// Set the player's next node
 					if (selectedUnitClass != null)
-						selectedUnitClass.SetNextNode (this);
+						selectedUnitClass.SetNextNode (selectedUnitClass.GetPath ().Pop());
 
-					// Change Visibility of Node back to translucent
-					HoverColor.a = HoverAlpha;
-					rend.material.color = HoverColor;
+					Debug.Log (selectedUnitClass.GetCurrNode ().GetXIndex () + ", " + selectedUnitClass.GetCurrNode ().GetZIndex ());
+					Debug.Log (selectedUnitClass.GetNextNode ().GetXIndex () + ", " + selectedUnitClass.GetNextNode ().GetZIndex ());
 				}
 			}
 
@@ -112,10 +129,8 @@ public class Nodes : MonoBehaviour
 				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 				// Limits move range to one grid from the player current node
-				if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
-				   (unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
-				   (unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
-				   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)) {
+				if (this.selectable) 
+				{
 					// Change Visibility of Node to opague
 					HoverColor.a = 1.0f;
 					rend.material.color = HoverColor;
@@ -156,9 +171,7 @@ public class Nodes : MonoBehaviour
 		{
 			if (playerManager.GetAbleToMove () || playerManager.GetAbleToAttack ()) 
 			{
-				// Change Visibility of Node back to translucent
-				HoverColor.a = HoverAlpha;
-				rend.material.color = HoverColor;
+				ChangeColour ();
 			}
 		}
 	}
@@ -182,8 +195,41 @@ public class Nodes : MonoBehaviour
 		_OccupiedBy = null;
 	}
 
+	// Change tile's colour
+	public void ChangeColour()
+	{
+		// If it is selectable, change the colour to the selectable colour
+		// Else change it back to original
+		if(selectable || isPath)
+		{ 
+			rend.material.color = SelectableColor;
+		}
+		else
+		{
+			// Change Visibility of Node back to translucent
+			HoverColor.a = HoverAlpha;
+			rend.material.color = HoverColor;
+		}
+	}
+
 	// Get grid's index
 	public int GetXIndex() {return X;}
 	public int GetZIndex() {return Z;}
 	public GameObject GetOccupied() {return _OccupiedBy;}
+
+	// Get & Set Selectable
+	public bool GetSelectable() {return selectable;}
+	public void SetSelectable(bool _select) {selectable = _select;}
+
+	// Get & Set Dist
+	public int GetDist() {return dist;}
+	public void SetDist(int _dist) {dist = _dist;}
+
+	// Get & Set Parent
+	public Nodes GetParent() {return parent;}
+	public void SetParent(Nodes _parent) {parent = _parent;}
+
+	// Get & Set Is Path
+	public bool GetIsPath() {return isPath;}
+	public void SetIsPath(bool _path) {isPath = _path;}
 }

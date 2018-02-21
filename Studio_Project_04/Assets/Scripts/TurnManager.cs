@@ -19,7 +19,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		listOfAIUnits = FindObjectsOfType<AI> ();
 		if (listOfAIUnits.Count() == 0)
 			return;
-		Debug.Log ("The AI Count: " + listOfAIUnits.Count());
 
 
 		// Sort List based on each unit's initiative
