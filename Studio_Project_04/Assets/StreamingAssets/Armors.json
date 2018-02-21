@@ -1,19 +1,260 @@
 [
   {
     "id": 0,
-    "title": "The Hax Sword",
-    "value": 696969,
-    "type": "Weapon",
-      "stats": {
-        "attack": 696969,
-        "strength": 6969,
-        "vitality": 6969,
-        "intelligence": 6969,
-        "dexterity": 6969
+    "title": "Nothing",
+    "value": 25,
+    "type": "Light",
+    "stats":
+    {
+      "defence": 0,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
     },
-    "description": "Hax sword of unlimited haxx",
-    "stackable": true,
+    "description": "Worn by Archer and Sniper.",
+    "stackable": false,
+    "rarity": "Common",
+    "icon": "nothing"
+  }
+  ,
+  {
+    "id": 1,
+    "title": "Cloth",
+    "value": 50,
+    "type": "Light",
+    "stats":
+    {
+      "defence": 1,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by Novice.",
+    "stackable": false,
+    "rarity": "Common",
+    "icon": "cloth"
+  }
+  ,
+  {
+    "id": 2,
+    "title": "Upgraded Cloth",
+    "value": 75,
+    "type": "Light",
+    "stats":
+    {
+      "defence": 2,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by Novice. Offers greater defence than normal clothes.",
+    "stackable": false,
+    "rarity": "Rare",
+    "icon": "upgraded_cloth"
+  }
+  ,
+  {
+    "id": 3,
+    "title": "Leather",
+    "value": 100,
+    "type": "Light",
+    "stats":
+    {
+      "defence": 3,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by Adventurer.",
+    "stackable": false,
+    "rarity": "Common",
+    "icon": "leather"
+  }
+  ,
+  {
+    "id": 4,
+    "title": "Upgraded Leather",
+    "value": 125,
+    "type": "Light",
+    "stats":
+    {
+      "defence": 4,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by Hero. Offers greater defence than normal leather armor.",
+    "stackable": false,
+    "rarity": "Rare",
+    "icon": "upgraded_leather"
+  }
+  
+  
+  
+  ,
+
+
+
+  {
+    "id": 5,
+    "title": "Wooden",
+    "value": 150,
+    "type": "Medium",
+    "stats":
+    {
+      "defence": 5,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by Trainee and Fighter.",
+    "stackable": false,
+    "rarity": "Rare",
+    "icon": "wooden"
+  }
+  ,
+  {
+    "id": 6,
+    "title": "Upgraded Wooden",
+    "value": 175,
+    "type": "Medium",
+    "stats":
+    {
+      "defence": 6,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by Mercenary. Offers greater defence than normal wooden breastplate.",
+    "stackable": false,
+    "rarity": "Epic",
+    "icon": "upgraded_wooden"
+  }
+  ,
+  {
+    "id": 7,
+    "title": "Iron",
+    "value": 200,
+    "type": "Medium",
+    "stats":
+    {
+      "defence": 7,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by Myrmidon and Warrior.",
+    "stackable": false,
+    "rarity": "Rare",
+    "icon": "iron"
+  }
+  ,
+  {
+    "id": 8,
+    "title": "Upgraded Iron",
+    "value": 225,
+    "type": "Medium",
+    "stats":
+    {
+      "defence": 8,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by SwordMaster. Offers greater defence than normal iron breastplate.",
+    "stackable": false,
+    "rarity": "Epic",
+    "icon": "upgraded_iron"
+  }
+  
+  
+
+  ,
+
+
+
+  {
+    "id": 9,
+    "title": "Steel",
+    "value": 250,
+    "type": "Heavy",
+    "stats":
+    {
+      "defence": 9,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by Brigand and Brigand Trainee.",
+    "stackable": false,
+    "rarity": "Epic",
+    "icon": "steel"
+  }
+  ,
+  {
+    "id": 10,
+    "title": "Upgraded Steel",
+    "value": 275,
+    "type": "Heavy",
+    "stats":
+    {
+      "defence": 10,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by Pirate. Offers greater defence than normal steel armor.",
+    "stackable": false,
     "rarity": "Legendary",
-    "icon": "hax_sword"
+    "icon": "upgraded_steel"
+  }
+  ,
+  {
+    "id": 11,
+    "title": "Silver",
+    "value": 300,
+    "type": "Heavy",
+    "stats":
+    {
+      "defence": 11,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by Corsair.",
+    "stackable": false,
+    "rarity": "Epic",
+    "icon": "silver"
+  }
+  ,
+  {
+    "id": 12,
+    "title": "Upgraded Silver",
+    "value": 325,
+    "type": "Heavy",
+    "stats":
+    {
+      "defence": 12,
+      "strength": 6969,
+      "vitality": 6969,
+      "intelligence": 6969,
+      "dexterity": 6969
+    },
+    "description": "Worn by Berserker. Offers greater defence than normal silver armor.",
+    "stackable": false,
+    "rarity": "Legendary",
+    "icon": "upgraded_silver"
   }
 ]

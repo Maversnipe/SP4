@@ -17,19 +17,16 @@ public class UnitVariables : MonoBehaviour {
 
 	//Take From Database
 	public string Name;
-
 	public int HP;
-
 	public int AP;
-
 	public int Initiative;
-
 	public int ID;
-
 	public Weapon _weapon;
 	public Armor _armor;
 
-	public UnitVariables (string name, int hp, int ap, int initiative, int id, string weapon, string armor)
+	public UnitVariables (string name, int hp, int ap,
+		int initiative, int id, string weapon,
+		string armor)
 	{
 		this.Name = name;
 		this.HP = hp;

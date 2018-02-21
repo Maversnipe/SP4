@@ -33,9 +33,10 @@ public class Players : MonoBehaviour
 	void Start ()
 	{
 		//Gathers the name from the Unit Variable
-		Stats = GetComponent<UnitVariables> ();
+		Stats = this.gameObject.GetComponent<UnitVariables> ();
 		//Gathers the stats from the Json File
-		Stats = UnitDatabase.Instance.FetchUnitByName (Stats.Name);
+		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (Stats.Name));
+
 
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
@@ -91,6 +92,8 @@ public class Players : MonoBehaviour
 
 	void Update()
 	{
+		this.gameObject.GetComponent<UnitVariables> ().Copy (Stats);
+
 		// Cheat key to lose scene
 		if(Input.GetKeyDown("q"))
 			SceneManager.LoadScene ("SceneDefeated");
@@ -101,6 +104,7 @@ public class Players : MonoBehaviour
 			if (nextNode.GetOccupied () != null)
 			{
 				Debug.Log ("Node is occupied by : " + nextNode.GetOccupied ().name);
+				nextNode = null;
 				TurnEnd ();
 				PlayerManager.Instance.ChangeUnit (null);
 				return;
@@ -164,6 +168,7 @@ public class Players : MonoBehaviour
 		// And null nextNode
 		if (nextNode)
 		{
+			currNode.SetOccupiedNULL();
 			//Debug.Log ("Before Move -> X: " + currNode.GetXIndex() + " Z: " + currNode.GetZIndex() + " Name: " + currNode.GetOccupied().name);
 			currNode = nextNode;
 			currNode.SetOccupied (this.gameObject);
@@ -185,6 +190,6 @@ public class Players : MonoBehaviour
 	public int GetID() {return ID;}
 	public void SetID(int _id) {ID = _id;}
 
-	public UnitVariables getStats() {return Stats;}
-	public void setStats(UnitVariables n_Stats) {Stats = n_Stats;}
+	public UnitVariables GetStats() {return Stats;}
+	public void SetStats(UnitVariables n_Stats) {Stats = n_Stats;}
 }

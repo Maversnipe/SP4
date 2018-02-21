@@ -52,8 +52,8 @@ public class Nodes : MonoBehaviour
 				if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
 				   (unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
 				   (unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
-				   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)) {
-					Debug.Log ("Node Selected.");
+				   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X))
+				{
 
 					// Set selected unit's target to this node's position
 					if (selectedUnitClass != null)
@@ -83,15 +83,13 @@ public class Nodes : MonoBehaviour
 						AI enemy = _OccupiedBy.GetComponent<AI> ();
 						int damageDeal = playerManager.CalculateDamage (selectedUnitClass, enemy);
 
+						enemy.GetStats ().HP -= damageDeal;
 						if (enemy.GetStats ().HP <= 0)
 						{
-							enemy.GetStats ().HP -= damageDeal;
 							Destroy (_OccupiedBy);
+							SceneManager.LoadScene ("SceneCleared");
 						}
-						else
-							enemy.GetStats ().HP -= damageDeal;
 
-						//SceneManager.LoadScene ("SceneCleared");
 					}
 				}
 			}
@@ -115,7 +113,8 @@ public class Nodes : MonoBehaviour
 				if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
 				   (unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
 				   (unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
-				   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)) {
+				   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X))
+				{
 					// Change Visibility of Node to opague
 					HoverColor.a = 1.0f;
 					rend.material.color = HoverColor;

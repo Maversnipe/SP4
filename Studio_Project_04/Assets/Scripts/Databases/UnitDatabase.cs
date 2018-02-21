@@ -74,7 +74,6 @@ public class UnitDatabase : GenericSingleton<UnitDatabase>
 			{
 				return unitDatabase[i];
 			}
-
 		}
 
 		return null;
@@ -84,7 +83,11 @@ public class UnitDatabase : GenericSingleton<UnitDatabase>
 	{
 		for(int i = 0; i < unitData.Count; i++)
 		{
-			unitDatabase.Add(new UnitVariables(unitData[i]["name"].ToString(), (int)unitData[i]["hp"], (int)unitData[i]["ap"], (int)unitData[i]["initiative"], (int)unitData[i]["id"], unitData[i]["weapon"].ToString(), unitData[i]["armor"].ToString()));
+			UnitVariables newUnit = new UnitVariables(unitData[i]["name"].ToString(), (int)unitData[i]["hp"], (int)unitData[i]["ap"],
+				(int)unitData[i]["initiative"], (int)unitData[i]["id"], unitData[i]["weapon"].ToString(),
+				unitData[i]["armor"].ToString());
+
+			unitDatabase.Add(newUnit);
 		}
 	}
 }
