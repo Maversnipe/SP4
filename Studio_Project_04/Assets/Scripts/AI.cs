@@ -50,6 +50,7 @@ public class AI : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		this.gameObject.GetComponent<UnitVariables> ().Copy (Stats);
+		this.gameObject.GetComponent<UnitVariables> ().UpdateHealthBar ();
 
 		if (Stats.AP != 0) {
 			//print (this.gameObject.name + Stats.AP);

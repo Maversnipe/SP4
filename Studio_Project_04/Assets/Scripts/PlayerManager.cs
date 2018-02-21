@@ -34,6 +34,9 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// Check if there is a unit selected
 		if (selectedPlayer)
 		{
+			// Update the unit's heathbar image
+			selectedPlayer.GetComponent<UnitVariables>().UpdateHealthBar();
+
 			// Only update menu when selected unit is not null
 			UpdateMenu();
 
