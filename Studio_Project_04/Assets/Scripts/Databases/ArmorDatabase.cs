@@ -14,7 +14,7 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase>
 
 	// Use this for initialization
 	void Start () {
-        armorData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/UnitVariables.json"));
+        armorData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Armors.json"));
 
         ConstructArmorDatabase();
 
@@ -52,9 +52,13 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase>
     {
         for(int i = 0; i < armorData.Count; i++)
         {
-            armorDatabase.Add(new Armor((int)armorData[i]["id"], armorData[i]["title"].ToString(), (int)armorData[i]["value"], armorData[i]["type"].ToString(),
-               (int)armorData[i]["stats"]["defence"], (int)armorData[i]["stats"]["strength"], (int)armorData[i]["stats"]["vitality"], (int)armorData[i]["stats"]["intelligence"]
-               , (int)armorData[i]["stats"]["dexterity"], armorData[i]["description"].ToString(), (bool)armorData[i]["stackable"], armorData[i]["rarity"].ToString(), armorData[i]["icon"].ToString()));
+			Armor newArmor = new Armor((int)armorData[i]["id"], armorData[i]["title"].ToString(), (int)armorData[i]["value"],
+				armorData[i]["type"].ToString(), (int)armorData[i]["stats"]["defence"], (int)armorData[i]["stats"]["strength"],
+				(int)armorData[i]["stats"]["vitality"], (int)armorData[i]["stats"]["intelligence"], (int)armorData[i]["stats"]["dexterity"],
+				armorData[i]["description"].ToString(), (bool)armorData[i]["stackable"], armorData[i]["rarity"].ToString(),
+				armorData[i]["icon"].ToString());
+			
+			armorDatabase.Add(newArmor);
         }
     }
 }
@@ -76,7 +80,11 @@ public class Armor
     public string Icon { get; set; }
     public Sprite Sprite { get; set; }
 
-    public Armor(int id, string title, int value, string type, int defence, int strength, int vitality, int intelligence, int dexterity, string description, bool stackable, string rarity, string icon)
+    public Armor(int id, string title, int value,
+		string type, int defence, int strength,
+		int vitality, int intelligence, int dexterity,
+		string description, bool stackable, string rarity,
+		string icon)
     {
         this.ID = id;
         this.Title = title;

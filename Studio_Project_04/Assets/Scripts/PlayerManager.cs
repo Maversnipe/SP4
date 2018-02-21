@@ -41,6 +41,9 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// Check if there is a unit selected
 		if (selectedPlayer)
 		{
+			// Update the unit's heathbar image
+			selectedPlayer.GetComponent<UnitVariables>().UpdateHealthBar();
+
 			// Only update menu when selected unit is not null
 			UpdateMenu();
 		}
@@ -183,7 +186,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Calculation of Damage Value for attacking
 	public int CalculateDamage(Players player, AI enemy)
 	{
-		Weapon weapon = player.getStats ()._weapon;
+		Weapon weapon = player.GetStats ()._weapon;
 		Armor armor = enemy.GetStats ()._armor;
 		int damageDeal = 1;
 

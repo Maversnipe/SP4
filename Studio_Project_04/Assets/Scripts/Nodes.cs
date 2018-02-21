@@ -66,7 +66,7 @@ public class Nodes : MonoBehaviour
 			if (playerManager.GetAbleToMove ())
 			{
 				// Get information from Units class
-				Players selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Players> ();
+				Players selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Players> ();                
 
 				// Check if the clicked node is selectable
 				if(this.selectable)
@@ -100,15 +100,13 @@ public class Nodes : MonoBehaviour
 						AI enemy = _OccupiedBy.GetComponent<AI> ();
 						int damageDeal = playerManager.CalculateDamage (selectedUnitClass, enemy);
 
+						enemy.GetStats ().HP -= damageDeal;
 						if (enemy.GetStats ().HP <= 0)
 						{
-							enemy.GetStats ().HP -= damageDeal;
 							Destroy (_OccupiedBy);
+							SceneManager.LoadScene ("SceneCleared");
 						}
-						else
-							enemy.GetStats ().HP -= damageDeal;
 
-						//SceneManager.LoadScene ("SceneCleared");
 					}
 				}
 			}
@@ -128,7 +126,6 @@ public class Nodes : MonoBehaviour
 				Players selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Players> ();
 				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
-				// Limits move range to one grid from the player current node
 				if (this.selectable) 
 				{
 					// Change Visibility of Node to opague
