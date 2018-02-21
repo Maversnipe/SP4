@@ -52,9 +52,13 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase>
     {
         for(int i = 0; i < weaponData.Count; i++)
         {
-            weaponDatabase.Add(new Weapon((int)weaponData[i]["id"], weaponData[i]["title"].ToString(), (int)weaponData[i]["value"], weaponData[i]["type"].ToString(),
-                (int)weaponData[i]["stats"]["attack"], (int)weaponData[i]["stats"]["strength"], (int)weaponData[i]["stats"]["vitality"], (int)weaponData[i]["stats"]["intelligence"]
-                , (int)weaponData[i]["stats"]["dexterity"], weaponData[i]["description"].ToString(), (bool)weaponData[i]["stackable"], weaponData[i]["rarity"].ToString(), weaponData[i]["icon"].ToString()));
+			Weapon newWeapon = new Weapon ((int)weaponData[i]["id"], weaponData[i]["title"].ToString(), (int)weaponData[i]["value"],
+				weaponData[i]["type"].ToString(), (int)weaponData[i]["stats"]["attack"], (int)weaponData[i]["stats"]["range"],
+				(int)weaponData[i]["stats"]["strength"], (int)weaponData[i]["stats"]["vitality"], (int)weaponData[i]["stats"]["intelligence"],
+				(int)weaponData[i]["stats"]["dexterity"], weaponData[i]["description"].ToString(), (bool)weaponData[i]["stackable"],
+				weaponData[i]["rarity"].ToString(), weaponData[i]["icon"].ToString());
+
+			weaponDatabase.Add(newWeapon);
         }
     }
 }
@@ -66,6 +70,7 @@ public class Weapon
     public int Value { get; set; }
     public string Type { get; set; }
     public int Attack { get; set; }
+	public int Range { get; set; }
     public int Strength { get; set; }
     public int Vitality { get; set; }
     public int Intelligence { get; set; }
@@ -76,13 +81,18 @@ public class Weapon
     public string Icon { get; set; }
     public Sprite Sprite { get; set; }
 
-    public Weapon(int id, string title, int value, string type, int attack, int strength, int vitality, int intelligence, int dexterity, string description, bool stackable, string rarity, string icon)
+	public Weapon(int id, string title, int value,
+		string type, int attack, int range,
+		int strength, int vitality, int intelligence,
+		int dexterity, string description, bool stackable,
+		string rarity, string icon)
     {
         this.ID = id;
         this.Title = title;
         this.Value = value;
         this.Type = type;
         this.Attack = attack;
+		this.Range = range;
         this.Strength = strength;
         this.Vitality = vitality;
         this.Intelligence = intelligence;

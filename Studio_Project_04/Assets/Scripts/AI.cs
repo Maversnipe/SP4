@@ -49,11 +49,12 @@ public class AI : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		GetComponent<UnitVariables> ().Copy (Stats);
-
+		this.gameObject.GetComponent<UnitVariables> ().Copy (Stats);
+		this.gameObject.GetComponent<UnitVariables> ().UpdateHealthBar ();
 
 		if (Stats.AP != 0) {
-			print (this.gameObject.name + Stats.AP);
+			// print (this.gameObject.name + " " + Stats.AP);
+
 			if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
 				switch (Personality) {
 				case(EnemyStrategy.AGGRESSIVE):

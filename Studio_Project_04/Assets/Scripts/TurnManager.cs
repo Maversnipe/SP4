@@ -19,7 +19,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		listOfAIUnits = FindObjectsOfType<AI> ();
 		if (listOfAIUnits.Count() == 0)
 			return;
-		Debug.Log ("The AI Count: " + listOfAIUnits.Count());
 
 
 		// Sort List based on each unit's initiative
@@ -32,7 +31,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 			// Push the AI unit into the queue
 			queueOfUnits.Enqueue (theAIUnit.GetID ());
-
 		}
 
 		// Player will always start first for each battle

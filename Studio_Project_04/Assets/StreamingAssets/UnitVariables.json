@@ -5,7 +5,199 @@
     "ap": 7,
     "initiative": 9,
     "id": 0,
-    "weapon": "sword",
-    "armor": "leather_armor"
+    "weapon": "Wooden Sword",
+    "armor": "Wooden"
+  }
+  ,
+  {
+    "name": "Mercenary",
+    "hp": 30,
+    "ap": 9,
+    "initiative": 11,
+    "id": 1,
+    "weapon": "Iron Sword",
+    "armor": "Upgraded Wooden"
+  }
+  ,
+  {
+    "name": "Myrmidon",
+    "hp": 40,
+    "ap": 11,
+    "initiative": 13,
+    "id": 2,
+    "weapon": "Steel Sword",
+    "armor": "Iron"
+  }
+  ,
+  {
+    "name": "Sword Master",
+    "hp": 50,
+    "ap": 13,
+    "initiative": 15,
+    "id": 3,
+    "weapon": "Silver Sword",
+    "armor": "Upgraded Iron"
+  }
+  ,
+  {
+    "name": "Fighter",
+    "hp": 20,
+    "ap": 7,
+    "initiative": 9,
+    "id": 4,
+    "weapon": "Hatchet",
+    "armor": "Wooden"
+  }
+  ,
+  {
+    "name": "Warrior",
+    "hp": 30,
+    "ap": 9,
+    "initiative": 11,
+    "id": 5,
+    "weapon": "Hand Axe",
+    "armor": "Iron"
+  }
+  
+  
+  
+  ,
+
+
+
+  {
+    "name": "Brigand",
+    "hp": 30,
+    "ap": 3,
+    "initiative": 5,
+    "id": 6,
+    "weapon": "Wooden Hammer",
+    "armor": "Steel"
+  }
+  ,
+  {
+    "name": "Pirate",
+    "hp": 40,
+    "ap": 5,
+    "initiative": 7,
+    "id": 7,
+    "weapon": "Iron Hammer",
+    "armor": "Upgraded Steel"
+  }
+  ,
+  {
+    "name": "Corsair",
+    "hp": 50,
+    "ap": 7,
+    "initiative": 9,
+    "id": 8,
+    "weapon": "Steel Hammer",
+    "armor": "Silver"
+  }
+  ,
+  {
+    "name": "Berserker",
+    "hp": 60,
+    "ap": 9,
+    "initiative": 11,
+    "id": 9,
+    "weapon": "Silver Hammer",
+    "armor": "Upgraded Silver"
+  }
+  ,
+  {
+    "name": "Brigand Trainee",
+    "hp": 30,
+    "ap": 3,
+    "initiative": 5,
+    "id": 10,
+    "weapon": "Sling Shot",
+    "armor": "Steel"
+  }
+  ,
+  {
+    "name": "Joker",
+    "hp": 40,
+    "ap": 5,
+    "initiative": 7,
+    "id": 11,
+    "weapon": "Boomerang",
+    "armor": "Silver"
+  }
+  
+  
+  
+  ,
+
+
+
+  {
+    "name": "Novice",
+    "hp": 10,
+    "ap": 5,
+    "initiative": 7,
+    "id": 12,
+    "weapon": "Wooden Lance",
+    "armor": "Cloth"
+  }
+  ,
+  {
+    "name": "Squire",
+    "hp": 20,
+    "ap": 7,
+    "initiative": 9,
+    "id": 13,
+    "weapon": "Iron Lance",
+    "armor": "Upgraded Cloth"
+  }
+  ,
+  {
+    "name": "Adventurer",
+    "hp": 30,
+    "ap": 9,
+    "initiative": 11,
+    "id": 14,
+    "weapon": "Steel Lance",
+    "armor": "Leather"
+  }
+  ,
+  {
+    "name": "Hero",
+    "hp": 40,
+    "ap": 11,
+    "initiative": 13,
+    "id": 15,
+    "weapon": "Silver Lance",
+    "armor": "Upgraded Leather"
+  }
+  ,
+  {
+    "name": "Archer",
+    "hp": 10,
+    "ap": 5,
+    "initiative": 7,
+    "id": 16,
+    "weapon": "Bow",
+    "armor": "Nothing"
+  }
+  ,
+  {
+    "name": "Sniper",
+    "hp": 20,
+    "ap": 7,
+    "initiative": 9,
+    "id": 17,
+    "weapon": "Cross Bow",
+    "armor": "Nothing"
+  }
+  ,
+  {
+    "name": "Hacker",
+    "hp": 1,
+    "ap": 999,
+    "initiative": 999,
+    "id": 17,
+    "weapon": "The Hax Sword",
+    "armor": "Nothing"
   }
 ]
