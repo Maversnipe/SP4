@@ -11,47 +11,36 @@ public class OpenControl : MonoBehaviour {
 	Vector3 TargetPosition;
 
 	[SerializeField]
+	float Speed;
+
+	[SerializeField]
 	GameObject MovePoint;
-
-	[SerializeField]
-	GameObject Dungeon1;
-
-	[SerializeField]
-	GameObject Dungeon2;
 
 	GameObject MovePointRef;
 
-	Vector3 Dungeon1Pos;
-	Vector3 Dungeon2Pos;
+	bool CanMove;
 
 	// Use this for initialization
 	void Start () {
 		CameraRef = FindObjectOfType<Camera> ().GetComponent<Camera>();
 		TargetPosition = this.transform.position;
 
-		Dungeon1Pos = new Vector3 (Dungeon1.transform.position.x, this.transform.position.y, Dungeon1.transform.position.z);
-		Dungeon2Pos = new Vector3 (Dungeon2.transform.position.x, this.transform.position.y, Dungeon2.transform.position.z);
+		CanMove = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetMouseButtonDown (0)) {
+		// Moves the unit towards the TargetPosition
+		if ((this.transform.position - TargetPosition).magnitude > 0.1f) {
+			this.transform.position += (TargetPosition - this.transform.position).normalized * Speed;
+		}
+
+		// Mouse Control
+		if (CanMove && Input.GetMouseButtonDown (0)) {
 			ClickOnSpot ();
 		}
 
-		// Check collision of player and "Dungeons"
-		if ((this.transform.position - Dungeon1Pos).magnitude < 3.5f) {
-			//Debug.Log ("Reached Dungeon 1");
-			SceneManager.LoadScene ("SceneBase");
-		}
-		if ((this.transform.position - Dungeon2Pos).magnitude < 3.5f) {
-			Debug.Log ("Reached Dungeon 2");
-		}
-
-		if ((this.transform.position - TargetPosition).magnitude > 0.1f) {
-			this.transform.position += (TargetPosition - this.transform.position).normalized * 0.05f;
-		}
-
+		// Removes the MovePointRef object IF it has not reached it's alpha limit and the unit has reached the targetposition
 		if (MovePointRef != null) {
 			if ((this.transform.position - MovePointRef.transform.position).magnitude < 0.1f) {
 				Destroy (MovePointRef);
@@ -60,18 +49,42 @@ public class OpenControl : MonoBehaviour {
 	}
 
 	void ClickOnSpot() {
+		RaycastHit collide;
 		Ray ray = CameraRef.ScreenPointToRay(Input.mousePosition);
-		Debug.DrawRay(ray.origin, ray.direction * 20, Color.yellow);
-		TargetPosition.x = this.transform.position.x + ray.direction.x * 40;
-		TargetPosition.z = this.transform.position.z + ray.direction.z * 40;
+
+		// Check if mouseclick has collided with any buildings
+		if (Physics.Raycast (ray, out collide)) {
+			if (collide.collider.tag == "Building") {
+				TargetPosition = collide.transform.GetChild (0).transform.position;
+			} else if (collide.collider.tag == "NPC") {
+				TargetPosition = collide.transform.position;
+			} else {
+				TargetPosition.x = this.transform.position.x + ray.direction.x * 30;
+				TargetPosition.z = this.transform.position.z + ray.direction.z * 30;
+			}
+		}
 
 		Quaternion Temp = Quaternion.Euler (90, 0, 0);
 		if (MovePointRef != null) {
-			MovePointRef.transform.position = TargetPosition;
-		} else {
-			MovePointRef = (Instantiate (MovePoint, TargetPosition, Temp));
+			Destroy (MovePointRef);
 		}
 
-		//Debug.Log (ray.direction);
+		MovePointRef = (Instantiate (MovePoint, TargetPosition, Temp));
+	}
+
+	// Instantly stops the player from moving but does not prevent the player from moving further
+	public void StopMoving() {
+		TargetPosition = this.transform.position;
+	}
+
+	// Gets the target position
+	public Vector3 getTarget() {
+		return TargetPosition;
+	}
+
+	// To Prevent player from moving altogether
+	public void setAbleToMove(bool Setter)
+	{
+		CanMove = Setter;
 	}
 }
