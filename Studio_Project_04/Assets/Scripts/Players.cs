@@ -45,7 +45,6 @@ public class Players : MonoBehaviour
 		//Gathers the stats from the Json File
 		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (Stats.Name));
 
-
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
 		DefaultColor = rend.material.color;
@@ -143,8 +142,12 @@ public class Players : MonoBehaviour
 				nextNode.ChangeColour ();
 				if (path.Count > 0)
 				{
+					// Set the curr node's occupied to null
+					currNode.SetOccupiedNULL ();
 					// Set curr node as the next node
 					currNode = nextNode;
+					// Set the new curr node's occupied to this unit
+					currNode.SetOccupied (this.gameObject);
 					// Set the next node
 					nextNode = path.Pop ();
 				} 
@@ -186,8 +189,9 @@ public class Players : MonoBehaviour
 			currNode.SetOccupiedNULL();
 			//Debug.Log ("Before Move -> X: " + currNode.GetXIndex() + " Z: " + currNode.GetZIndex() + " Name: " + currNode.GetOccupied().name);
 			currNode = nextNode;
+			// Set curr node as occupied by this unit
 			currNode.SetOccupied (this.gameObject);
-			//Debug.Log ("After Move -> X: " + currNode.GetXIndex() + " Z: " + currNode.GetZIndex() + " Name: " + currNode.GetOccupied().name);
+			// Set next node to be null
 			nextNode = null;
 		}
 	}

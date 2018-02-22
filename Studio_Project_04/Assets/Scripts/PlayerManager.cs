@@ -270,67 +270,89 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		{
 			Nodes temp = theQueue.Dequeue ();
 
-			selectableNodes.Add (temp);
-
-			temp.SetSelectable (true);
-			temp.ChangeColour ();
-
 			// Do not check tiles if the dist of furthest tile is more than max dist
 			if (temp.GetDist () < 3)
 			{
+				// Get the nodes adjacent to the temp node
+				Nodes tempUp = null; 
+				Nodes tempLeft = null;
+				Nodes tempDown = null;
+				Nodes tempRight = null;
+
+				if(temp.GetZIndex () + 1 <= GridSystem.Instance.GetColumn () - 1)
+					tempUp = GridSystem.Instance.GetNode (temp.GetXIndex (), temp.GetZIndex () + 1);
+				if(temp.GetXIndex () - 1 >= 0)
+					tempLeft = GridSystem.Instance.GetNode (temp.GetXIndex () - 1, temp.GetZIndex ());
+				if(temp.GetZIndex () - 1 >= 0)
+					tempDown = GridSystem.Instance.GetNode (temp.GetXIndex (), temp.GetZIndex () - 1);
+				if(temp.GetXIndex () + 1 <= GridSystem.Instance.GetRows () - 1)
+					tempRight = GridSystem.Instance.GetNode (temp.GetXIndex () + 1, temp.GetZIndex ());
+
 				// Checks Tile Above
-				if (temp.GetZIndex () + 1 <= GridSystem.Instance.GetColumn () - 1
-				  && !visited [temp.GetXIndex (), temp.GetZIndex () + 1])
+				if (tempUp != null
+					&& !visited [tempUp.GetXIndex (), tempUp.GetZIndex ()]
+					&& tempUp.GetOccupied () == null)
 				{
-					Nodes tempUp = GridSystem.Instance.GetNode (temp.GetXIndex (), temp.GetZIndex () + 1);
 					tempUp.SetDist (1 + temp.GetDist ());
+					// Set this node to be selectable
 					tempUp.SetSelectable (true);
+					// Change this node's color
 					tempUp.ChangeColour ();
 					tempUp.SetParent (temp);
 					visited [tempUp.GetXIndex (), tempUp.GetZIndex ()] = true;
 					theQueue.Enqueue (tempUp);
+					// Add this node to the list of selectable node
 					selectableNodes.Add (tempUp);
 				}
 
 				// Checks Tile Left
-				if (temp.GetXIndex () - 1 >= 0
-					&& !visited [temp.GetXIndex () - 1, temp.GetZIndex ()])
+				if (tempLeft != null
+					&& !visited [tempLeft.GetXIndex (), tempLeft.GetZIndex ()]
+					&& tempLeft.GetOccupied () == null)
 				{
-					Nodes tempLeft = GridSystem.Instance.GetNode (temp.GetXIndex () - 1, temp.GetZIndex ());
 					tempLeft.SetDist (1 + temp.GetDist ());
+					// Set this node to be selectable
 					tempLeft.SetSelectable (true);
+					// Change this node's color
 					tempLeft.ChangeColour ();
 					tempLeft.SetParent (temp);
 					visited [tempLeft.GetXIndex (), tempLeft.GetZIndex ()] = true;
 					theQueue.Enqueue (tempLeft);
+					// Add this node to the list of selectable node
 					selectableNodes.Add (tempLeft);
 				}
 
 				// Checks Tile Below
-				if (temp.GetZIndex () - 1 >= 0
-					&& !visited [temp.GetXIndex (), temp.GetZIndex () - 1])
+				if (tempDown != null
+					&& !visited [tempDown.GetXIndex (), tempDown.GetZIndex ()]
+					&& tempDown.GetOccupied () == null)
 				{
-					Nodes tempDown = GridSystem.Instance.GetNode (temp.GetXIndex (), temp.GetZIndex () - 1);
 					tempDown.SetDist (1 + temp.GetDist ());
+					// Set this node to be selectable
 					tempDown.SetSelectable (true);
+					// Change this node's color
 					tempDown.ChangeColour ();
 					tempDown.SetParent (temp);
 					visited [tempDown.GetXIndex (), tempDown.GetZIndex ()] = true;
 					theQueue.Enqueue (tempDown);
+					// Add this node to the list of selectable node
 					selectableNodes.Add (tempDown);
 				}
 
 				// Checks Tile Right
-				if (temp.GetXIndex () + 1 <= GridSystem.Instance.GetRows () - 1
-					&& !visited [temp.GetXIndex () + 1, temp.GetZIndex ()])
+				if (tempRight != null
+					&& !visited [tempRight.GetXIndex (), tempRight.GetZIndex ()]
+					&& tempRight.GetOccupied () == null)
 				{
-					Nodes tempRight = GridSystem.Instance.GetNode (temp.GetXIndex () + 1, temp.GetZIndex ());
 					tempRight.SetDist (1 + temp.GetDist ());
+					// Set this node to be selectable
 					tempRight.SetSelectable (true);
+					// Change this node's color
 					tempRight.ChangeColour ();
 					tempRight.SetParent (temp);
 					visited [tempRight.GetXIndex (), tempRight.GetZIndex ()] = true;
 					theQueue.Enqueue (tempRight);
+					// Add this node to the list of selectable node
 					selectableNodes.Add (tempRight);
 				}
 			}

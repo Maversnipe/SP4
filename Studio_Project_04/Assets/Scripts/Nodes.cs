@@ -71,6 +71,7 @@ public class Nodes : MonoBehaviour
 				// Check if the clicked node is selectable
 				if(this.selectable)
 				{
+					Debug.Log ("Dist: " + dist);
 					// Set the player's path
 					playerManager.SetPath (this);
 					// Set the player's next node
@@ -148,6 +149,17 @@ public class Nodes : MonoBehaviour
 		else
 		{
 			// Change Visibility of Node back to translucent
+			HoverColor.a = HoverAlpha;
+			rend.material.color = HoverColor;
+		}
+	}
+
+	void Update()
+	{
+		if (_OccupiedBy)
+			rend.material.color = Color.cyan;
+		else if(!selectable)
+		{
 			HoverColor.a = HoverAlpha;
 			rend.material.color = HoverColor;
 		}
