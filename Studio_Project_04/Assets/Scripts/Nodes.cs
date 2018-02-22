@@ -76,39 +76,6 @@ public class Nodes : MonoBehaviour
 					// Set the player's next node
 					if (selectedUnitClass != null)
 						selectedUnitClass.SetNextNode (selectedUnitClass.GetPath ().Pop());
-
-					Debug.Log (selectedUnitClass.GetCurrNode ().GetXIndex () + ", " + selectedUnitClass.GetCurrNode ().GetZIndex ());
-					Debug.Log (selectedUnitClass.GetNextNode ().GetXIndex () + ", " + selectedUnitClass.GetNextNode ().GetZIndex ());
-				}
-			}
-
-			// if unit can attack
-			if (playerManager.GetAbleToAttack ())
-			{
-				// Get information from Units class
-				Players selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Players> ();
-				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
-
-				// Limits move range to one grid from the player current node
-				if (_OccupiedBy)
-				{
-					if ((unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
-					   (unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z) ||
-					   (unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X) ||
-					   (unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X))
-					{
-						AI enemy = _OccupiedBy.GetComponent<AI> ();
-						int damageDeal = playerManager.CalculateDamage (selectedUnitClass, enemy);
-
-						enemy.GetStats ().HP -= damageDeal;
-						if (enemy.GetStats ().HP <= 0)
-						{
-							Destroy (_OccupiedBy);
-							SceneManager.LoadScene ("SceneCleared");
-						}
-						playerManager.SetAbleToAttack (false);
-
-					}
 				}
 			}
 		}
@@ -129,30 +96,6 @@ public class Nodes : MonoBehaviour
 
 				if (this.selectable) 
 				{
-					// Change Visibility of Node to opague
-					HoverColor.a = 1.0f;
-					rend.material.color = HoverColor;
-				}
-			}
-			// if unit can attack
-			if (playerManager.GetAbleToAttack ())
-			{
-				// Get information from Units class
-				Players selectedUnitClass = playerManager.GetSelectedUnit ().GetComponent<Players> ();
-				Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
-
-				// Limits move range to one grid from the player current node
-				if (_OccupiedBy)
-				{
-					if(unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z)
-						Debug.Log ("Right Node Occupied.");
-					if(unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z)
-						Debug.Log ("Left Node Occupied.");
-					if(unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X)
-						Debug.Log ("Up Node Occupied.");
-					if(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)
-						Debug.Log ("Down Node Occupied.");
-					
 					// Change Visibility of Node to opague
 					HoverColor.a = 1.0f;
 					rend.material.color = HoverColor;

@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum EnemyStrategy{
 	AGGRESSIVE,
@@ -10,6 +11,11 @@ public enum EnemyStrategy{
 };
 
 public class AI : MonoBehaviour {
+	[SerializeField]
+	Color HoverColor;
+
+	// Reference to the Node's Components
+	private Renderer rend;
 
 	[SerializeField]
 	public EnemyStrategy Personality;
@@ -30,6 +36,8 @@ public class AI : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		rend = GetComponent<Renderer> ();
+
 		//Gathers the name from the Unit Variable
 		Stats = this.gameObject.GetComponent<UnitVariables> ();
 		//Gathers the stats from the Json File
@@ -45,6 +53,84 @@ public class AI : MonoBehaviour {
 		currNode.SetOccupied (this.gameObject);
 		this.transform.position = currNode.transform.position;
 		TargetMovement = this.transform.position;
+	}
+
+	// Run only when Mouse click on the unit
+	void OnMouseDown()
+	{
+		// if unit can attack
+		if (PlayerManager.Instance.GetAbleToAttack ())
+		{
+			// Get information from Units class
+			Players selectedUnitClass = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
+
+			if ((selectedUnitClass.GetCurrNode ().GetXIndex () + 1 == currNode.GetXIndex () 
+				&& selectedUnitClass.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
+				(selectedUnitClass.GetCurrNode ().GetXIndex () - 1 == currNode.GetXIndex () 
+					&& selectedUnitClass.GetCurrNode ().GetZIndex () ==  currNode.GetZIndex ()) ||
+				(selectedUnitClass.GetCurrNode ().GetZIndex () + 1 ==  currNode.GetZIndex () 
+					&& selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()) ||
+				(selectedUnitClass.GetCurrNode ().GetZIndex () - 1 ==  currNode.GetZIndex ()
+					&& selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()))
+			{
+				int damageDeal = PlayerManager.Instance.CalculateDamage (selectedUnitClass, this);
+
+				Stats.HP -= damageDeal;
+				if (Stats.HP <= 0)
+				{
+					Destroy (this);
+					SceneManager.LoadScene ("SceneCleared");
+				}
+				PlayerManager.Instance.SetAbleToAttack (false);
+				// End the turn of the player node
+				selectedUnitClass.TurnEnd ();
+				// Change unit back to no unit
+				PlayerManager.Instance.ChangeUnit (null);
+
+			}
+		}
+	}
+
+	// Run only when Mouse cursor move into the node collision box
+	// Visual feedback for player, show that he/she can clicked on these nodes
+	void OnMouseEnter()
+	{
+		// if unit can attack
+		if (PlayerManager.Instance.GetAbleToAttack ())
+		{
+			// Get information from Units class
+			Players selectedUnitClass = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
+			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
+
+			// Limits move range to one grid from the player current node
+//			if(unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z)
+//					Debug.Log ("Right Node Occupied.");
+//			if(unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z)
+//					Debug.Log ("Left Node Occupied.");
+//			if(unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X)
+//					Debug.Log ("Up Node Occupied.");
+//			if(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)
+//					Debug.Log ("Down Node Occupied.");
+
+			if ((selectedUnitClass.GetCurrNode ().GetXIndex () + 1 == currNode.GetXIndex ()
+			    && selectedUnitClass.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
+			    (selectedUnitClass.GetCurrNode ().GetXIndex () - 1 == currNode.GetXIndex ()
+			    && selectedUnitClass.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
+			    (selectedUnitClass.GetCurrNode ().GetZIndex () + 1 == currNode.GetZIndex ()
+			    && selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()) ||
+			    (selectedUnitClass.GetCurrNode ().GetZIndex () - 1 == currNode.GetZIndex ()
+			    && selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()))
+			{
+				// Change Visibility of Node to opague
+				rend.material.color = HoverColor;
+			}
+		}
+	}
+
+	// Run only when Mouse cursor move out of the node collision box
+	void OnMouseExit()
+	{
+		rend.material.color = Color.white;
 	}
 	
 	// Update is called once per frame
