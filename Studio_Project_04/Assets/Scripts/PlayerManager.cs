@@ -302,7 +302,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			Nodes temp = theQueue.Dequeue ();
 
 			// Do not check tiles if the dist of furthest tile is more than max dist
-			if (temp.GetDist () < 3)
+			if (temp.GetDist () < selectedPlayer.GetAP ())
 			{
 				// Get the nodes adjacent to the temp node
 				Nodes tempUp = null; 
@@ -324,13 +324,17 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 					&& !visited [tempUp.GetXIndex (), tempUp.GetZIndex ()]
 					&& tempUp.GetOccupied () == null)
 				{
+					// Set the current node's distance from starting node
 					tempUp.SetDist (1 + temp.GetDist ());
 					// Set this node to be selectable
 					tempUp.SetSelectable (true);
 					// Change this node's color
 					tempUp.ChangeColour ();
+					// Set the node's parent to be the previous node
 					tempUp.SetParent (temp);
+					// Set current node's visited to be true
 					visited [tempUp.GetXIndex (), tempUp.GetZIndex ()] = true;
+					// Add current node to the queue
 					theQueue.Enqueue (tempUp);
 					// Add this node to the list of selectable node
 					selectableNodes.Add (tempUp);
@@ -341,13 +345,17 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 					&& !visited [tempLeft.GetXIndex (), tempLeft.GetZIndex ()]
 					&& tempLeft.GetOccupied () == null)
 				{
+					// Set the current node's distance from starting node
 					tempLeft.SetDist (1 + temp.GetDist ());
 					// Set this node to be selectable
 					tempLeft.SetSelectable (true);
 					// Change this node's color
 					tempLeft.ChangeColour ();
+					// Set the node's parent to be the previous node
 					tempLeft.SetParent (temp);
+					// Set current node's visited to be true
 					visited [tempLeft.GetXIndex (), tempLeft.GetZIndex ()] = true;
+					// Add current node to the queue
 					theQueue.Enqueue (tempLeft);
 					// Add this node to the list of selectable node
 					selectableNodes.Add (tempLeft);
@@ -358,13 +366,17 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 					&& !visited [tempDown.GetXIndex (), tempDown.GetZIndex ()]
 					&& tempDown.GetOccupied () == null)
 				{
+					// Set the current node's distance from starting node
 					tempDown.SetDist (1 + temp.GetDist ());
 					// Set this node to be selectable
 					tempDown.SetSelectable (true);
 					// Change this node's color
 					tempDown.ChangeColour ();
+					// Set the node's parent to be the previous node
 					tempDown.SetParent (temp);
+					// Set current node's visited to be true
 					visited [tempDown.GetXIndex (), tempDown.GetZIndex ()] = true;
+					// Add current node to the queue
 					theQueue.Enqueue (tempDown);
 					// Add this node to the list of selectable node
 					selectableNodes.Add (tempDown);
@@ -375,13 +387,17 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 					&& !visited [tempRight.GetXIndex (), tempRight.GetZIndex ()]
 					&& tempRight.GetOccupied () == null)
 				{
+					// Set the current node's distance from starting node
 					tempRight.SetDist (1 + temp.GetDist ());
 					// Set this node to be selectable
 					tempRight.SetSelectable (true);
 					// Change this node's color
 					tempRight.ChangeColour ();
+					// Set the node's parent to be the previous node
 					tempRight.SetParent (temp);
+					// Set current node's visited to be true
 					visited [tempRight.GetXIndex (), tempRight.GetZIndex ()] = true;
+					// Add current node to the queue
 					theQueue.Enqueue (tempRight);
 					// Add this node to the list of selectable node
 					selectableNodes.Add (tempRight);
@@ -430,14 +446,10 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			targetNode = targetNode.GetParent ();
 		}
 
-		Debug.Log (selectedPlayer.GetPath ().Count);
-
 		// Since the player's curr node's parent is null
 		// Pop the path to remove the player's curr node from path
 		selectedPlayer.GetPath().Pop ();
 		selectedPlayer.GetCurrNode ().SetIsPath (false);
-
-		Debug.Log (selectedPlayer.GetPath ().Count);
 
 		// Make all the units unselectable as the player moves
 		RemoveSelectable ();

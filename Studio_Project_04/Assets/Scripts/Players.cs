@@ -32,8 +32,8 @@ public class Players : MonoBehaviour
 	// Player's path
 	private Stack<Nodes> path;
 
-	// Player's AP Left
-	private int APLeft;
+	// Player's AP amount in the current turn
+	private int turnAP;
 
 	[SerializeField]
 	public bool menuOpen;
@@ -62,13 +62,16 @@ public class Players : MonoBehaviour
 
 		// Init the path
 		path = new Stack<Nodes>();
+
+		// Set turnAP to player's AP
+		turnAP = Stats.AP;
 	}
 
 	// Run only when Mouse click onto the unit
 	void OnMouseDown()
 	{
 		// If it is Player's turn
-		if(turnManager.IsPlayerTurn ())
+		if(turnManager.IsPlayerTurn () && turnAP > 0)
 		{
 			PlayerManager.Instance.ChangeUnit (this);
 			this.transform.GetChild (0).gameObject.SetActive (true);
@@ -150,9 +153,13 @@ public class Players : MonoBehaviour
 					currNode.SetOccupied (this.gameObject);
 					// Set the next node
 					nextNode = path.Pop ();
+					// Set AP to new AP
+					turnAP -= 1;
 				} 
 				else
 				{
+					// Set AP to new AP
+					turnAP -= 1;
 					// End the turn of the player node
 					TurnEnd ();
 					// Change unit back to no unit
@@ -229,4 +236,8 @@ public class Players : MonoBehaviour
 	// Get Unit's Stats
 	public UnitVariables GetStats() {return Stats;}
 	public void SetStats(UnitVariables n_Stats) {Stats = n_Stats;}
+
+	// Get & Set Unit's AP for the turn
+	public int GetAP() {return turnAP;}
+	public void SetAP(int _ap) {turnAP = _ap;}
 }

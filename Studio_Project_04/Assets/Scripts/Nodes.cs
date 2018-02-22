@@ -47,22 +47,13 @@ public class Nodes : MonoBehaviour
 		// Code Optimising - Get UnitManager instance once only
 		playerManager = PlayerManager.Instance;
 		// Set selectable color
-		SelectableColor = Color.red;
-		SelectableColor.a = HoverAlpha;
+		SelectableColor = Color.green;
+		SelectableColor.a = 0.6f;
 		// Set parent to null
 		parent = null;
 		// Set the dist to 0
 		dist = 0;
 
-	}
-
-	void Update ()
-	{
-		if (selectable) {
-			rend.material.color = Color.red;
-		} else {
-			rend.material.color = HoverColor;
-		}
 	}
 
 	// Run only when Mouse click onto the unit

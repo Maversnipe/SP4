@@ -80,18 +80,21 @@ public class AI : MonoBehaviour {
 		if (PlayerManager.Instance.GetAbleToAttack ())
 		{
 			// Get information from Units class
-			Players selectedUnitClass = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
+			Players selectedUnitObject = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
 
-			if ((selectedUnitClass.GetCurrNode ().GetXIndex () + 1 == currNode.GetXIndex () 
-				&& selectedUnitClass.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
-				(selectedUnitClass.GetCurrNode ().GetXIndex () - 1 == currNode.GetXIndex () 
-					&& selectedUnitClass.GetCurrNode ().GetZIndex () ==  currNode.GetZIndex ()) ||
-				(selectedUnitClass.GetCurrNode ().GetZIndex () + 1 ==  currNode.GetZIndex () 
-					&& selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()) ||
-				(selectedUnitClass.GetCurrNode ().GetZIndex () - 1 ==  currNode.GetZIndex ()
-					&& selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()))
+			if ((selectedUnitObject.GetCurrNode ().GetXIndex () + 1 == currNode.GetXIndex () 
+				&& selectedUnitObject.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
+				(selectedUnitObject.GetCurrNode ().GetXIndex () - 1 == currNode.GetXIndex () 
+					&& selectedUnitObject.GetCurrNode ().GetZIndex () ==  currNode.GetZIndex ()) ||
+				(selectedUnitObject.GetCurrNode ().GetZIndex () + 1 ==  currNode.GetZIndex () 
+					&& selectedUnitObject.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()) ||
+				(selectedUnitObject.GetCurrNode ().GetZIndex () - 1 ==  currNode.GetZIndex ()
+					&& selectedUnitObject.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()))
 			{
-				int damageDeal = PlayerManager.Instance.CalculateDamage (selectedUnitClass.gameObject, this.gameObject);
+				// Set selected player unit's new AP
+				selectedUnitObject.SetAP (selectedUnitObject.GetAP () - 1);
+
+				int damageDeal = PlayerManager.Instance.CalculateDamage (selectedUnitObject.gameObject, this.gameObject);
 
 				Stats.HP -= damageDeal;
 				if (Stats.HP <= 0)
@@ -101,7 +104,7 @@ public class AI : MonoBehaviour {
 				}
 				PlayerManager.Instance.SetAbleToAttack (false);
 				// End the turn of the player node
-				selectedUnitClass.TurnEnd ();
+				selectedUnitObject.TurnEnd ();
 				// Change unit back to no unit
 				PlayerManager.Instance.ChangeUnit (null);
 
@@ -119,16 +122,6 @@ public class AI : MonoBehaviour {
 			// Get information from Units class
 			Players selectedUnitClass = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
 			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
-
-			// Limits move range to one grid from the player current node
-//			if(unitCurrNode.GetXIndex () + 1 == this.X && unitCurrNode.GetZIndex () == this.Z)
-//					Debug.Log ("Right Node Occupied.");
-//			if(unitCurrNode.GetXIndex () - 1 == this.X && unitCurrNode.GetZIndex () == this.Z)
-//					Debug.Log ("Left Node Occupied.");
-//			if(unitCurrNode.GetZIndex () + 1 == this.Z && unitCurrNode.GetXIndex () == this.X)
-//					Debug.Log ("Up Node Occupied.");
-//			if(unitCurrNode.GetZIndex () - 1 == this.Z && unitCurrNode.GetXIndex () == this.X)
-//					Debug.Log ("Down Node Occupied.");
 
 			if ((selectedUnitClass.GetCurrNode ().GetXIndex () + 1 == currNode.GetXIndex ()
 			    && selectedUnitClass.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
@@ -166,6 +159,7 @@ public class AI : MonoBehaviour {
 
 			if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
 				currNode.SetSelectable (false);
+				currNode.ChangeColour ();
 				switch (Personality) {
 				case(EnemyStrategy.AGGRESSIVE):
 					AggressiveAction ();
@@ -185,6 +179,7 @@ public class AI : MonoBehaviour {
 			if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
 				this.transform.position = TargetMovement;
 				currNode.SetSelectable (false);
+				currNode.ChangeColour ();
 				currNode.SetOccupiedNULL ();
 				TurnEnd ();
 			}
@@ -319,6 +314,7 @@ public class AI : MonoBehaviour {
 			}
 
 			Temp.SetSelectable (true);
+			Temp.ChangeColour ();
 			m_path.Enqueue (Temp);
 			AP_Ref--;
 		}

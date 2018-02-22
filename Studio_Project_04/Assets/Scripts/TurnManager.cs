@@ -70,6 +70,16 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		// according to which unit player clicks on
 		currUnit = null;
 
+		// Get array of player units
+		GameObject[] ArrayOfPlayers = GameObject.FindGameObjectsWithTag ("PlayerUnit");
+		// Iterate through array of player units
+		for(int i = 0; i < ArrayOfPlayers.Count (); ++i)
+		{
+			Players thePlayer = ArrayOfPlayers [i].GetComponent <Players> ();
+			// Set each of Player's unit's AP at start of player's turn
+			thePlayer.SetAP (thePlayer.GetStats ().AP); 
+		}
+
 		// Set to not be able to move unit
 		PlayerManager.Instance.SetAbleToMove (false);
 		// Set to not be able to attack
