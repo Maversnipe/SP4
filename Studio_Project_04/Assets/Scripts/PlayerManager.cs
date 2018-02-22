@@ -159,12 +159,22 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Skip current turn
 	public void SkipTurn()
 	{
-		// Check if unit is available and if unit can move
+		// Check if unit is available
 		if(selectedPlayer)
 		{
 			selectedPlayer.TurnEnd ();
-			TurnManager.Instance.ExitPlayerTurn ();
 		}
+		TurnManager.Instance.ExitPlayerTurn ();
+
+		// Find the end button gameobject
+		GameObject endButton = GameObject.FindGameObjectWithTag ("EndTurnButton");
+		// Set end button to not active
+		endButton.SetActive (false);
+
+//		// Find the cancel button gameobject
+//		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+//		// Set cancel button to not active
+//		cancelButton.SetActive(false);
 	}
 
 	// Set & Get Selected Unit
@@ -183,68 +193,80 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	public bool GetIsMoving() {return isMoving;}
 	public void SetIsMoving(bool _stopMove) {isMoving = _stopMove;}
 
-	// Calculation of Damage Value for attacking
-	public int CalculateDamage(Players player, AI enemy)
+	// Return calculated Damage Value for attacking - Need to pass in GameObjects of Attacker and Victim
+	public int CalculateDamage(GameObject attacker, GameObject victim)
 	{
-		Weapon weapon = player.GetStats ()._weapon;
-		Armor armor = enemy.GetStats ()._armor;
-		int damageDeal = 1;
+		// Weapon of player and Armor of enemy informations
+		Weapon weapon = attacker.GetComponent<UnitVariables>()._weapon;
+		Armor armor = victim.GetComponent<UnitVariables>()._armor;
 
-		if (weapon.Type == "Slash")
-		{
-			// Strong against
-			if (armor.Type == "Light")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
-			}
-			// Weak against
-			else if (armor.Type == "Heavy")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
-			}
-			// Normal
-			else
-			{
-				damageDeal = Mathf.Max(1, weapon.Attack - armor.Defence);
-			}
-		}
-		else if (weapon.Type == "Pierce")
-		{
-			// Strong against
-			if (armor.Type == "Medium")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
-			}
-			// Weak against
-			else if (armor.Type == "Light")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
-			}
-			// Normal
-			else
-			{
-				damageDeal = Mathf.Max(1, weapon.Attack - armor.Defence);
-			}
-		}
-		else if (weapon.Type == "Blunt")
-		{
-			// Strong against
-			if (armor.Type == "Heavy")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
-			}
-			// Weak against
-			else if (armor.Type == "Medium")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
-			}
-			// Normal
-			else
-			{
-				damageDeal = Mathf.Max(1, weapon.Attack - armor.Defence);
-			}
-		}
+		// Damage Calculations
+		int damageDeal = -1;
+		int advantagedDamage = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
+		int disadvantagedDamage = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
+		int normalDamage = Mathf.Max(1, weapon.Attack - armor.Defence);
 
+		switch (weapon.Type)
+		{
+		case "Slash":
+			{
+				switch (armor.Type) 
+				{
+				// Strong against
+				case "Light":
+					{
+						damageDeal = advantagedDamage;
+						break;
+					}
+				// Weak against
+				case "Heavy":
+					{
+						damageDeal = disadvantagedDamage;
+						break;
+					}
+				}
+				break;
+			}
+		case "Pierce":
+			{
+				switch (armor.Type) 
+				{
+				// Strong against
+				case "Medium":
+					{
+						damageDeal = advantagedDamage;
+						break;
+					}
+				// Weak against
+				case "Light":
+					{
+						damageDeal = disadvantagedDamage;
+						break;
+					}
+				}
+				break;
+			}
+		case "Blunt":
+			{
+				switch (armor.Type) {
+				// Strong against
+				case "Heavy":
+					{
+						damageDeal = advantagedDamage;
+						break;
+					}
+				// Weak against
+				case "Medium":
+					{
+						damageDeal = disadvantagedDamage;
+						break;
+					}
+				}
+				break;
+			}
+		}
+		if(damageDeal == -1)
+			damageDeal = normalDamage;
 		return damageDeal;
 	}
 		

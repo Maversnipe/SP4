@@ -56,6 +56,15 @@ public class Nodes : MonoBehaviour
 
 	}
 
+	void Update ()
+	{
+		if (selectable) {
+			rend.material.color = Color.red;
+		} else {
+			rend.material.color = HoverColor;
+		}
+	}
+
 	// Run only when Mouse click onto the unit
 	void OnMouseDown()
 	{
@@ -149,17 +158,6 @@ public class Nodes : MonoBehaviour
 		else
 		{
 			// Change Visibility of Node back to translucent
-			HoverColor.a = HoverAlpha;
-			rend.material.color = HoverColor;
-		}
-	}
-
-	void Update()
-	{
-		if (_OccupiedBy)
-			rend.material.color = Color.cyan;
-		else if(!selectable)
-		{
 			HoverColor.a = HoverAlpha;
 			rend.material.color = HoverColor;
 		}

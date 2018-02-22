@@ -74,6 +74,16 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		// Set is moving to false
 		PlayerManager.Instance.SetIsMoving (false);
 
+//		// Get the end button gameobject
+//		GameObject endButton = GameObject.FindGameObjectWithTag ("EndTurnButton");
+//		// Set end button to active
+//		endButton.SetActive (true);
+
+//		// Get the cancel button gameobject
+//		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+//		// Set cancel button to active
+//		cancelButton.SetActive (true);
+
 		// Center the camera into the middle of the Grid
 		CameraReset ();
 	}
