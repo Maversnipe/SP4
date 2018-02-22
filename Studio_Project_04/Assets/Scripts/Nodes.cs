@@ -106,6 +106,7 @@ public class Nodes : MonoBehaviour
 							Destroy (_OccupiedBy);
 							SceneManager.LoadScene ("SceneCleared");
 						}
+						playerManager.SetAbleToAttack (false);
 
 					}
 				}
