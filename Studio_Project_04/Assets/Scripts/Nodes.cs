@@ -56,6 +56,15 @@ public class Nodes : MonoBehaviour
 
 	}
 
+	void Update ()
+	{
+		if (selectable) {
+			rend.material.color = Color.red;
+		} else {
+			rend.material.color = HoverColor;
+		}
+	}
+
 	// Run only when Mouse click onto the unit
 	void OnMouseDown()
 	{

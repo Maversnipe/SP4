@@ -14,12 +14,14 @@ public class GridSystem : GenericSingleton<GridSystem>
 
 	// 2D Array of GameObjects(Grounds)
 	private GameObject[,] Grid;
+
+	// Dimensions of the whole Grid
 	private float width;
 	private float height;
 
 	void Awake()
 	{
-		// Create Grid based on inputted number of rows and columns
+		// Create Grid based on input number of rows and columns
 		Grid = new GameObject[Rows, Columns];
 
 		for (int x = 0; x < Rows; ++x)
@@ -29,43 +31,37 @@ public class GridSystem : GenericSingleton<GridSystem>
 				// Create a Ground
 				GameObject GridGround = (GameObject)Instantiate (Ground);
 
-				// Set the position according to Grid
+				// Set the position of Ground Object according to Grid
 				// (0.2f * xz) - this determines the size of gap in between the Grounds
 				GridGround.transform.position = new Vector3 (GridGround.transform.position.x + x + (0.2f * x),
 					GridGround.transform.position.y, GridGround.transform.position.z + z + (0.2f * z));
 
 				// Get information from Nodes class
 				Nodes GroundNode = GridGround.GetComponent <Nodes> ();
+				// Set Index from Grid onto each Node
 				GroundNode.SetIndex (x, z);
 
-				// Put it into the Grid Array
+				// Put Ground Object into the Grid Array
 				Grid [x, z] = GridGround;
 			}
 		}
+		// Calculating the dimensions of the Grid
 		width = (Rows - 1) + (0.2f * (Rows - 1));
 		height = (Columns - 1) + (0.2f * (Columns - 1));
 	}
 
-	public GameObject [,] GetGrid ()
-	{
-		return Grid;
-	}
+	// Return Grid Array
+	public GameObject [,] GetGrid () { return Grid; }
+	// Return Node with passed in index x and z in the Grid
+	public Nodes GetNode(int _X, int _Z) { return Grid [_X, _Z].GetComponent <Nodes>(); }
 
-	public Nodes GetNode(int _X, int _Z)
-	{
-		return Grid [_X, _Z].GetComponent <Nodes>();
-	}
+	// Return number of rows of the Grid
+	public int GetRows() { return Rows; }
+	// Return number of columns of the Grid
+	public int GetColumn() { return Columns; }
 
-	public int GetRows()
-	{
-		return Rows;
-	}
-
-	public int GetColumn()
-	{
-		return Columns;
-	}
-
+	// Return Width of Grid
 	public float GetWidth() { return width; }
+	// Return Height of Grid
 	public float GetHeight() { return height; }
 }
