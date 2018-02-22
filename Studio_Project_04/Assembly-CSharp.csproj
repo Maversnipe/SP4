@@ -70,6 +70,11 @@
      <Compile Include="Assets\Scripts\OpenControl.cs" />
      <Compile Include="Assets\Scripts\PlayerManager.cs" />
      <Compile Include="Assets\Scripts\Players.cs" />
+     <Compile Include="Assets\Scripts\Shop\SellScript.cs" />
+     <Compile Include="Assets\Scripts\Shop\Shop.cs" />
+     <Compile Include="Assets\Scripts\Shop\ShopItemData.cs" />
+     <Compile Include="Assets\Scripts\Shop\ShopPanel.cs" />
+     <Compile Include="Assets\Scripts\Shop\ShopSlot.cs" />
      <Compile Include="Assets\Scripts\TurnManager.cs" />
      <Compile Include="Assets\Scripts\UI Nonsense Scripts\FadeUI.cs" />
      <Compile Include="Assets\Scripts\UI Nonsense Scripts\FillingUI.cs" />

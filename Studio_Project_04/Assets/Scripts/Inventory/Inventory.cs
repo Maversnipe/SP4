@@ -7,12 +7,14 @@ using System;
 
 public class InventoryObject
 {
+    //Class to represent objects in inventory, stores a reference to a item, weapon or armor
     public Item item;
     public Weapon weapon;
     public Armor armor;
 
     public string itemType;
 
+    //Boolean to check if the slot its in is empty
     public bool isEmpty;
 
     public InventoryObject()
@@ -21,12 +23,10 @@ public class InventoryObject
     }
 }
 
-public class Inventory : MonoBehaviour, IDragHandler
+[System.Serializable]
+public class Inventory : GenericSingleton<Inventory>, IDragHandler
 {
 
-    ItemDatabase itemDatabase;
-    WeaponDatabase weaponDatabase;
-    ArmorDatabase armorDatabase;
     GameObject inventoryPanel;
     GameObject slotPanel;
     public GameObject inventorySlot;
@@ -39,15 +39,13 @@ public class Inventory : MonoBehaviour, IDragHandler
 
     void Start()
     {
-        itemDatabase = GetComponent<ItemDatabase>();
-        weaponDatabase = GetComponent<WeaponDatabase>();
-        armorDatabase = GetComponent<ArmorDatabase>();
+
 
         slotAmount = 20;
         inventoryPanel = GameObject.Find("Inventory");
         slotPanel = inventoryPanel.transform.Find("Slot Panel").gameObject;
 
-        for(int i = 0; i < slotAmount; i++)
+        for (int i = 0; i < slotAmount; i++)
         {
             items.Add(new InventoryObject());
             slots.Add(Instantiate(inventorySlot));
@@ -55,26 +53,24 @@ public class Inventory : MonoBehaviour, IDragHandler
             slots[i].transform.SetParent(slotPanel.transform);
         }
 
-        AddItem(0);
-        AddItem(0);
-        AddItem(0);
-        AddWeapon(0);
+        AddItem(0, 3);
+        AddWeapon(0, 1);
     }
 
-    public void AddItem(int id)
+    public void AddItem(int id, int no)
     {
-        Item itemToAdd = itemDatabase.FetchItemByID(id);
+        Item itemToAdd = ItemDatabase.Instance.FetchItemByID(id);
 
-        if(itemToAdd.Stackable && checkForItem(itemToAdd))
+        if (itemToAdd.Stackable && checkForItem(itemToAdd))
         {
-            for(int i = 0; i < items.Count; i++)
+            for (int i = 0; i < items.Count; i++)
             {
                 if (!items[i].isEmpty && items[i].item.ID == id)
                 {
                     if (items[i].item.ID == id)
                     {
                         ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
-                        data.amount++;
+                        data.amount += no;
                         data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
                         break;
                     }
@@ -92,13 +88,21 @@ public class Inventory : MonoBehaviour, IDragHandler
                     itemObj.GetComponent<ItemData>().item = itemToAdd;
                     itemObj.GetComponent<ItemData>().slot = i;
                     itemObj.transform.SetParent(slots[i].transform);
-                    itemObj.transform.position = Vector2.zero;
+                    itemObj.transform.localPosition = Vector2.zero;
                     itemObj.GetComponent<Image>().sprite = itemToAdd.Sprite;
                     itemObj.name = itemToAdd.Title;
                     ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
-                    data.amount++;
-                    data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
-                    if(itemToAdd.Type == "Consumable")
+                    if(itemToAdd.Stackable)
+                    {
+                        data.amount += no;
+                        data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
+                    }
+                    else
+                    {
+                        data.amount++;
+                        data.transform.GetChild(0).gameObject.SetActive(false);
+                    }
+                    if (itemToAdd.Type == "Consumable")
                     {
                         slots[data.slot].transform.GetChild(0).gameObject.AddComponent<ConsumableItem>();
                     }
@@ -110,9 +114,56 @@ public class Inventory : MonoBehaviour, IDragHandler
         }
     }
 
-    public void AddWeapon(int id)
+    public void RemoveItem(int id, int no)
     {
-        Weapon weaponToAdd = weaponDatabase.FetchWeaponByID(id);
+        Item itemToRemove = ItemDatabase.Instance.FetchItemByID(id);
+
+        bool removeItem = false;
+
+        if (itemToRemove.Stackable && checkForItem(itemToRemove))
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (!items[i].isEmpty && items[i].item.ID == id)
+                {
+                    if (items[i].item.ID == id)
+                    {
+                        ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
+                        if ((data.amount - no) <= 0)
+                        {
+                            removeItem = true;
+                            break;
+                        }
+                        data.amount -= no;
+                        data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (checkForItem(itemToRemove))
+            {
+                items[FindItemToRemove(itemToRemove)].item = null;
+                slots[FindItemToRemove(itemToRemove)].transform.DetachChildren();
+            }
+        }
+
+        if(removeItem)
+        {
+            if (checkForItem(itemToRemove))
+            {
+                items[FindItemToRemove(itemToRemove)].item = null;
+                slots[FindItemToRemove(itemToRemove)].transform.DetachChildren();
+            }
+        }
+
+    }
+
+    public void AddWeapon(int id, int no)
+    {
+        Weapon weaponToAdd = WeaponDatabase.Instance.FetchWeaponByID(id);
 
         if (weaponToAdd.Stackable && checkForItem(weaponToAdd))
         {
@@ -123,7 +174,7 @@ public class Inventory : MonoBehaviour, IDragHandler
                     if (items[i].weapon.ID == id)
                     {
                         ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
-                        data.amount++;
+                        data.amount += no;
                         data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
                         break;
                     }
@@ -141,11 +192,20 @@ public class Inventory : MonoBehaviour, IDragHandler
                     itemObj.GetComponent<ItemData>().weapon = weaponToAdd;
                     itemObj.GetComponent<ItemData>().slot = i;
                     itemObj.transform.SetParent(slots[i].transform);
-                    itemObj.transform.position = Vector2.zero;
+                    itemObj.transform.localPosition = Vector2.zero;
                     itemObj.GetComponent<Image>().sprite = weaponToAdd.Sprite;
                     itemObj.name = weaponToAdd.Title;
                     ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
-                    data.amount++;
+                    if (weaponToAdd.Stackable)
+                    {
+                        data.amount += no;
+                        data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
+                    }
+                    else
+                    {
+                        data.amount++;
+                        data.transform.GetChild(0).gameObject.SetActive(false);
+                    }
                     data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
                     items[i].isEmpty = false;
                     items[i].itemType = "Weapon";
@@ -155,11 +215,58 @@ public class Inventory : MonoBehaviour, IDragHandler
         }
     }
 
+    public void RemoveWeapon(int id, int no)
+    {
+        Weapon weaponToRemove = WeaponDatabase.Instance.FetchWeaponByID(id);
+
+        bool removeItem = false;
+
+        if (weaponToRemove.Stackable && checkForItem(weaponToRemove))
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (!items[i].isEmpty && items[i].item.ID == id)
+                {
+                    if (items[i].item.ID == id)
+                    {
+                        ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
+                        if((data.amount - no) <= 0)
+                        {
+                            removeItem = true;
+                            break;
+                        }
+                        data.amount -= no;
+                        data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            if (checkForItem(weaponToRemove))
+            {
+                items[FindItemToRemove(weaponToRemove)].item = null;
+                slots[FindItemToRemove(weaponToRemove)].transform.DetachChildren();
+            }
+        }
+
+        if(removeItem)
+        {
+            if (checkForItem(weaponToRemove))
+            {
+                items[FindItemToRemove(weaponToRemove)].item = null;
+                slots[FindItemToRemove(weaponToRemove)].transform.DetachChildren();
+            }
+        }
+
+    }
+
     bool checkForItem(Item item)
     {
-        for(int i = 0; i < items.Count; i++)
+        for (int i = 0; i < items.Count; i++)
         {
-            if(items[i].item != null)
+            if (items[i].item != null)
             {
                 if (items[i].item.ID == item.ID)
                 {
@@ -174,7 +281,7 @@ public class Inventory : MonoBehaviour, IDragHandler
     {
         for (int i = 0; i < items.Count; i++)
         {
-            if(items[i].weapon != null)
+            if (items[i].weapon != null)
             {
                 if (items[i].weapon.ID == weapon.ID)
                 {
@@ -189,16 +296,60 @@ public class Inventory : MonoBehaviour, IDragHandler
     {
         for (int i = 0; i < items.Count; i++)
         {
-            if(items[i].armor != null)
+            if (items[i].armor != null)
             {
                 if (items[i].armor.ID == armor.ID)
                 {
                     return true;
                 }
             }
-
         }
         return false;
+    }
+
+    int FindItemToRemove(Item item)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].item != null)
+            {
+                if (items[i].item.ID == item.ID)
+                {
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+
+    int FindItemToRemove(Weapon weapon)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].weapon != null)
+            {
+                if (items[i].weapon.ID == weapon.ID)
+                {
+                    return i;
+                }
+            }
+        }
+        return 0;
+    }
+
+    int FindItemToRemove(Armor armor)
+    {
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i].armor != null)
+            {
+                if (items[i].armor.ID == armor.ID)
+                {
+                    return i;
+                }
+            }
+        }
+        return 0;
     }
 
     public void OnDrag(PointerEventData eventData)

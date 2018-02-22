@@ -19,9 +19,9 @@ public class InfoPanel : MonoBehaviour {
 
     void Start()
     {
-        infoPanel = GameObject.Find("Info Panel");
-        itemName = GameObject.Find("Item Name");
-        itemInfo = GameObject.Find("Item Info");
+        infoPanel = this.gameObject.transform.GetChild(0).gameObject;
+        itemName = infoPanel.transform.GetChild(1).gameObject;
+        itemInfo = infoPanel.transform.GetChild(2).gameObject;
         useButton = GameObject.Find("Use");
         equipButton = GameObject.Find("Equip");
         useButton.SetActive(false);
@@ -80,7 +80,7 @@ public class InfoPanel : MonoBehaviour {
     public void ConstructArmorDataString()
     {
         title = armor.Title;
-        info = armor.Description + "\n" + "\nATK : " + armor.Defence + "\nSTR : " + armor.Strength + "\nVIT : " + armor.Vitality + "\nINT : " + armor.Intelligence + "\nDEX : " + armor.Dexterity + "\nRarity : " + armor.Rarity;
+        info = armor.Description + "\n" + "\nDEF : " + armor.Defence + "\nSTR : " + armor.Strength + "\nVIT : " + armor.Vitality + "\nINT : " + armor.Intelligence + "\nDEX : " + armor.Dexterity + "\nRarity : " + armor.Rarity;
         itemName.GetComponent<Text>().text = title;
         itemInfo.GetComponent<Text>().text = info;
     }
