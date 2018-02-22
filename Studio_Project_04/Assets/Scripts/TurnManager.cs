@@ -47,7 +47,7 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	// Update is called once per frame
 	void Update () {
 		// Update player health barx	
-		PlayerManager.Instance.GetSelectedUnit ().GetStats ().UpdateHealthBar ();
+		//PlayerManager.Instance.GetSelectedUnit ().GetStats ().UpdateHealthBar ();
 		// Enter Player Update only if it is Player's turn
 		if(PlayerTurn)
 		{
