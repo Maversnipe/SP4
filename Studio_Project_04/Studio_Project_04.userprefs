@@ -1,11 +1,19 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+<<<<<<< HEAD
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\AI.cs">
     <Files>
       <File FileName="Assets\Scripts\AI.cs" Line="240" Column="18" />
       <File FileName="Assets\Scripts\Players.cs" Line="149" Column="21" />
       <File FileName="Assets\Scripts\GridSystem.cs" Line="56" Column="1" />
       <File FileName="Assets\Scripts\Nodes.cs" Line="67" Column="2" />
+=======
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Nodes.cs">
+    <Files>
+      <File FileName="Assets\Scripts\AI.cs" Line="133" Column="37" />
+      <File FileName="Assets\Scripts\Players.cs" Line="102" Column="3" />
+      <File FileName="Assets\Scripts\Nodes.cs" Line="91" Column="23" NotebookId="1" />
+>>>>>>> ee53c23bf6e6c9cf6711a4bbe746b815887a611c
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

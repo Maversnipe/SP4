@@ -7,34 +7,34 @@ using UnityEngine.EventSystems;
 public class Slot : MonoBehaviour, IDropHandler {
 
     public int id;
-    private Inventory inv;
+    //private Inventory inv;
 
     // Use this for initialization
     void Start () {
-        inv = GameObject.Find("Inventory").GetComponent<Inventory>();
+        //inv = GameObject.Find("Inventory").GetComponent<Inventory>();
 	}
 
     public void OnDrop(PointerEventData eventData)
     {
         ItemData droppedItem = eventData.pointerDrag.GetComponent<ItemData>();
 
-        if (inv.items[id].isEmpty)
+        if (Inventory.Instance.items[id].isEmpty)
         {
-            inv.items[id] = inv.items[droppedItem.slot];
-            inv.items[droppedItem.slot] = new InventoryObject();
+            Inventory.Instance.items[id] = Inventory.Instance.items[droppedItem.slot];
+            Inventory.Instance.items[droppedItem.slot] = new InventoryObject();
             droppedItem.slot = id;
         }
         else
         {
-            InventoryObject temp = inv.items[id];
-            inv.items[id] = inv.items[droppedItem.slot];
-            inv.items[droppedItem.slot] = new InventoryObject();
-            inv.items[droppedItem.slot] = temp;
+            InventoryObject temp = Inventory.Instance.items[id];
+            Inventory.Instance.items[id] = Inventory.Instance.items[droppedItem.slot];
+            Inventory.Instance.items[droppedItem.slot] = new InventoryObject();
+            Inventory.Instance.items[droppedItem.slot] = temp;
 
             Transform item = this.transform.GetChild(0);
             item.GetComponent<ItemData>().slot = droppedItem.slot;
-            item.transform.SetParent(inv.slots[droppedItem.slot].transform);
-            item.transform.position = inv.slots[droppedItem.slot].transform.position;
+            item.transform.SetParent(Inventory.Instance.slots[droppedItem.slot].transform);
+            item.transform.position = Inventory.Instance.slots[droppedItem.slot].transform.position;
             droppedItem.slot = id;
             droppedItem.transform.SetParent(this.transform);
             droppedItem.transform.position = this.transform.position;
