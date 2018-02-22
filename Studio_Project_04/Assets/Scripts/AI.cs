@@ -185,8 +185,9 @@ public class AI : MonoBehaviour {
 			if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
 				this.transform.position = TargetMovement;
 				currNode.SetSelectable (false);
+				currNode.SetOccupiedNULL ();
+				TurnEnd ();
 			}
-			TurnEnd ();
 		}
 
 		this.transform.position += (TargetMovement - this.transform.position).normalized * 0.05f;
@@ -226,13 +227,16 @@ public class AI : MonoBehaviour {
 					}
 					if (TempMove != EnemyTarget) {
 						currNode = TempMove;
+						currNode.SetOccupied (this.gameObject);
 					} else {
 						isAttacking = true;
 						EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP--;
 					}
 				} else {
 					print (Stats.AP + "vs" + EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP);
-					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP--;
+					UnitVariables Temp = EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ();
+					Temp.HP--;
+					EnemyTarget.GetOccupied ().GetComponent<Players> ().SetStats (Temp);
 				}
 				this.Stats.AP--;
 			}
@@ -273,6 +277,7 @@ public class AI : MonoBehaviour {
 			currNode = nextNode;
 			nextNode = null;
 		}
+		turnManager.NextTurn ();
 	}
 
 	public void SetPath(Nodes m_start, Nodes m_end)
