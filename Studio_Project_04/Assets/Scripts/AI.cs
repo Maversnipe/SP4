@@ -91,7 +91,7 @@ public class AI : MonoBehaviour {
 				(selectedUnitClass.GetCurrNode ().GetZIndex () - 1 ==  currNode.GetZIndex ()
 					&& selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()))
 			{
-				int damageDeal = PlayerManager.Instance.CalculateDamage (selectedUnitClass, this);
+				int damageDeal = PlayerManager.Instance.CalculateDamage (selectedUnitClass.gameObject, this.gameObject);
 
 				Stats.HP -= damageDeal;
 				if (Stats.HP <= 0)
