@@ -237,6 +237,7 @@ public class AI : MonoBehaviour {
 					UnitVariables Temp = EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ();
 					Temp.HP--;
 					EnemyTarget.GetOccupied ().GetComponent<Players> ().SetStats (Temp);
+					EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ().UpdateHealthBar ();
 				}
 				this.Stats.AP--;
 			}
