@@ -85,53 +85,67 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// Only render the unit's menu if no action is selected
 		// And if the unit is not moving
 		if(selectedPlayer.menuOpen && !ableToAttack && !isMoving)
-		{
+		{ // If player still selecting menu options
 			// This makes the Canvas in the unit to be active
 			selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
-
 		}
 		else if(!selectedPlayer.menuOpen || isMoving || ableToAttack)
-		{
+		{ // If player already selected from menu options
 			// This makes the Canvas in the unit to be inactive
 			selectedPlayer.transform.GetChild (0).gameObject.SetActive (false);
 		}
 
-		// Check for deselection at the end
-		DeselectActions ();
+		if(ableToMove || ableToAttack)
+		{
+			// Get the cancel button gameobject
+			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+			// Set cancel button to active
+			cancelButton.transform.GetChild (0).gameObject.SetActive (true);
+		}
+		else
+		{
+			// Get the cancel button gameobject
+			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+			// Set cancel button to active
+			cancelButton.transform.GetChild (0).gameObject.SetActive (false);
+		}
+
 	}
 
 	// For deselecting an action
 	public void DeselectActions()
 	{
-		if (!ableToMove && !ableToAttack)
-		{ // To deselect the selected unit
-			if (Input.GetMouseButtonDown(1))
-			{
-				selectedPlayer.transform.GetChild (0).gameObject.SetActive (false);
-				selectedPlayer.menuOpen = false;
-				selectedPlayer.TurnEnd ();
-				selectedPlayer = null;
-			}
-		}
+//		if (!ableToMove && !ableToAttack)
+//		{ // To deselect the selected unit
+//			if (Input.GetMouseButtonDown(1))
+//			{
+//				selectedPlayer.transform.GetChild (0).gameObject.SetActive (false);
+//				selectedPlayer.menuOpen = false;
+//				selectedPlayer.TurnEnd ();
+//				selectedPlayer = null;
+//			}
+//		}
 		if (ableToMove)
 		{ // If move is clicked, you can deselect move
-			if (Input.GetMouseButtonDown(1))
-			{
-				selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
-				selectedPlayer.menuOpen = true;
-				isMoving = true;
-				ableToMove = false;
-			}
+			selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
+			selectedPlayer.menuOpen = true;
+			isMoving = true;
+			ableToMove = false;
+			RemoveSelectable ();
 		}
 		if (ableToAttack)
 		{ // If attack is clicked, you can deselect attack
-			if (Input.GetMouseButtonDown(1))
-			{
-				selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
-				selectedPlayer.menuOpen = true;
-				ableToAttack = false;
-			}
+			selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
+			selectedPlayer.menuOpen = true;
+			ableToAttack = false;
 		}
+
+		selectedPlayer.SetToDefaultColor ();
+
+		// Get the cancel button gameobject
+		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+		// Set cancel button to not active
+		cancelButton.transform.GetChild (0).gameObject.SetActive (false);
 	}
 
 	// Set the selected unit to be able to move
@@ -169,12 +183,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// Find the end button gameobject
 		GameObject endButton = GameObject.FindGameObjectWithTag ("EndTurnButton");
 		// Set end button to not active
-		endButton.SetActive (false);
-
-//		// Find the cancel button gameobject
-//		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
-//		// Set cancel button to not active
-//		cancelButton.SetActive(false);
+		endButton.transform.GetChild (0).gameObject.SetActive (false);
 	}
 
 	// Set & Get Selected Unit

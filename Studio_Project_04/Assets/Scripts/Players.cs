@@ -180,7 +180,7 @@ public class Players : MonoBehaviour
 		this.transform.GetChild (0).gameObject.SetActive (false);
 
 		// Set Color back to default
-		rend.material.color = DefaultColor;
+		SetToDefaultColor();
 
 		// If nextNode is not null, update currNode to be nextNode
 		// And null nextNode
@@ -194,6 +194,17 @@ public class Players : MonoBehaviour
 			// Set next node to be null
 			nextNode = null;
 		}
+
+		// Get the cancel button gameobject
+		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+		// Set cancel button to not active
+		cancelButton.transform.GetChild (0).gameObject.SetActive (false);
+	}
+
+	// Set To Default Color
+	public void SetToDefaultColor()
+	{
+		rend.material.color = DefaultColor;
 	}
 
 	// Get & Set Current Node
