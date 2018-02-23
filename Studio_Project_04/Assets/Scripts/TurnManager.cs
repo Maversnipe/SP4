@@ -79,6 +79,10 @@ public class TurnManager : GenericSingleton<TurnManager> {
 			thePlayer.SetAP (thePlayer.GetStats ().startAP); 
 		}
 
+		// Set Camera position to be the last player unit's position
+		Players theLastPlayer = ArrayOfPlayers [ArrayOfPlayers.Count () - 1].GetComponent <Players> ();
+		Camera.main.transform.position = new Vector3(theLastPlayer.transform.position.x, Camera.main.transform.position.y, theLastPlayer.transform.position.z);
+
 		// Set to not be able to move unit
 		PlayerManager.Instance.SetAbleToMove (false);
 		// Set to not be able to attack
@@ -90,9 +94,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		GameObject endButton = GameObject.FindGameObjectWithTag ("EndTurnButton");
 		// Set end button to active
 		endButton.transform.GetChild (0).gameObject.SetActive (true);
-
-		// Center the camera into the middle of the Grid
-		CameraReset ();
 	}
 
 	// Exit Player's Turn
@@ -136,13 +137,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 			// Start Player's Turn
 			EnterPlayerTurn ();
 		}
-	}
-
-	// Set camera to the position in the middle of the grid
-	void CameraReset()
-	{
-		Camera.main.transform.position = new Vector3 (GridSystem.Instance.GetWidth () / 2.0f, 
-			Camera.main.transform.position.y, GridSystem.Instance.GetHeight () / 2.0f); 
 	}
 
 	// Find AI Unit based on its ID
