@@ -32,8 +32,8 @@ public class Players : MonoBehaviour
 	// Player's path
 	private Stack<Nodes> path;
 
-	// Player's AP Left
-	private int APLeft;
+	// Player's AP amount in the current turn
+	private int turnAP;
 
 	[SerializeField]
 	public bool menuOpen;
@@ -44,7 +44,6 @@ public class Players : MonoBehaviour
 		Stats = this.gameObject.GetComponent<UnitVariables> ();
 		//Gathers the stats from the Json File
 		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (Stats.Name));
-
 
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
@@ -63,13 +62,16 @@ public class Players : MonoBehaviour
 
 		// Init the path
 		path = new Stack<Nodes>();
+
+		// Set turnAP to player's AP
+		turnAP = Stats.AP;
 	}
 
 	// Run only when Mouse click onto the unit
 	void OnMouseDown()
 	{
 		// If it is Player's turn
-		if(turnManager.IsPlayerTurn ())
+		if(turnManager.IsPlayerTurn () && turnAP > 0)
 		{
 			PlayerManager.Instance.ChangeUnit (this);
 			this.transform.GetChild (0).gameObject.SetActive (true);
@@ -143,13 +145,21 @@ public class Players : MonoBehaviour
 				nextNode.ChangeColour ();
 				if (path.Count > 0)
 				{
+					// Set the curr node's occupied to null
+					currNode.SetOccupiedNULL ();
 					// Set curr node as the next node
 					currNode = nextNode;
+					// Set the new curr node's occupied to this unit
+					currNode.SetOccupied (this.gameObject);
 					// Set the next node
 					nextNode = path.Pop ();
+					// Set AP to new AP
+					turnAP -= 1;
 				} 
 				else
 				{
+					// Set AP to new AP
+					turnAP -= 1;
 					// End the turn of the player node
 					TurnEnd ();
 					// Change unit back to no unit
@@ -177,7 +187,7 @@ public class Players : MonoBehaviour
 		this.transform.GetChild (0).gameObject.SetActive (false);
 
 		// Set Color back to default
-		rend.material.color = DefaultColor;
+		SetToDefaultColor();
 
 		// If nextNode is not null, update currNode to be nextNode
 		// And null nextNode
@@ -186,10 +196,22 @@ public class Players : MonoBehaviour
 			currNode.SetOccupiedNULL();
 			//Debug.Log ("Before Move -> X: " + currNode.GetXIndex() + " Z: " + currNode.GetZIndex() + " Name: " + currNode.GetOccupied().name);
 			currNode = nextNode;
+			// Set curr node as occupied by this unit
 			currNode.SetOccupied (this.gameObject);
-			//Debug.Log ("After Move -> X: " + currNode.GetXIndex() + " Z: " + currNode.GetZIndex() + " Name: " + currNode.GetOccupied().name);
+			// Set next node to be null
 			nextNode = null;
 		}
+
+		// Get the cancel button gameobject
+		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+		// Set cancel button to not active
+		cancelButton.transform.GetChild (0).gameObject.SetActive (false);
+	}
+
+	// Set To Default Color
+	public void SetToDefaultColor()
+	{
+		rend.material.color = DefaultColor;
 	}
 
 	// Get & Set Current Node
@@ -214,4 +236,8 @@ public class Players : MonoBehaviour
 	// Get Unit's Stats
 	public UnitVariables GetStats() {return Stats;}
 	public void SetStats(UnitVariables n_Stats) {Stats = n_Stats;}
+
+	// Get & Set Unit's AP for the turn
+	public int GetAP() {return turnAP;}
+	public void SetAP(int _ap) {turnAP = _ap;}
 }

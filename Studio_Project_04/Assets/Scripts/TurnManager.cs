@@ -46,11 +46,14 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 	// Update is called once per frame
 	void Update () {
+		// Update player health barx	
+		//PlayerManager.Instance.GetSelectedUnit ().GetStats ().UpdateHealthBar ();
 		// Enter Player Update only if it is Player's turn
 		if(PlayerTurn)
 		{
 			// Update Player
 			PlayerManager.Instance.UpdatePlayerUnits();
+
 		}
 		else
 		{
@@ -67,12 +70,27 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		// according to which unit player clicks on
 		currUnit = null;
 
+		// Get array of player units
+		GameObject[] ArrayOfPlayers = GameObject.FindGameObjectsWithTag ("PlayerUnit");
+		// Iterate through array of player units
+		for(int i = 0; i < ArrayOfPlayers.Count (); ++i)
+		{
+			Players thePlayer = ArrayOfPlayers [i].GetComponent <Players> ();
+			// Set each of Player's unit's AP at start of player's turn
+			thePlayer.SetAP (thePlayer.GetStats ().AP); 
+		}
+
 		// Set to not be able to move unit
 		PlayerManager.Instance.SetAbleToMove (false);
 		// Set to not be able to attack
 		PlayerManager.Instance.SetAbleToAttack (false);
 		// Set is moving to false
 		PlayerManager.Instance.SetIsMoving (false);
+
+		// Get the end button gameobject
+		GameObject endButton = GameObject.FindGameObjectWithTag ("EndTurnButton");
+		// Set end button to active
+		endButton.transform.GetChild (0).gameObject.SetActive (true);
 
 		// Center the camera into the middle of the Grid
 		CameraReset ();

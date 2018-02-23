@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum EnemyStrategy{
 	AGGRESSIVE,
@@ -10,6 +11,11 @@ public enum EnemyStrategy{
 };
 
 public class AI : MonoBehaviour {
+	[SerializeField]
+	Color HoverColor;
+
+	// Reference to the Node's Components
+	private Renderer rend;
 
 	[SerializeField]
 	public EnemyStrategy Personality;
@@ -25,11 +31,23 @@ public class AI : MonoBehaviour {
 
 	Nodes currNode;
 	Nodes nextNode;
+	private Queue<Nodes> m_path = new Queue<Nodes>();
 
-	GameObject EnemyTarget;
+	Nodes EnemyTarget;
+
+	private bool Path_Set;
+	private bool isAttacking;
+
+	// Reference to the UnitManager's instance
+	private TurnManager turnManager;
+
+	// Reference to GridSystem's Instance
+	private GridSystem GridRef;
 
 	// Use this for initialization
 	void Start () {
+		rend = GetComponent<Renderer> ();
+
 		//Gathers the name from the Unit Variable
 		Stats = this.gameObject.GetComponent<UnitVariables> ();
 		//Gathers the stats from the Json File
@@ -45,6 +63,85 @@ public class AI : MonoBehaviour {
 		currNode.SetOccupied (this.gameObject);
 		this.transform.position = currNode.transform.position;
 		TargetMovement = this.transform.position;
+
+		nextNode = currNode;
+
+		turnManager = TurnManager.Instance;
+		GridRef = GridSystem.Instance;
+
+		Path_Set = false;
+		isAttacking = false;
+	}
+
+	// Run only when Mouse click on the unit
+	void OnMouseDown()
+	{
+		// if unit can attack
+		if (PlayerManager.Instance.GetAbleToAttack ())
+		{
+			// Get information from Units class
+			Players selectedUnitObject = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
+
+			if ((selectedUnitObject.GetCurrNode ().GetXIndex () + 1 == currNode.GetXIndex () 
+				&& selectedUnitObject.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
+				(selectedUnitObject.GetCurrNode ().GetXIndex () - 1 == currNode.GetXIndex () 
+					&& selectedUnitObject.GetCurrNode ().GetZIndex () ==  currNode.GetZIndex ()) ||
+				(selectedUnitObject.GetCurrNode ().GetZIndex () + 1 ==  currNode.GetZIndex () 
+					&& selectedUnitObject.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()) ||
+				(selectedUnitObject.GetCurrNode ().GetZIndex () - 1 ==  currNode.GetZIndex ()
+					&& selectedUnitObject.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()))
+			{
+				// Set selected player unit's new AP
+				selectedUnitObject.SetAP (selectedUnitObject.GetAP () - 1);
+
+				int damageDeal = PlayerManager.Instance.CalculateDamage (selectedUnitObject.gameObject, this.gameObject);
+
+				Stats.HP -= damageDeal;
+				if (Stats.HP <= 0)
+				{
+					Destroy (this);
+					SceneManager.LoadScene ("SceneCleared");
+				}
+				PlayerManager.Instance.SetAbleToAttack (false);
+				// End the turn of the player node
+				selectedUnitObject.TurnEnd ();
+				// Change unit back to no unit
+				PlayerManager.Instance.ChangeUnit (null);
+
+			}
+		}
+	}
+
+	// Run only when Mouse cursor move into the node collision box
+	// Visual feedback for player, show that he/she can clicked on these nodes
+	void OnMouseEnter()
+	{
+		// if unit can attack
+		if (PlayerManager.Instance.GetAbleToAttack ())
+		{
+			// Get information from Units class
+			Players selectedUnitClass = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
+			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
+
+			if ((selectedUnitClass.GetCurrNode ().GetXIndex () + 1 == currNode.GetXIndex ()
+			    && selectedUnitClass.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
+			    (selectedUnitClass.GetCurrNode ().GetXIndex () - 1 == currNode.GetXIndex ()
+			    && selectedUnitClass.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
+			    (selectedUnitClass.GetCurrNode ().GetZIndex () + 1 == currNode.GetZIndex ()
+			    && selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()) ||
+			    (selectedUnitClass.GetCurrNode ().GetZIndex () - 1 == currNode.GetZIndex ()
+			    && selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()))
+			{
+				// Change Visibility of Node to opague
+				rend.material.color = HoverColor;
+			}
+		}
+	}
+
+	// Run only when Mouse cursor move out of the node collision box
+	void OnMouseExit()
+	{
+		rend.material.color = Color.white;
 	}
 	
 	// Update is called once per frame
@@ -52,10 +149,17 @@ public class AI : MonoBehaviour {
 		this.gameObject.GetComponent<UnitVariables> ().Copy (Stats);
 		this.gameObject.GetComponent<UnitVariables> ().UpdateHealthBar ();
 
+		if (turnManager.GetCurrUnit() == null || turnManager.GetCurrUnit().GetID() != this.gameObject.GetComponent<AI>().GetID())
+		{
+			return;
+		}
+
 		if (Stats.AP != 0) {
 			// print (this.gameObject.name + " " + Stats.AP);
 
 			if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
+				currNode.SetSelectable (false);
+				currNode.ChangeColour ();
 				switch (Personality) {
 				case(EnemyStrategy.AGGRESSIVE):
 					AggressiveAction ();
@@ -72,7 +176,13 @@ public class AI : MonoBehaviour {
 				TargetMovement = currNode.transform.position;
 			}
 		} else {
-			TurnEnd ();
+			if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
+				this.transform.position = TargetMovement;
+				currNode.SetSelectable (false);
+				currNode.ChangeColour ();
+				currNode.SetOccupiedNULL ();
+				TurnEnd ();
+			}
 		}
 
 		this.transform.position += (TargetMovement - this.transform.position).normalized * 0.05f;
@@ -82,18 +192,17 @@ public class AI : MonoBehaviour {
 	{
 		if (EnemyTarget == null) {
 
-			GameObject Temp = null;
+			Nodes Temp = null;
 
-			for (int x = 0; x < GridSystem.Instance.GetRows (); ++x) {
-				for (int z = 0; z < GridSystem.Instance.GetColumn (); ++z) {
-					if (GridSystem.Instance.GetNode (x, z).GetOccupied () != null &&
-						GridSystem.Instance.GetNode (x, z).GetOccupied ().tag == "PlayerUnit") {
-						if (Temp == null) {
-							Temp = GridSystem.Instance.GetNode (x, z).GetOccupied ();
-						} else {
-							if ((GridSystem.Instance.GetNode (x, z).GetOccupied ().transform.position - currNode.transform.position).magnitude > (Temp.transform.position - currNode.transform.position).magnitude) {
-								Temp = GridSystem.Instance.GetNode (x, z).GetOccupied ();
+			for (int x = 0; x < GridRef.GetRows (); ++x) {
+				for (int z = 0; z < GridRef.GetColumn (); ++z) {
+					if (GridRef.GetNode (x, z).GetOccupied () != null && GridRef.GetNode (x, z).GetOccupied ().tag == "PlayerUnit") {
+						if (Temp != null) { // Temp Magnitude is more than current grid magnitude, change Temp altogether
+							if ((Temp.GetOccupied ().transform.position - currNode.transform.position).magnitude > (GridRef.GetNode (x, z).GetOccupied ().transform.position - currNode.transform.position).magnitude) {
+								Temp = GridRef.GetNode (x, z);
 							}
+						} else { // Sets the first reference of Temp
+							Temp = GridRef.GetNode (x, z);
 						}
 					}
 				}
@@ -101,71 +210,32 @@ public class AI : MonoBehaviour {
 
 			EnemyTarget = Temp;
 		} else {
-			
-			if ((currNode.GetZIndex() != GridSystem.Instance.GetColumn() - 1 && GridSystem.Instance.GetNode (currNode.GetXIndex (), currNode.GetZIndex () + 1).GetOccupied () == EnemyTarget)
-				|| (currNode.GetZIndex () != 0 && GridSystem.Instance.GetNode (currNode.GetXIndex (), currNode.GetZIndex () - 1).GetOccupied () == EnemyTarget)
-				|| (currNode.GetXIndex () != GridSystem.Instance.GetRows() - 1 && GridSystem.Instance.GetNode (currNode.GetXIndex () + 1, currNode.GetZIndex ()).GetOccupied () == EnemyTarget)
-				|| (currNode.GetXIndex () != 0 && GridSystem.Instance.GetNode (currNode.GetXIndex () - 1, currNode.GetZIndex ()).GetOccupied () == EnemyTarget)) {
-				EnemyTarget.GetComponent<UnitVariables> ().HP--;
-				print ("Player Hit");
+			if (!Path_Set) {
+				SetPath (currNode, EnemyTarget);
+				m_path.Dequeue ();
+				Path_Set = true;
 			} else {
-				float UpMag = (currNode.transform.position - EnemyTarget.transform.position).magnitude,
-				RightMag = (currNode.transform.position - EnemyTarget.transform.position).magnitude,
-				DownMag = (currNode.transform.position - EnemyTarget.transform.position).magnitude,
-				LeftMag = (currNode.transform.position - EnemyTarget.transform.position).magnitude;
-
-				if (currNode.GetZIndex () != GridSystem.Instance.GetColumn() - 1) {
-					UpMag = (GridSystem.Instance.GetNode (currNode.GetXIndex(), currNode.GetZIndex() + 1).transform.position - EnemyTarget.transform.position).magnitude;
-				}
-				if (currNode.GetXIndex () != GridSystem.Instance.GetRows() - 1) {
-					RightMag = (GridSystem.Instance.GetNode (currNode.GetXIndex() + 1, currNode.GetZIndex()).transform.position - EnemyTarget.transform.position).magnitude;
-				}
-				if (currNode.GetZIndex () != 0) {
-					DownMag = (GridSystem.Instance.GetNode (currNode.GetXIndex(), currNode.GetZIndex() - 1).transform.position - EnemyTarget.transform.position).magnitude;
-				}
-				if (currNode.GetXIndex () != 0) {
-					LeftMag = (GridSystem.Instance.GetNode (currNode.GetXIndex() - 1, currNode.GetZIndex()).transform.position - EnemyTarget.transform.position).magnitude;
-				}
-
-				float Closest = Mathf.Min (UpMag, RightMag, DownMag, LeftMag);
-
-				if (UpMag == Closest) {
-					if (GridSystem.Instance.GetNode (currNode.GetXIndex (), currNode.GetZIndex () + 1).GetOccupied() != null) {
-						Closest = Mathf.Min (RightMag, DownMag, LeftMag);
-					} else {
-						//print (UpMag + " vs " + Closest);
-						currNode.SetOccupiedNULL();
-						currNode = GridSystem.Instance.GetNode (currNode.GetXIndex(), currNode.GetZIndex() + 1);
-						currNode.SetOccupied (this.gameObject);
-						print ("Up Mag = " + UpMag);
+				if (!isAttacking) {
+					Nodes TempMove = currNode;
+					if (m_path.Count != 0) {
+						TempMove = m_path.Dequeue ();
 					}
+					if (TempMove != EnemyTarget) {
+						currNode = TempMove;
+						currNode.SetOccupied (this.gameObject);
+					} else {
+						isAttacking = true;
+						EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP--;
+					}
+				} else {
+					print (Stats.AP + "vs" + EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP);
+					UnitVariables Temp = EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ();
+					Temp.HP--;
+					EnemyTarget.GetOccupied ().GetComponent<Players> ().SetStats (Temp);
+					EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ().UpdateHealthBar ();
 				}
-
-				if (RightMag == Closest) {
-					//print (RightMag + " vs " + Closest);
-					currNode.SetOccupiedNULL();
-					currNode = GridSystem.Instance.GetNode (currNode.GetXIndex() + 1, currNode.GetZIndex());
-					currNode.SetOccupied (this.gameObject);
-					print ("Right Mag = " + RightMag);
-				}
-
-				if (DownMag == Closest) {
-					//print (DownMag + " vs " + Closest);
-					currNode.SetOccupiedNULL();
-					currNode = GridSystem.Instance.GetNode (currNode.GetXIndex(), currNode.GetZIndex() - 1);
-					currNode.SetOccupied (this.gameObject);
-					print ("Down Mag = " + DownMag);
-				}
-
-				if (LeftMag == Closest) {
-					//print (LeftMag + " vs " + Closest);
-					currNode.SetOccupiedNULL();
-					currNode = GridSystem.Instance.GetNode (currNode.GetXIndex() - 1, currNode.GetZIndex());
-					currNode.SetOccupied (this.gameObject);
-					print ("Left Mag = " + LeftMag);
-				}
+				this.Stats.AP--;
 			}
-			this.Stats.AP--;
 		}
 	}
 
@@ -176,97 +246,7 @@ public class AI : MonoBehaviour {
 
 	void RandomAction()
 	{
-//		int Choice = Random.Range (1, 5);
-//		switch (Choice) {
-//		case(1): // Up
-//			if (CurrNode.GetZIndex () == FindObjectOfType<GridSystem> ().GetColumn () - 1
-//				|| CurrNode.GetOccupied() == null) {
-//				return;
-//			}
-//			PrevNode = CurrNode;
-//			CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex (), CurrNode.GetZIndex () + 1);
-//
-//			for (int i = 0; i < m_visited.Count; i++) {
-//				//Checks if the current random node was visited before.
-//				if (CurrNode.GetXIndex () == m_visited [i].GetXIndex () &&
-//				    CurrNode.GetZIndex () == m_visited [i].GetZIndex ()) {
-//					CurrNode = PrevNode;
-//					return;
-//				}
-//			}
-//
-//			m_visited.Add (CurrNode);
-//			PrevNode.SetOccupiedNULL ();
-//			CurrNode.SetOccupied (this.gameObject);
-//			break;
-//		case(2): // Right
-//			if (CurrNode.GetXIndex () == FindObjectOfType<GridSystem> ().GetRows () - 1
-//				|| CurrNode.GetOccupied() == null) {
-//				return;
-//			}
-//
-//			PrevNode = CurrNode;
-//			CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex () + 1, CurrNode.GetZIndex ());
-//
-//			for (int i = 0; i < m_visited.Count; i++) {
-//				//Checks if the current random node was visited before.
-//				if (CurrNode.GetXIndex () == m_visited [i].GetXIndex () &&
-//					CurrNode.GetZIndex () == m_visited [i].GetZIndex ()) {
-//					CurrNode = PrevNode;
-//					return;
-//				}
-//			}
-//
-//			m_visited.Add (CurrNode);
-//			PrevNode.SetOccupiedNULL ();
-//			CurrNode.SetOccupied (this.gameObject);
-//			break;
-//		case(3): // Down
-//			if (CurrNode.GetZIndex () == 0
-//				|| CurrNode.GetOccupied() == null) {
-//				return;
-//			}
-//
-//			PrevNode = CurrNode;
-//			CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex (), CurrNode.GetZIndex () - 1);
-//
-//			for (int i = 0; i < m_visited.Count; i++) {
-//				//Checks if the current random node was visited before.
-//				if (CurrNode.GetXIndex () == m_visited [i].GetXIndex () &&
-//				    CurrNode.GetZIndex () == m_visited [i].GetZIndex ()) {
-//					CurrNode = PrevNode;
-//					return;
-//				}
-//			}
-//
-//			m_visited.Add (CurrNode);
-//			PrevNode.SetOccupiedNULL ();
-//			CurrNode.SetOccupied (this.gameObject);
-//			break;
-//		case(4): // Left
-//			if (CurrNode.GetXIndex () == 0
-//				|| CurrNode.GetOccupied() == null) {
-//				return;
-//			}
-//
-//			PrevNode = CurrNode;
-//			CurrNode = FindObjectOfType<GridSystem> ().GetNode (CurrNode.GetXIndex () - 1, CurrNode.GetZIndex ());
-//
-//			for (int i = 0; i < m_visited.Count; i++) {
-//				//Checks if the current random node was visited before.
-//				if (CurrNode.GetXIndex () == m_visited [i].GetXIndex () &&
-//				    CurrNode.GetZIndex () == m_visited [i].GetZIndex ()) {
-//					CurrNode = PrevNode;
-//					return;
-//				}
-//			}
-//
-//			m_visited.Add (CurrNode);
-//			PrevNode.SetOccupiedNULL ();
-//			CurrNode.SetOccupied (this.gameObject);
-//			break;
-//		}
-//		AP--;
+		
 	}
 
 	void StrategicAction()
@@ -292,6 +272,51 @@ public class AI : MonoBehaviour {
 		{
 			currNode = nextNode;
 			nextNode = null;
+		}
+		turnManager.NextTurn ();
+	}
+
+	public void SetPath(Nodes m_start, Nodes m_end)
+	{
+		m_path.Enqueue (m_start);
+		Nodes Temp = m_start;
+		int AP_Ref = Stats.AP;
+
+		while (!m_path.Contains (m_end) && AP_Ref > 0) {
+			float UpMag = (Temp.transform.position - m_end.transform.position).magnitude,
+			DownMag = (Temp.transform.position - m_end.transform.position).magnitude,
+			LeftMag = (Temp.transform.position - m_end.transform.position).magnitude,
+			RightMag = (Temp.transform.position - m_end.transform.position).magnitude,
+			Closest;
+
+			if (Temp.GetZIndex () != GridRef.GetColumn () - 1) {
+				UpMag = (GridRef.GetNode(Temp.GetXIndex(), Temp.GetZIndex() + 1).transform.position - m_end.transform.position).magnitude;
+			}
+			if (Temp.GetZIndex () != 0) {
+				DownMag = (GridRef.GetNode(Temp.GetXIndex(), Temp.GetZIndex() - 1).transform.position - m_end.transform.position).magnitude;
+			}
+			if (Temp.GetXIndex () != GridRef.GetRows () - 1) {
+				LeftMag = (GridRef.GetNode(Temp.GetXIndex() + 1, Temp.GetZIndex()).transform.position - m_end.transform.position).magnitude;
+			}
+			if (Temp.GetXIndex () != 0) {
+				RightMag = (GridRef.GetNode(Temp.GetXIndex() - 1, Temp.GetZIndex()).transform.position - m_end.transform.position).magnitude;
+			}
+			Closest = Mathf.Min (UpMag, DownMag, LeftMag, RightMag);
+
+			if (Closest == UpMag) {
+				Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () + 1);
+			} else if (Closest == DownMag) {
+				Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () - 1);
+			} else if (Closest == LeftMag) {
+				Temp = GridRef.GetNode (Temp.GetXIndex () + 1, Temp.GetZIndex ());
+			} else if (Closest == RightMag) {
+				Temp = GridRef.GetNode (Temp.GetXIndex () - 1, Temp.GetZIndex ());
+			}
+
+			Temp.SetSelectable (true);
+			Temp.ChangeColour ();
+			m_path.Enqueue (Temp);
+			AP_Ref--;
 		}
 	}
 

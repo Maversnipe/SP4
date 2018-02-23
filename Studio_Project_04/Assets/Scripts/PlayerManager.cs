@@ -85,53 +85,67 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// Only render the unit's menu if no action is selected
 		// And if the unit is not moving
 		if(selectedPlayer.menuOpen && !ableToAttack && !isMoving)
-		{
+		{ // If player still selecting menu options
 			// This makes the Canvas in the unit to be active
 			selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
-
 		}
 		else if(!selectedPlayer.menuOpen || isMoving || ableToAttack)
-		{
+		{ // If player already selected from menu options
 			// This makes the Canvas in the unit to be inactive
 			selectedPlayer.transform.GetChild (0).gameObject.SetActive (false);
 		}
 
-		// Check for deselection at the end
-		DeselectActions ();
+		if(ableToMove || ableToAttack)
+		{
+			// Get the cancel button gameobject
+			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+			// Set cancel button to active
+			cancelButton.transform.GetChild (0).gameObject.SetActive (true);
+		}
+		else
+		{
+			// Get the cancel button gameobject
+			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+			// Set cancel button to active
+			cancelButton.transform.GetChild (0).gameObject.SetActive (false);
+		}
+
 	}
 
 	// For deselecting an action
 	public void DeselectActions()
 	{
-		if (!ableToMove && !ableToAttack)
-		{ // To deselect the selected unit
-			if (Input.GetMouseButtonDown(1))
-			{
-				selectedPlayer.transform.GetChild (0).gameObject.SetActive (false);
-				selectedPlayer.menuOpen = false;
-				selectedPlayer.TurnEnd ();
-				selectedPlayer = null;
-			}
-		}
+//		if (!ableToMove && !ableToAttack)
+//		{ // To deselect the selected unit
+//			if (Input.GetMouseButtonDown(1))
+//			{
+//				selectedPlayer.transform.GetChild (0).gameObject.SetActive (false);
+//				selectedPlayer.menuOpen = false;
+//				selectedPlayer.TurnEnd ();
+//				selectedPlayer = null;
+//			}
+//		}
 		if (ableToMove)
 		{ // If move is clicked, you can deselect move
-			if (Input.GetMouseButtonDown(1))
-			{
-				selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
-				selectedPlayer.menuOpen = true;
-				isMoving = true;
-				ableToMove = false;
-			}
+			selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
+			selectedPlayer.menuOpen = true;
+			isMoving = true;
+			ableToMove = false;
+			RemoveSelectable ();
 		}
 		if (ableToAttack)
 		{ // If attack is clicked, you can deselect attack
-			if (Input.GetMouseButtonDown(1))
-			{
-				selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
-				selectedPlayer.menuOpen = true;
-				ableToAttack = false;
-			}
+			selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
+			selectedPlayer.menuOpen = true;
+			ableToAttack = false;
 		}
+
+		selectedPlayer.SetToDefaultColor ();
+
+		// Get the cancel button gameobject
+		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+		// Set cancel button to not active
+		cancelButton.transform.GetChild (0).gameObject.SetActive (false);
 	}
 
 	// Set the selected unit to be able to move
@@ -159,12 +173,17 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Skip current turn
 	public void SkipTurn()
 	{
-		// Check if unit is available and if unit can move
+		// Check if unit is available
 		if(selectedPlayer)
 		{
 			selectedPlayer.TurnEnd ();
-			TurnManager.Instance.ExitPlayerTurn ();
 		}
+		TurnManager.Instance.ExitPlayerTurn ();
+
+		// Find the end button gameobject
+		GameObject endButton = GameObject.FindGameObjectWithTag ("EndTurnButton");
+		// Set end button to not active
+		endButton.transform.GetChild (0).gameObject.SetActive (false);
 	}
 
 	// Set & Get Selected Unit
@@ -183,68 +202,80 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	public bool GetIsMoving() {return isMoving;}
 	public void SetIsMoving(bool _stopMove) {isMoving = _stopMove;}
 
-	// Calculation of Damage Value for attacking
-	public int CalculateDamage(Players player, AI enemy)
+	// Return calculated Damage Value for attacking - Need to pass in GameObjects of Attacker and Victim
+	public int CalculateDamage(GameObject attacker, GameObject victim)
 	{
-		Weapon weapon = player.GetStats ()._weapon;
-		Armor armor = enemy.GetStats ()._armor;
-		int damageDeal = 1;
+		// Weapon of player and Armor of enemy informations
+		Weapon weapon = attacker.GetComponent<UnitVariables>()._weapon;
+		Armor armor = victim.GetComponent<UnitVariables>()._armor;
 
-		if (weapon.Type == "Slash")
-		{
-			// Strong against
-			if (armor.Type == "Light")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
-			}
-			// Weak against
-			else if (armor.Type == "Heavy")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
-			}
-			// Normal
-			else
-			{
-				damageDeal = Mathf.Max(1, weapon.Attack - armor.Defence);
-			}
-		}
-		else if (weapon.Type == "Pierce")
-		{
-			// Strong against
-			if (armor.Type == "Medium")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
-			}
-			// Weak against
-			else if (armor.Type == "Light")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
-			}
-			// Normal
-			else
-			{
-				damageDeal = Mathf.Max(1, weapon.Attack - armor.Defence);
-			}
-		}
-		else if (weapon.Type == "Blunt")
-		{
-			// Strong against
-			if (armor.Type == "Heavy")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
-			}
-			// Weak against
-			else if (armor.Type == "Medium")
-			{
-				damageDeal = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
-			}
-			// Normal
-			else
-			{
-				damageDeal = Mathf.Max(1, weapon.Attack - armor.Defence);
-			}
-		}
+		// Damage Calculations
+		int damageDeal = -1;
+		int advantagedDamage = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
+		int disadvantagedDamage = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
+		int normalDamage = Mathf.Max(1, weapon.Attack - armor.Defence);
 
+		switch (weapon.Type)
+		{
+		case "Slash":
+			{
+				switch (armor.Type) 
+				{
+				// Strong against
+				case "Light":
+					{
+						damageDeal = advantagedDamage;
+						break;
+					}
+				// Weak against
+				case "Heavy":
+					{
+						damageDeal = disadvantagedDamage;
+						break;
+					}
+				}
+				break;
+			}
+		case "Pierce":
+			{
+				switch (armor.Type) 
+				{
+				// Strong against
+				case "Medium":
+					{
+						damageDeal = advantagedDamage;
+						break;
+					}
+				// Weak against
+				case "Light":
+					{
+						damageDeal = disadvantagedDamage;
+						break;
+					}
+				}
+				break;
+			}
+		case "Blunt":
+			{
+				switch (armor.Type) {
+				// Strong against
+				case "Heavy":
+					{
+						damageDeal = advantagedDamage;
+						break;
+					}
+				// Weak against
+				case "Medium":
+					{
+						damageDeal = disadvantagedDamage;
+						break;
+					}
+				}
+				break;
+			}
+		}
+		if(damageDeal == -1)
+			damageDeal = normalDamage;
 		return damageDeal;
 	}
 		
@@ -270,67 +301,105 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		{
 			Nodes temp = theQueue.Dequeue ();
 
-			selectableNodes.Add (temp);
-
-			temp.SetSelectable (true);
-			temp.ChangeColour ();
-
 			// Do not check tiles if the dist of furthest tile is more than max dist
-			if (temp.GetDist () < 3)
+			if (temp.GetDist () < selectedPlayer.GetAP ())
 			{
+				// Get the nodes adjacent to the temp node
+				Nodes tempUp = null; 
+				Nodes tempLeft = null;
+				Nodes tempDown = null;
+				Nodes tempRight = null;
+
+				if(temp.GetZIndex () + 1 <= GridSystem.Instance.GetColumn () - 1)
+					tempUp = GridSystem.Instance.GetNode (temp.GetXIndex (), temp.GetZIndex () + 1);
+				if(temp.GetXIndex () - 1 >= 0)
+					tempLeft = GridSystem.Instance.GetNode (temp.GetXIndex () - 1, temp.GetZIndex ());
+				if(temp.GetZIndex () - 1 >= 0)
+					tempDown = GridSystem.Instance.GetNode (temp.GetXIndex (), temp.GetZIndex () - 1);
+				if(temp.GetXIndex () + 1 <= GridSystem.Instance.GetRows () - 1)
+					tempRight = GridSystem.Instance.GetNode (temp.GetXIndex () + 1, temp.GetZIndex ());
+
 				// Checks Tile Above
-				if (temp.GetZIndex () + 1 <= GridSystem.Instance.GetColumn () - 1
-				  && !visited [temp.GetXIndex (), temp.GetZIndex () + 1])
+				if (tempUp != null
+					&& !visited [tempUp.GetXIndex (), tempUp.GetZIndex ()]
+					&& tempUp.GetOccupied () == null)
 				{
-					Nodes tempUp = GridSystem.Instance.GetNode (temp.GetXIndex (), temp.GetZIndex () + 1);
+					// Set the current node's distance from starting node
 					tempUp.SetDist (1 + temp.GetDist ());
+					// Set this node to be selectable
 					tempUp.SetSelectable (true);
+					// Change this node's color
 					tempUp.ChangeColour ();
+					// Set the node's parent to be the previous node
 					tempUp.SetParent (temp);
+					// Set current node's visited to be true
 					visited [tempUp.GetXIndex (), tempUp.GetZIndex ()] = true;
+					// Add current node to the queue
 					theQueue.Enqueue (tempUp);
+					// Add this node to the list of selectable node
 					selectableNodes.Add (tempUp);
 				}
 
 				// Checks Tile Left
-				if (temp.GetXIndex () - 1 >= 0
-					&& !visited [temp.GetXIndex () - 1, temp.GetZIndex ()])
+				if (tempLeft != null
+					&& !visited [tempLeft.GetXIndex (), tempLeft.GetZIndex ()]
+					&& tempLeft.GetOccupied () == null)
 				{
-					Nodes tempLeft = GridSystem.Instance.GetNode (temp.GetXIndex () - 1, temp.GetZIndex ());
+					// Set the current node's distance from starting node
 					tempLeft.SetDist (1 + temp.GetDist ());
+					// Set this node to be selectable
 					tempLeft.SetSelectable (true);
+					// Change this node's color
 					tempLeft.ChangeColour ();
+					// Set the node's parent to be the previous node
 					tempLeft.SetParent (temp);
+					// Set current node's visited to be true
 					visited [tempLeft.GetXIndex (), tempLeft.GetZIndex ()] = true;
+					// Add current node to the queue
 					theQueue.Enqueue (tempLeft);
+					// Add this node to the list of selectable node
 					selectableNodes.Add (tempLeft);
 				}
 
 				// Checks Tile Below
-				if (temp.GetZIndex () - 1 >= 0
-					&& !visited [temp.GetXIndex (), temp.GetZIndex () - 1])
+				if (tempDown != null
+					&& !visited [tempDown.GetXIndex (), tempDown.GetZIndex ()]
+					&& tempDown.GetOccupied () == null)
 				{
-					Nodes tempDown = GridSystem.Instance.GetNode (temp.GetXIndex (), temp.GetZIndex () - 1);
+					// Set the current node's distance from starting node
 					tempDown.SetDist (1 + temp.GetDist ());
+					// Set this node to be selectable
 					tempDown.SetSelectable (true);
+					// Change this node's color
 					tempDown.ChangeColour ();
+					// Set the node's parent to be the previous node
 					tempDown.SetParent (temp);
+					// Set current node's visited to be true
 					visited [tempDown.GetXIndex (), tempDown.GetZIndex ()] = true;
+					// Add current node to the queue
 					theQueue.Enqueue (tempDown);
+					// Add this node to the list of selectable node
 					selectableNodes.Add (tempDown);
 				}
 
 				// Checks Tile Right
-				if (temp.GetXIndex () + 1 <= GridSystem.Instance.GetRows () - 1
-					&& !visited [temp.GetXIndex () + 1, temp.GetZIndex ()])
+				if (tempRight != null
+					&& !visited [tempRight.GetXIndex (), tempRight.GetZIndex ()]
+					&& tempRight.GetOccupied () == null)
 				{
-					Nodes tempRight = GridSystem.Instance.GetNode (temp.GetXIndex () + 1, temp.GetZIndex ());
+					// Set the current node's distance from starting node
 					tempRight.SetDist (1 + temp.GetDist ());
+					// Set this node to be selectable
 					tempRight.SetSelectable (true);
+					// Change this node's color
 					tempRight.ChangeColour ();
+					// Set the node's parent to be the previous node
 					tempRight.SetParent (temp);
+					// Set current node's visited to be true
 					visited [tempRight.GetXIndex (), tempRight.GetZIndex ()] = true;
+					// Add current node to the queue
 					theQueue.Enqueue (tempRight);
+					// Add this node to the list of selectable node
 					selectableNodes.Add (tempRight);
 				}
 			}
@@ -377,14 +446,10 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			targetNode = targetNode.GetParent ();
 		}
 
-		Debug.Log (selectedPlayer.GetPath ().Count);
-
 		// Since the player's curr node's parent is null
 		// Pop the path to remove the player's curr node from path
 		selectedPlayer.GetPath().Pop ();
 		selectedPlayer.GetCurrNode ().SetIsPath (false);
-
-		Debug.Log (selectedPlayer.GetPath ().Count);
 
 		// Make all the units unselectable as the player moves
 		RemoveSelectable ();

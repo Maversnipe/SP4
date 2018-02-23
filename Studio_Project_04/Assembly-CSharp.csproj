@@ -46,7 +46,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\NPC.cs" />
+     <Compile Include="Assets\OpenWorldFade.cs" />
      <Compile Include="Assets\Scripts\AI.cs" />
      <Compile Include="Assets\Scripts\BackToMenu.cs" />
      <Compile Include="Assets\Scripts\CameraControl.cs" />
@@ -66,10 +66,16 @@
      <Compile Include="Assets\Scripts\Inventory\Slot.cs" />
      <Compile Include="Assets\Scripts\ItemScripts\ConsumableItem.cs" />
      <Compile Include="Assets\Scripts\MainMenu.cs" />
+     <Compile Include="Assets\Scripts\NPC.cs" />
      <Compile Include="Assets\Scripts\Nodes.cs" />
      <Compile Include="Assets\Scripts\OpenControl.cs" />
      <Compile Include="Assets\Scripts\PlayerManager.cs" />
      <Compile Include="Assets\Scripts\Players.cs" />
+     <Compile Include="Assets\Scripts\Shop\SellScript.cs" />
+     <Compile Include="Assets\Scripts\Shop\Shop.cs" />
+     <Compile Include="Assets\Scripts\Shop\ShopItemData.cs" />
+     <Compile Include="Assets\Scripts\Shop\ShopPanel.cs" />
+     <Compile Include="Assets\Scripts\Shop\ShopSlot.cs" />
      <Compile Include="Assets\Scripts\TurnManager.cs" />
      <Compile Include="Assets\Scripts\UI Nonsense Scripts\FadeUI.cs" />
      <Compile Include="Assets\Scripts\UI Nonsense Scripts\FillingUI.cs" />

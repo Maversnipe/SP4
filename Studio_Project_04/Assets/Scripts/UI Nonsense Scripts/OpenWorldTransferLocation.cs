@@ -5,42 +5,25 @@ using UnityEngine.UI;
 
 public class OpenWorldTransferLocation : MonoBehaviour {
 
-	public Image Fade;
+	public GameObject Fade;
 
 	public GameObject TransportLocation;
 
-	private Color Temp;
-
-	private bool FadeIn;
-
 	// Use this for initialization
 	void Start () {
-		Temp = Fade.color;
-		Temp.a = 0;
+		
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Fade.color = Temp;
 
-		if (FadeIn) {
-			if (Temp.a < 1) {
-				Temp.a += 0.05f;
-			}
-		}
-
-		if (!FadeIn) {
-			if (Temp.a > 0) {
-				Temp.a -= 0.05f;
-			}
-		}
 	}
 
 	void OnTriggerStay(Collider other) {
 		if (other.name == "Player") {
-			FadeIn = true;
+			Fade.GetComponent<OpenWorldFade> ().SetFade (true);
 
-			if (Temp.a >= 1) {
+			if (Fade.GetComponent<OpenWorldFade>().GetAlpha() >= 1) {
 				other.transform.position = TransportLocation.transform.position;
 				other.GetComponent<OpenControl> ().StopMoving ();
 			}
@@ -49,7 +32,7 @@ public class OpenWorldTransferLocation : MonoBehaviour {
 
 	void OnTriggerExit(Collider other) {
 		if (other.name == "Player") {
-			FadeIn = false;
+			Fade.GetComponent<OpenWorldFade>().SetFade(false);
 		}
 	}
 }

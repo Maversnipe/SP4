@@ -57,8 +57,10 @@ public class UnitVariables : MonoBehaviour {
 		this.startHp = RealStats.startHp;
 	}
 
+	// Update health bar for all units
 	public void UpdateHealthBar()
 	{
+		// Calculation of health percentage
 		healthbar.fillAmount = ((float)this.HP / (float)this.startHp);
 	}
 }
