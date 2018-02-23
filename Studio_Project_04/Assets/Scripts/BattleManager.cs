@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // This represents the game mode that the player is in
 public enum GAMEMODE
@@ -24,6 +25,9 @@ public class BattleManager : GenericSingleton<BattleManager>
 	// Keeps track of number of turns have passed
 	private int numOfTurns;
 
+	// The unit that has to be protected
+	private AI protectUnit;
+
 	// Use this for initialization
 	void Start () {
 		// Set game mode to none
@@ -32,6 +36,8 @@ public class BattleManager : GenericSingleton<BattleManager>
 		numOfEnemies = 0;
 		// Set num or turns to 0
 		numOfTurns = 0;
+		// Set protectUnit to null
+		protectUnit = null;
 	}
 	
 	// Update is called once per frame
@@ -41,8 +47,15 @@ public class BattleManager : GenericSingleton<BattleManager>
 			case GAMEMODE.OPEN_WORLD:
 				break;
 			case GAMEMODE.KILL_ALL_ENEMIES:
+				// Checks if enemy count is less than or equal to 0
+				if(numOfEnemies <= 0)
+				{
+					// Game Win
+					SceneManager.LoadScene ("SceneCleared");
+				}
 				break;
 			case GAMEMODE.PROTECT_THE_PRESIDENT:
+				
 				break;
 		}
 	}
@@ -54,6 +67,18 @@ public class BattleManager : GenericSingleton<BattleManager>
 		numOfEnemies = 0;
 		// Set num or turns to 0
 		numOfTurns = 0;
+	}
+
+	// Start Kill All Game Mode
+	public void StartKillAll()
+	{
+		
+	}
+
+	// Start Protect The President Game Mode
+	public void StartProtect()
+	{
+		
 	}
 		
 	// Get & Set num of enemies in battle

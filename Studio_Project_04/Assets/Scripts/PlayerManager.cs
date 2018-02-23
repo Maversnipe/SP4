@@ -115,16 +115,6 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	// For deselecting an action
 	public void DeselectActions()
 	{
-//		if (!ableToMove && !ableToAttack)
-//		{ // To deselect the selected unit
-//			if (Input.GetMouseButtonDown(1))
-//			{
-//				selectedPlayer.transform.GetChild (0).gameObject.SetActive (false);
-//				selectedPlayer.menuOpen = false;
-//				selectedPlayer.TurnEnd ();
-//				selectedPlayer = null;
-//			}
-//		}
 		if (ableToMove)
 		{ // If move is clicked, you can deselect move
 			selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
@@ -140,6 +130,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			ableToAttack = false;
 		}
 
+		// Change player back to default color
 		selectedPlayer.SetToDefaultColor ();
 
 		// Get the cancel button gameobject
