@@ -7,11 +7,9 @@ using UnityEngine.EventSystems;
 public class Slot : MonoBehaviour, IDropHandler {
 
     public int id;
-    //private Inventory inv;
 
     // Use this for initialization
     void Start () {
-        //inv = GameObject.Find("Inventory").GetComponent<Inventory>();
 	}
 
     public void OnDrop(PointerEventData eventData)

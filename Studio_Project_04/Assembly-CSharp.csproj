@@ -77,8 +77,9 @@
      <Compile Include="Assets\Scripts\Shop\ShopItemData.cs" />
      <Compile Include="Assets\Scripts\Shop\ShopPanel.cs" />
      <Compile Include="Assets\Scripts\Shop\ShopSlot.cs" />
+     <Compile Include="Assets\Scripts\Status\EquipmentInfoPanel.cs" />
      <Compile Include="Assets\Scripts\Status\EquipmentSlot.cs" />
-     <Compile Include="Assets\Scripts\Status\StatusScript.cs" />
+     <Compile Include="Assets\Scripts\Status\StatusMenu.cs" />
      <Compile Include="Assets\Scripts\TurnManager.cs" />
      <Compile Include="Assets\Scripts\UI Nonsense Scripts\FadeUI.cs" />
      <Compile Include="Assets\Scripts\UI Nonsense Scripts\FillingUI.cs" />
