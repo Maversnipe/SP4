@@ -20,10 +20,16 @@ public class UnitVariables : MonoBehaviour {
 	private Image healthbar;
 	private int startHp;
 
+	[SerializeField]
+	private GameObject UnitInfoObject;
+	[SerializeField]
+	private GameObject OpponentUnitInfoObject;
+
 	//Take From Database
 	public string Name;
 	public int HP;
 	public int AP;
+	public int startAP;
 	public int Initiative;
 	public int ID;
 	public Weapon _weapon;
@@ -42,6 +48,7 @@ public class UnitVariables : MonoBehaviour {
 		this._armor = ArmorDatabase.Instance.FetchArmorByName (armor);
 
 		this.startHp = this.HP;
+		this.startAP = this.AP;
 	}
 
 	public void Copy(UnitVariables RealStats)
@@ -55,6 +62,7 @@ public class UnitVariables : MonoBehaviour {
 		this._armor = RealStats._armor;
 
 		this.startHp = RealStats.startHp;
+		this.startAP = RealStats.startAP;
 	}
 
 	// Update health bar for all units
@@ -62,5 +70,76 @@ public class UnitVariables : MonoBehaviour {
 	{
 		// Calculation of health percentage
 		healthbar.fillAmount = ((float)this.HP / (float)this.startHp);
+	}
+
+	// Update Unit Info Window for all units - Active status
+	public void SetUnitInfoWindow(bool isActive)
+	{
+		// Set Unit Info Window according to passed in boolean
+		UnitInfoObject.transform.GetChild (0).gameObject.SetActive (isActive);
+	}
+
+	// Update Unit Info Window for all units - Text values
+	public void UpdateUnitInfo()
+	{
+		// Get the end button gameobject
+		Transform UnitInfoWindow = UnitInfoObject.transform.GetChild(0).transform;
+
+		// Update values inside Unit Infor Window
+
+		// Name
+		Text Name = UnitInfoWindow.Find("Name variable").GetChild(0).GetComponent<Text>();
+		Name.text = this.Name.ToString();
+
+		// HP
+		Text HP = UnitInfoWindow.Find("HP variable").GetChild(0).GetComponent<Text>();
+		HP.text = this.HP.ToString();
+
+		// AP
+		Text AP = UnitInfoWindow.Find("AP variable").GetChild(0).GetComponent<Text>();
+		AP.text = this.AP.ToString();
+
+		// Weapon
+		Text Weapon = UnitInfoWindow.Find("Weapon variable").GetChild(0).GetComponent<Text>();
+		Weapon.text = this._weapon.Title;
+
+		// Armor
+		Text Armor = UnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
+		Armor.text = this._armor.Title;
+	}
+
+	public void SetOpponentUnitInfoWindow(bool isActive)
+	{
+		// Set Unit Info Window according to passed in boolean
+		OpponentUnitInfoObject.transform.GetChild (0).gameObject.SetActive (isActive);
+	}
+
+	// Update Unit Info Window for all units - Text values
+	public void UpdateOpponentUnitInfo(UnitVariables OpponentStats)
+	{
+		// Get the end button gameobject
+		Transform OpponentUnitInfoWindow = OpponentUnitInfoObject.transform.GetChild(0).transform;
+
+		// Update values inside Unit Infor Window
+
+		// Name
+		Text Name = OpponentUnitInfoWindow.Find("Name variable").GetChild(0).GetComponent<Text>();
+		Name.text = OpponentStats.Name.ToString();
+
+		// HP
+		Text HP = OpponentUnitInfoWindow.Find("HP variable").GetChild(0).GetComponent<Text>();
+		HP.text = OpponentStats.HP.ToString();
+
+		// AP
+		Text AP = OpponentUnitInfoWindow.Find("AP variable").GetChild(0).GetComponent<Text>();
+		AP.text = OpponentStats.AP.ToString();
+
+		// Weapon
+		Text Weapon = OpponentUnitInfoWindow.Find("Weapon variable").GetChild(0).GetComponent<Text>();
+		Weapon.text = OpponentStats._weapon.Title;
+
+		// Armor
+		Text Armor = OpponentUnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
+		Armor.text = OpponentStats._armor.Title;
 	}
 }

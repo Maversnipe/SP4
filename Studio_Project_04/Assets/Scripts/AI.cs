@@ -91,6 +91,9 @@ public class AI : MonoBehaviour {
 				(selectedUnitObject.GetCurrNode ().GetZIndex () - 1 ==  currNode.GetZIndex ()
 					&& selectedUnitObject.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()))
 			{
+				// Update Opponent Unit Info
+				selectedUnitObject.GetStats ().UpdateOpponentUnitInfo(this.Stats);
+
 				// Set selected player unit's new AP
 				selectedUnitObject.SetAP (selectedUnitObject.GetAP () - 1);
 
@@ -108,6 +111,9 @@ public class AI : MonoBehaviour {
 				// Change unit back to no unit
 				PlayerManager.Instance.ChangeUnit (null);
 
+				// De-Spawn Opponent Unit Info Window
+				selectedUnitObject.GetStats ().SetOpponentUnitInfoWindow (false);
+
 			}
 		}
 	}
@@ -121,6 +127,13 @@ public class AI : MonoBehaviour {
 		{
 			// Get information from Units class
 			Players selectedUnitClass = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
+
+			// Spawn Opponent Unit Info Window
+			selectedUnitClass.GetStats ().SetOpponentUnitInfoWindow (true);
+
+			// Update Opponent Unit Info
+			selectedUnitClass.GetStats ().UpdateOpponentUnitInfo (this.Stats);
+
 			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
 			if ((selectedUnitClass.GetCurrNode ().GetXIndex () + 1 == currNode.GetXIndex ()
@@ -130,17 +143,37 @@ public class AI : MonoBehaviour {
 			    (selectedUnitClass.GetCurrNode ().GetZIndex () + 1 == currNode.GetZIndex ()
 			    && selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()) ||
 			    (selectedUnitClass.GetCurrNode ().GetZIndex () - 1 == currNode.GetZIndex ()
-			    && selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()))
-			{
+			    && selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ())) {
 				// Change Visibility of Node to opague
 				rend.material.color = HoverColor;
 			}
 		}
+		else
+		{
+			// Spawn Unit Info Window
+			Stats.SetUnitInfoWindow(true);
+		}
+			
 	}
 
 	// Run only when Mouse cursor move out of the node collision box
 	void OnMouseExit()
 	{
+		if (PlayerManager.Instance.GetAbleToAttack ())
+		{
+			// Get information from Units class
+			Players selectedUnitClass = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
+
+			// De-Spawn Opponent Unit Info Window
+			selectedUnitClass.GetStats ().SetOpponentUnitInfoWindow (false);
+		}
+		else
+		{
+			// De-Spawn Unit Info Window
+			Stats.SetUnitInfoWindow(false);
+		}
+
+
 		rend.material.color = Color.white;
 	}
 	
@@ -149,6 +182,10 @@ public class AI : MonoBehaviour {
 		this.gameObject.GetComponent<UnitVariables> ().Copy (Stats);
 		this.gameObject.GetComponent<UnitVariables> ().UpdateHealthBar ();
 
+		// Update Unit Info Window only if its Active
+		if (!PlayerManager.Instance.GetAbleToAttack ())
+			this.gameObject.GetComponent<UnitVariables> ().UpdateUnitInfo ();
+		
 		if (turnManager.GetCurrUnit() == null || turnManager.GetCurrUnit().GetID() != this.gameObject.GetComponent<AI>().GetID())
 		{
 			return;
@@ -158,8 +195,12 @@ public class AI : MonoBehaviour {
 			// print (this.gameObject.name + " " + Stats.AP);
 
 			if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
+
+				// Spawn Unit Info Window
+				Stats.SetUnitInfoWindow(true);
 				currNode.SetSelectable (false);
 				currNode.ChangeColour ();
+				currNode.SetOccupiedNULL ();
 				switch (Personality) {
 				case(EnemyStrategy.AGGRESSIVE):
 					AggressiveAction ();
@@ -178,9 +219,12 @@ public class AI : MonoBehaviour {
 		} else {
 			if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
 				this.transform.position = TargetMovement;
+				
+				// De-Spawn Unit Info Window
+				Stats.SetUnitInfoWindow(false);
 				currNode.SetSelectable (false);
 				currNode.ChangeColour ();
-				currNode.SetOccupiedNULL ();
+				currNode.SetOccupied (this.gameObject);
 				TurnEnd ();
 			}
 		}
@@ -225,6 +269,7 @@ public class AI : MonoBehaviour {
 						currNode.SetOccupied (this.gameObject);
 					} else {
 						isAttacking = true;
+
 						EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP--;
 					}
 				} else {
@@ -232,7 +277,8 @@ public class AI : MonoBehaviour {
 					UnitVariables Temp = EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ();
 					Temp.HP--;
 					EnemyTarget.GetOccupied ().GetComponent<Players> ().SetStats (Temp);
-					EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ().UpdateHealthBar ();
+					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateHealthBar ();
+					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateUnitInfo ();
 				}
 				this.Stats.AP--;
 			}
@@ -261,11 +307,16 @@ public class AI : MonoBehaviour {
 		nextNode = null;
 		// Set Camera position to be the Unit's position
 		Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
+		Stats.AP = Stats.startAP;
 	}
 
 	// The reset for the end of each Unit's turn
 	public void TurnEnd()
 	{
+		EnemyTarget = null;
+		if (m_path.Count > 0)
+			m_path.Clear ();
+		Path_Set = false;
 		// If nextNode is not null, update currNode to be nextNode
 		// And null nextNode
 		if (nextNode)

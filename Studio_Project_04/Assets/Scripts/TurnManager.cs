@@ -53,7 +53,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		{
 			// Update Player
 			PlayerManager.Instance.UpdatePlayerUnits();
-
 		}
 		else
 		{
@@ -77,7 +76,7 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		{
 			Players thePlayer = ArrayOfPlayers [i].GetComponent <Players> ();
 			// Set each of Player's unit's AP at start of player's turn
-			thePlayer.SetAP (thePlayer.GetStats ().AP); 
+			thePlayer.SetAP (thePlayer.GetStats ().startAP); 
 		}
 
 		// Set to not be able to move unit

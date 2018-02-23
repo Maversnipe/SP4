@@ -44,6 +44,9 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			// Update the unit's heathbar image
 			selectedPlayer.GetComponent<UnitVariables>().UpdateHealthBar();
 
+			// Update Unit Info Window
+			selectedPlayer.GetComponent<UnitVariables> ().UpdateUnitInfo ();
+
 			// Only update menu when selected unit is not null
 			UpdateMenu();
 		}
