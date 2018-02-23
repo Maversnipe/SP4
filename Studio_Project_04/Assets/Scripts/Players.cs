@@ -84,6 +84,9 @@ public class Players : MonoBehaviour
 		// If it is Player's turn
 		if (turnManager.IsPlayerTurn ())
 		{
+			// Spawn Unit Info Window
+			Stats.SetUnitInfoWindow(true);
+
 			// Change Color of unit to HoverColor
 			rend.material.color = HoverColor;
 		}
@@ -97,6 +100,9 @@ public class Players : MonoBehaviour
 		{
 			if (!PlayerManager.Instance.GetSelectedUnit ())
 			{
+				// De-Spawn Unit Info Window
+				Stats.SetUnitInfoWindow(false);
+
 				// Change Color of unit back to DefaultColor
 				rend.material.color = DefaultColor;
 			}
@@ -106,6 +112,8 @@ public class Players : MonoBehaviour
 	void Update()
 	{
 		this.gameObject.GetComponent<UnitVariables> ().Copy (Stats);
+		// Update Unit Info Window
+		this.gameObject.GetComponent<UnitVariables> ().UpdateUnitInfo ();
 
 		// Cheat key to lose scene
 		if(Input.GetKeyDown("q"))
@@ -155,11 +163,13 @@ public class Players : MonoBehaviour
 					nextNode = path.Pop ();
 					// Set AP to new AP
 					turnAP -= 1;
+					this.Stats.AP--;
 				} 
 				else
 				{
 					// Set AP to new AP
 					turnAP -= 1;
+					this.Stats.AP--;
 					// End the turn of the player node
 					TurnEnd ();
 					// Change unit back to no unit
@@ -172,6 +182,9 @@ public class Players : MonoBehaviour
 	// Init for the start of each Unit's turn
 	public void TurnStart()
 	{
+		// Spawn Unit Info Window
+		Stats.SetUnitInfoWindow(true);
+
 		// Reset nextNode to null
 		nextNode = null;
 		// Set object to be highlighted
@@ -185,6 +198,9 @@ public class Players : MonoBehaviour
 	{
 		// If it is a playable unit
 		this.transform.GetChild (0).gameObject.SetActive (false);
+
+		// De-Spawn Unit Info Window
+		Stats.SetUnitInfoWindow(false);
 
 		// Set Color back to default
 		SetToDefaultColor();
@@ -239,5 +255,9 @@ public class Players : MonoBehaviour
 
 	// Get & Set Unit's AP for the turn
 	public int GetAP() {return turnAP;}
-	public void SetAP(int _ap) {turnAP = _ap;}
+	public void SetAP(int _ap)
+	{
+		turnAP = _ap;
+		this.Stats.AP = _ap;
+	}
 }
