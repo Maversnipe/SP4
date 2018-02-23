@@ -49,6 +49,7 @@
      <Compile Include="Assets\OpenWorldFade.cs" />
      <Compile Include="Assets\Scripts\AI.cs" />
      <Compile Include="Assets\Scripts\BackToMenu.cs" />
+     <Compile Include="Assets\Scripts\BattleManager.cs" />
      <Compile Include="Assets\Scripts\CameraControl.cs" />
      <Compile Include="Assets\Scripts\CameraFollow.cs" />
      <Compile Include="Assets\Scripts\Compiled Stuff\UnitVariables.cs" />
