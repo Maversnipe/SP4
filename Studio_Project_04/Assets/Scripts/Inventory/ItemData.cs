@@ -21,6 +21,7 @@ public class ItemData : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDra
 
     private GameObject DragItemHolder;
     private InfoPanel infoPanel;
+    private EquipmentInfoPanel equipmentInfoPanel;
     private Transform originalParent;
     private Vector2 offset;
 
@@ -28,12 +29,14 @@ public class ItemData : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDra
     {
         equipped = false;
         infoPanel = Inventory.Instance.GetComponent<InfoPanel>();
+        equipmentInfoPanel = StatusMenu.Instance.GetComponent<EquipmentInfoPanel>();
         shopOverlay = GameObject.Find("Shop Overlay");
         DragItemHolder = GameObject.Find("DragItemHolder");
     }
 
     private void Update()
     {
+        shopOverlay = GameObject.Find("Shop Overlay");
         transform.GetChild(0).GetComponent<Text>().text = amount.ToString();
     }
 
@@ -48,6 +51,7 @@ public class ItemData : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDra
             GetComponent<CanvasGroup>().blocksRaycasts = false;
             shopOverlay.GetComponent<Image>().raycastTarget = true;
             infoPanel.Deactivate();
+            equipmentInfoPanel.Deactivate();
         }
     }
 
@@ -64,15 +68,27 @@ public class ItemData : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDra
         if(!equipped)
         {
             this.transform.SetParent(Inventory.Instance.slots[slot].transform);
-            this.transform.position = Inventory.Instance.slots[slot].transform.position;
-            GetComponent<CanvasGroup>().blocksRaycasts = true;
-            shopOverlay.GetComponent<Image>().raycastTarget = false;
+            this.transform.position = Inventory.Instance.slots[slot].transform.position;   
         }
-       
+        else
+        {
+            this.transform.SetParent(originalParent);
+            this.transform.position = originalParent.position;
+        }
+        GetComponent<CanvasGroup>().blocksRaycasts = true;
+        shopOverlay.GetComponent<Image>().raycastTarget = false;
+
     }
 
     public void OnPointerClick(PointerEventData eventData)
     {
-        infoPanel.Activate(this.gameObject.GetComponent<ItemData>());
+        if (!equipped)
+        {
+            infoPanel.Activate(this.gameObject.GetComponent<ItemData>());
+        }
+        else
+        {
+            equipmentInfoPanel.Activate(this.gameObject.GetComponent<ItemData>());
+        }
     }
 }

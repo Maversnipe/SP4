@@ -12,16 +12,69 @@ public class ButtonScript : MonoBehaviour {
     public ItemData itemData;
     public ShopItemData shopItemData;
 
+    public GameObject statusMenu;
+    public GameObject equipmentSlotPanel;
+
     public GameObject amountField;
 
 	// Use this for initialization
 	void Start () {
         amountField = GameObject.Find("AmountField");
+        statusMenu = GameObject.Find("StatusMenu");
+        equipmentSlotPanel = statusMenu.transform.Find("Equipment Slot Panel " + statusMenu.GetComponent<StatusMenu>().currPlayerUnit).gameObject;
+    }
+
+    private void Update()
+    {
+        equipmentSlotPanel = statusMenu.transform.Find("Equipment Slot Panel " + statusMenu.GetComponent<StatusMenu>().currPlayerUnit).gameObject;
     }
 	
     public void closePanel()
     {
         this.transform.parent.gameObject.SetActive(false);
+    }
+
+    public void equipItem()
+    {
+        if(itemData.weapon != null)
+        {
+            if (equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().isEmpty)
+            {
+                itemData.equipped = true;
+                itemData.transform.SetParent(equipmentSlotPanel.transform.Find("Weapon Slot").transform);
+                itemData.transform.position = equipmentSlotPanel.transform.Find("Weapon Slot").transform.position;
+                equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().temp = Inventory.Instance.items[itemData.slot];
+                Inventory.Instance.items[itemData.slot] = new InventoryObject();
+                equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().isEmpty = false;
+            }
+        }
+    }
+
+    public void unequipItem()
+    {
+        if(itemData.weapon != null)
+        {
+            if (!equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().isEmpty)
+            {
+                itemData.equipped = false;
+
+                for (int i = 0; i < Inventory.Instance.items.Count; i++)
+                {
+                    if (Inventory.Instance.items[i].isEmpty)
+                    {
+                        itemData.slot = i;
+                        itemData.equipped = false;
+                        Inventory.Instance.items[i] = equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().temp;
+                        equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().isEmpty = true;
+                        itemData.transform.SetParent(Inventory.Instance.slots[i].transform);
+                        itemData.transform.position = Inventory.Instance.slots[i].transform.position;
+                        break;
+                    
+                    }
+                }
+            }
+        }
+        
     }
 
     public void useItem()

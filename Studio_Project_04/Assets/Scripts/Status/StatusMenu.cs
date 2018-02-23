@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
-public class StatusScript : MonoBehaviour {
+[System.Serializable]
+public class StatusMenu : GenericSingleton<StatusMenu>, IDragHandler
+{
 
     private GameObject[] players;
 
@@ -25,9 +28,10 @@ public class StatusScript : MonoBehaviour {
     // Use this for initialization
     void Start()
     {
+        currPlayerUnit = 0;
 
         players = GameObject.FindGameObjectsWithTag("PlayerUnit");
-        equipmentPanel = GameObject.Find("Equipment Slot Panel");
+        equipmentPanel = GameObject.Find("Equipment Slot Panel " + currPlayerUnit);
 
         weapon = GameObject.Find("Weapon Slot");
         weapon.GetComponent<EquipmentSlot>().slotType = "Weapon";
@@ -52,4 +56,10 @@ public class StatusScript : MonoBehaviour {
     {
 
     }
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        this.transform.position = eventData.position;
+    }
+
 }
