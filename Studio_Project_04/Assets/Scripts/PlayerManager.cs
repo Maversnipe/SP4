@@ -98,7 +98,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			selectedPlayer.transform.GetChild (0).gameObject.SetActive (false);
 		}
 
-		if(ableToMove || ableToAttack)
+		if(selectedPlayer.menuOpen)
 		{
 			// Get the cancel button gameobject
 			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
@@ -135,6 +135,9 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 
 		// Change player back to default color
 		selectedPlayer.SetToDefaultColor ();
+
+		// Close Action Menu
+		selectedPlayer.menuOpen = false;
 
 		// Get the cancel button gameobject
 		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");

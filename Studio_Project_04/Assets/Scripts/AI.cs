@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public enum EnemyStrategy{
 	AGGRESSIVE,
@@ -76,6 +77,10 @@ public class AI : MonoBehaviour {
 	// Run only when Mouse click on the unit
 	void OnMouseDown()
 	{
+		// Return if AI is blocked by UI elements
+		if (EventSystem.current.IsPointerOverGameObject ())
+			return;
+		
 		// if unit can attack
 		if (PlayerManager.Instance.GetAbleToAttack ())
 		{
@@ -122,6 +127,10 @@ public class AI : MonoBehaviour {
 	// Visual feedback for player, show that he/she can clicked on these nodes
 	void OnMouseEnter()
 	{
+		// Return if AI is blocked by UI elements
+		if (EventSystem.current.IsPointerOverGameObject ())
+			return;
+		
 		// if unit can attack
 		if (PlayerManager.Instance.GetAbleToAttack ())
 		{

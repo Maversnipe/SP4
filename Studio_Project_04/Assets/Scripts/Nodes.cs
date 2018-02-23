@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class Nodes : MonoBehaviour
 {
@@ -59,6 +60,10 @@ public class Nodes : MonoBehaviour
 	// Run only when Mouse click onto the unit
 	void OnMouseDown()
 	{
+		// Return if node is blocked by UI elements
+		if (EventSystem.current.IsPointerOverGameObject ())
+			return;
+		
 		// Check if unit is available
 		if (playerManager.GetSelectedUnit () != null)
 		{
@@ -86,6 +91,10 @@ public class Nodes : MonoBehaviour
 	// Visual feedback for player, show that he/she can clicked on these nodes
 	void OnMouseEnter()
 	{
+		// Return if node is blocked by UI elements
+		if (EventSystem.current.IsPointerOverGameObject ())
+			return;
+		
 		// Check if unit is available
 		if (playerManager.GetSelectedUnit () != null)
 		{

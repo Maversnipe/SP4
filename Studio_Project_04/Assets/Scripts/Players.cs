@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.EventSystems;
 
 public class Players : MonoBehaviour
 {
@@ -70,6 +71,10 @@ public class Players : MonoBehaviour
 	// Run only when Mouse click onto the unit
 	void OnMouseDown()
 	{
+		// Return if player is blocked by UI elements
+		if (EventSystem.current.IsPointerOverGameObject ())
+			return;
+		
 		// If it is Player's turn
 		if(turnManager.IsPlayerTurn () && turnAP > 0)
 		{
@@ -81,6 +86,10 @@ public class Players : MonoBehaviour
 	// Run only when Mouse cursor move into the unit collision box
 	void OnMouseEnter()
 	{
+		// Return if player is blocked by UI elements
+		if (EventSystem.current.IsPointerOverGameObject ())
+			return;
+		
 		// If it is Player's turn
 		if (turnManager.IsPlayerTurn ())
 		{
