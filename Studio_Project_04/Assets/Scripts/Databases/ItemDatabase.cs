@@ -15,7 +15,7 @@ public class ItemDatabase : GenericSingleton<ItemDatabase>
 	// Use this for initialization
 	void Start () {
         itemData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Items.json"));
-        Debug.Log("1");
+
         ConstructItemDatabase();
 
 	}
