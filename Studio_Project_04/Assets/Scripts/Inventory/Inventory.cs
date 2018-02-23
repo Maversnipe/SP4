@@ -65,7 +65,7 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
         {
             for (int i = 0; i < items.Count; i++)
             {
-                if (!items[i].isEmpty && items[i].item.ID == id)
+                if (!items[i].isEmpty && items[i].item != null)
                 {
                     if (items[i].item.ID == id)
                     {
@@ -124,7 +124,7 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
         {
             for (int i = 0; i < items.Count; i++)
             {
-                if (!items[i].isEmpty && items[i].item.ID == id)
+                if (!items[i].isEmpty && items[i].item != null)
                 {
                     if (items[i].item.ID == id)
                     {
@@ -145,8 +145,8 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
         {
             if (checkForItem(itemToRemove))
             {
-                items[FindItemToRemove(itemToRemove)].item = null;
-                slots[FindItemToRemove(itemToRemove)].transform.DetachChildren();
+                GameObject.Destroy(slots[FindItemToRemove(itemToRemove)].transform.GetChild(0).gameObject);
+                items[FindItemToRemove(itemToRemove)] = new InventoryObject();
             }
         }
 
@@ -154,8 +154,8 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
         {
             if (checkForItem(itemToRemove))
             {
-                items[FindItemToRemove(itemToRemove)].item = null;
-                slots[FindItemToRemove(itemToRemove)].transform.DetachChildren();
+                GameObject.Destroy(slots[FindItemToRemove(itemToRemove)].transform.GetChild(0).gameObject);
+                items[FindItemToRemove(itemToRemove)] = new InventoryObject();
             }
         }
 
@@ -169,7 +169,7 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
         {
             for (int i = 0; i < items.Count; i++)
             {
-                if (!items[i].isEmpty && items[i].weapon.ID == id)
+                if (!items[i].isEmpty && items[i].weapon != null)
                 {
                     if (items[i].weapon.ID == id)
                     {
@@ -225,9 +225,9 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
         {
             for (int i = 0; i < items.Count; i++)
             {
-                if (!items[i].isEmpty && items[i].item.ID == id)
+                if (!items[i].isEmpty && items[i].weapon != null)
                 {
-                    if (items[i].item.ID == id)
+                    if (items[i].weapon.ID == id)
                     {
                         ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
                         if((data.amount - no) <= 0)
@@ -242,24 +242,17 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
                 }
             }
         }
-        else
-        {
-            if (checkForItem(weaponToRemove))
-            {
-                items[FindItemToRemove(weaponToRemove)].item = null;
-                slots[FindItemToRemove(weaponToRemove)].transform.DetachChildren();
-            }
-        }
+    }
 
-        if(removeItem)
-        {
-            if (checkForItem(weaponToRemove))
-            {
-                items[FindItemToRemove(weaponToRemove)].item = null;
-                slots[FindItemToRemove(weaponToRemove)].transform.DetachChildren();
-            }
-        }
+    public void RemoveWeapon(int id, int no, int slot)
+    {
+        Weapon weaponToRemove = WeaponDatabase.Instance.FetchWeaponByID(id);
 
+        if (checkForItem(weaponToRemove))
+        {
+            GameObject.Destroy(slots[slot].transform.GetChild(0).gameObject);
+            items[FindItemToRemove(weaponToRemove)] = new InventoryObject();
+        }
     }
 
     bool checkForItem(Item item)

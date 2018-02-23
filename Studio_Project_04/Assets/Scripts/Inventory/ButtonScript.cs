@@ -27,7 +27,8 @@ public class ButtonScript : MonoBehaviour {
     public void useItem()
     {
         Inventory.Instance.slots[itemData.slot].transform.GetChild(0).GetComponent<ConsumableItem>().Use();
-        itemData.amount--;
+        int itemID = itemData.item.ID;
+        Inventory.Instance.RemoveItem(itemID, 1);
     }
 
     public void buyItem()
@@ -56,13 +57,22 @@ public class ButtonScript : MonoBehaviour {
             int itemID = sellItemData.item.ID;
             Inventory.Instance.RemoveItem(itemID, amount);
             amount = 0;
+            amountField.GetComponent<InputField>().text = "";
             this.transform.parent.gameObject.SetActive(false);
         }
         else if (sellItemData.weapon != null)
         {
             int itemID = sellItemData.weapon.ID;
-            Inventory.Instance.RemoveWeapon(itemID, amount);
+            if(sellItemData.weapon.Stackable)
+            {
+                Inventory.Instance.RemoveWeapon(itemID, amount);
+            }
+            else
+            {
+                Inventory.Instance.RemoveWeapon(itemID, amount, sellItemData.slot);
+            }
             amount = 0;
+            amountField.GetComponent<InputField>().text = "";
             this.transform.parent.gameObject.SetActive(false);
         }
         //if (shopItemData.armor != null)

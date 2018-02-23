@@ -15,18 +15,21 @@ public class ItemData : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDra
 
     public int slot;
 
+    public bool equipped;
+
     private GameObject shopOverlay;
 
+    private GameObject DragItemHolder;
     private InfoPanel infoPanel;
     private Transform originalParent;
     private Vector2 offset;
 
     void Start()
     {
-        
+        equipped = false;
         infoPanel = Inventory.Instance.GetComponent<InfoPanel>();
         shopOverlay = GameObject.Find("Shop Overlay");
-
+        DragItemHolder = GameObject.Find("DragItemHolder");
     }
 
     private void Update()
@@ -40,10 +43,11 @@ public class ItemData : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDra
         {
             offset = eventData.position - new Vector2(this.transform.position.x, this.transform.position.y);
             originalParent = this.transform.parent;
-            this.transform.SetParent(this.transform.parent.parent);
+            this.transform.SetParent(DragItemHolder.transform);
             this.transform.position = eventData.position - offset;
             GetComponent<CanvasGroup>().blocksRaycasts = false;
             shopOverlay.GetComponent<Image>().raycastTarget = true;
+            infoPanel.Deactivate();
         }
     }
 
@@ -57,10 +61,14 @@ public class ItemData : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDra
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        this.transform.SetParent(Inventory.Instance.slots[slot].transform);
-        this.transform.position = Inventory.Instance.slots[slot].transform.position;
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
-        shopOverlay.GetComponent<Image>().raycastTarget = false;
+        if(!equipped)
+        {
+            this.transform.SetParent(Inventory.Instance.slots[slot].transform);
+            this.transform.position = Inventory.Instance.slots[slot].transform.position;
+            GetComponent<CanvasGroup>().blocksRaycasts = true;
+            shopOverlay.GetComponent<Image>().raycastTarget = false;
+        }
+       
     }
 
     public void OnPointerClick(PointerEventData eventData)
