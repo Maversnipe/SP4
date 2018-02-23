@@ -160,6 +160,7 @@ public class AI : MonoBehaviour {
 			if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
 				currNode.SetSelectable (false);
 				currNode.ChangeColour ();
+				currNode.SetOccupiedNULL ();
 				switch (Personality) {
 				case(EnemyStrategy.AGGRESSIVE):
 					AggressiveAction ();
@@ -180,7 +181,7 @@ public class AI : MonoBehaviour {
 				this.transform.position = TargetMovement;
 				currNode.SetSelectable (false);
 				currNode.ChangeColour ();
-				currNode.SetOccupiedNULL ();
+				currNode.SetOccupied (this.gameObject);
 				TurnEnd ();
 			}
 		}
