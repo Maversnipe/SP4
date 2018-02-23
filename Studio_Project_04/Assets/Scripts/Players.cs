@@ -231,6 +231,27 @@ public class Players : MonoBehaviour
 		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
 		// Set cancel button to not active
 		cancelButton.transform.GetChild (0).gameObject.SetActive (false);
+
+		// Get array of player units
+		GameObject[] ArrayOfPlayers = GameObject.FindGameObjectsWithTag ("PlayerUnit");
+
+		for (int i = 0; i < ArrayOfPlayers.Length; ++i)
+		{
+			// Check if AP is less than or equal to zero
+			if (ArrayOfPlayers [i].GetComponent <Players> ().GetStats ().AP <= 0)
+			{
+				// Count how many player finish their turns
+				if (turnManager.GetPlayerDoneCount () < ArrayOfPlayers.Length)
+					turnManager.SetPlayerDoneCount (turnManager.GetPlayerDoneCount () + 1);
+				else
+				{
+					// Auto End Turn
+					PlayerManager.Instance.SetSelectedUnit (null);
+					PlayerManager.Instance.SkipTurn ();
+					break;
+				}
+			}
+		}
 	}
 
 	// Set To Default Color

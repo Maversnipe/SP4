@@ -13,6 +13,8 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	// Determine if it is player's turn or not
 	private bool PlayerTurn = false;
 
+	private int playerDoneCount = 0;
+
 	// This is called whenever the player starts a battle
 	public void StartBattle()
 	{
@@ -158,4 +160,8 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	// Set & Get Player's Turn
 	public bool IsPlayerTurn() {return PlayerTurn;}
 	public void SetPlayerTurn(bool _turn) {PlayerTurn = _turn;}
+
+	// Get & Set player done count
+	public int GetPlayerDoneCount() { return playerDoneCount; }
+	public void SetPlayerDoneCount(int _playerDoneCount) { playerDoneCount = _playerDoneCount; }
 }
