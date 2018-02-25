@@ -18,9 +18,21 @@ public class Slot : MonoBehaviour, IDropHandler {
 
         if (Inventory.Instance.items[id].isEmpty)
         {
-            Inventory.Instance.items[id] = Inventory.Instance.items[droppedItem.slot];
-            Inventory.Instance.items[droppedItem.slot] = new InventoryObject();
-            droppedItem.slot = id;
+            if (droppedItem.equipped)
+            {
+                droppedItem.dropped = true;
+                droppedItem.equipped = false;
+                Inventory.Instance.items[id] = StatusMenu.Instance.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).Find(droppedItem.equipSlot).GetComponent<EquipmentSlot>().temp;
+                StatusMenu.Instance.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).Find(droppedItem.equipSlot).GetComponent<EquipmentSlot>().isEmpty = true;
+                StatusMenu.Instance.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).Find(droppedItem.equipSlot).GetComponent<EquipmentSlot>().temp = new InventoryObject();
+                droppedItem.slot = id;
+            }
+            else
+            {
+                Inventory.Instance.items[id] = Inventory.Instance.items[droppedItem.slot];
+                Inventory.Instance.items[droppedItem.slot] = new InventoryObject();
+                droppedItem.slot = id;
+            } 
         }
         else
         {

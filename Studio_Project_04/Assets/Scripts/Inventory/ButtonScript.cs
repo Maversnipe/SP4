@@ -10,17 +10,23 @@ public class ButtonScript : MonoBehaviour {
     public int amount;
     public ItemData sellItemData;
     public ItemData itemData;
+    public ShopItemData boughtItemData;
     public ShopItemData shopItemData;
 
     public GameObject statusMenu;
     public GameObject equipmentSlotPanel;
+    public EquipmentInfoPanel equipmentInfoPanel;
+    private GameObject buyConfirmDialog;
+    public GameObject sellAmountField;
+    public GameObject buyAmountField;
 
-    public GameObject amountField;
-
-	// Use this for initialization
-	void Start () {
-        amountField = GameObject.Find("AmountField");
+    // Use this for initialization
+    void Start () {
+        buyConfirmDialog = GameObject.FindWithTag("BuyConfirmDialog");
+        sellAmountField = GameObject.Find("SellAmountField");
+        buyAmountField = GameObject.Find("BuyAmountField");
         statusMenu = GameObject.Find("StatusMenu");
+        equipmentInfoPanel = StatusMenu.Instance.GetComponent<EquipmentInfoPanel>();
         equipmentSlotPanel = statusMenu.transform.Find("Equipment Slot Panel " + statusMenu.GetComponent<StatusMenu>().currPlayerUnit).gameObject;
     }
 
@@ -47,6 +53,29 @@ public class ButtonScript : MonoBehaviour {
                 Inventory.Instance.items[itemData.slot] = new InventoryObject();
                 equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().isEmpty = false;
             }
+            else if (!equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().isEmpty)
+            {
+                Transform item = equipmentSlotPanel.transform.Find("Weapon Slot").transform.GetChild(0);
+
+                item.GetComponent<ItemData>().equipped = false;
+                item.GetComponent<ItemData>().slot = itemData.slot;
+                InventoryObject temp2 = equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().temp;
+
+                equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().temp = Inventory.Instance.items[itemData.slot];
+                Inventory.Instance.items[itemData.slot] = new InventoryObject();
+                Inventory.Instance.items[itemData.slot] = temp2;
+
+
+                item.transform.SetParent(Inventory.Instance.slots[itemData.slot].transform);
+                item.transform.position = Inventory.Instance.slots[itemData.slot].transform.position;
+
+                itemData.equipped = true;
+                itemData.transform.SetParent(equipmentSlotPanel.transform.Find("Weapon Slot").transform);
+                itemData.transform.position = equipmentSlotPanel.transform.Find("Weapon Slot").transform.position;
+
+               
+                
+            }
         }
     }
 
@@ -57,7 +86,7 @@ public class ButtonScript : MonoBehaviour {
             if (!equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().isEmpty)
             {
                 itemData.equipped = false;
-
+                equipmentInfoPanel.Deactivate();
                 for (int i = 0; i < Inventory.Instance.items.Count; i++)
                 {
                     if (Inventory.Instance.items[i].isEmpty)
@@ -84,23 +113,48 @@ public class ButtonScript : MonoBehaviour {
         Inventory.Instance.RemoveItem(itemID, 1);
     }
 
+    public void activateConfirmDialog()
+    {
+        buyConfirmDialog.SetActive(true);
+        buyConfirmDialog.transform.GetChild(0).GetComponent<ButtonScript>().boughtItemData = shopItemData;
+    }
+
     public void buyItem()
     {
-        if(shopItemData.item != null)
+        if(boughtItemData.item != null)
         {
-            int itemID = shopItemData.item.ID;
-            Inventory.Instance.AddItem(itemID, 1);
+            int itemID = boughtItemData.item.ID;
+            Inventory.Instance.AddItem(itemID, amount);
+            amount = 0;
+            buyAmountField.GetComponent<InputField>().text = "";
+            this.transform.parent.gameObject.SetActive(false);
         }
-        else if (shopItemData.weapon != null)
+        else if (boughtItemData.weapon != null)
         {
-            int itemID = shopItemData.weapon.ID;
-            Inventory.Instance.AddWeapon(itemID, 1);
+            int itemID = boughtItemData.weapon.ID;
+
+            if(boughtItemData.weapon.Stackable)
+            {
+                Inventory.Instance.AddWeapon(itemID, amount);
+                amount = 0;
+                buyAmountField.GetComponent<InputField>().text = "";
+                this.transform.parent.gameObject.SetActive(false);
+            }
+            else if(!boughtItemData.weapon.Stackable)
+            {
+                if(amount <= Inventory.Instance.emptySlots)
+                {
+                    for (int i = 0; i < amount; i++)
+                    {
+                        Inventory.Instance.AddWeapon(itemID, 1);
+
+                    }
+                    buyAmountField.GetComponent<InputField>().text = "";
+                    this.transform.parent.gameObject.SetActive(false);
+                    amount = 0;
+                }
+            }
         }
-        //if (shopItemData.armor != null)
-        //{
-        //    int itemID = shopItemData.item.ID;
-        //    inv.GetComponent<Inventory>().AddItem(itemID);
-        //}
     }
 
     public void sellItem()
@@ -110,7 +164,7 @@ public class ButtonScript : MonoBehaviour {
             int itemID = sellItemData.item.ID;
             Inventory.Instance.RemoveItem(itemID, amount);
             amount = 0;
-            amountField.GetComponent<InputField>().text = "";
+            sellAmountField.GetComponent<InputField>().text = "";
             this.transform.parent.gameObject.SetActive(false);
         }
         else if (sellItemData.weapon != null)
@@ -125,7 +179,7 @@ public class ButtonScript : MonoBehaviour {
                 Inventory.Instance.RemoveWeapon(itemID, amount, sellItemData.slot);
             }
             amount = 0;
-            amountField.GetComponent<InputField>().text = "";
+            sellAmountField.GetComponent<InputField>().text = "";
             this.transform.parent.gameObject.SetActive(false);
         }
         //if (shopItemData.armor != null)
@@ -135,8 +189,13 @@ public class ButtonScript : MonoBehaviour {
         //}
     }
 
-    public void setAmount()
+    public void setSellAmount()
     {
-        amount = int.Parse(amountField.GetComponent<InputField>().text);
+        amount = int.Parse(sellAmountField.GetComponent<InputField>().text);
+    }
+
+    public void setBuyAmount()
+    {
+        amount = int.Parse(buyAmountField.GetComponent<InputField>().text);
     }
 }

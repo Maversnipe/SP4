@@ -28,7 +28,9 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler
                 if (droppedItem.weapon != null)
                 {
                     droppedItem.equipped = true;
+                    droppedItem.equipSlot = this.name;
                     droppedItem.transform.SetParent(this.transform);
+                    droppedItem.originalParent = droppedItem.transform.parent;
                     droppedItem.transform.position = this.transform.position;
                     temp = Inventory.Instance.items[droppedItem.slot];
                     Inventory.Instance.items[droppedItem.slot] = new InventoryObject();

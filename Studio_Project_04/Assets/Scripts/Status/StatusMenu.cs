@@ -17,13 +17,7 @@ public class StatusMenu : GenericSingleton<StatusMenu>, IDragHandler
     GameObject unitName;
 
     public GameObject weapon;
-    public GameObject offhand;
-    public GameObject head;
-    public GameObject body;
-    public GameObject arms;
-    public GameObject legs;
-    public GameObject feet;
-    public GameObject accessory;
+    public GameObject armor;
 
     // Use this for initialization
     void Start()
@@ -35,26 +29,25 @@ public class StatusMenu : GenericSingleton<StatusMenu>, IDragHandler
 
         weapon = GameObject.Find("Weapon Slot");
         weapon.GetComponent<EquipmentSlot>().slotType = "Weapon";
-        offhand = GameObject.Find("Offhand Slot");
-        offhand.GetComponent<EquipmentSlot>().slotType = "Offhand";
-        head = GameObject.Find("Head Slot");
-        head.GetComponent<EquipmentSlot>().slotType = "Head";
-        body = GameObject.Find("Body Slot");
-        body.GetComponent<EquipmentSlot>().slotType = "Body";
-        arms = GameObject.Find("Arms Slot");
-        arms.GetComponent<EquipmentSlot>().slotType = "Arms";
-        legs = GameObject.Find("Legs Slot");
-        legs.GetComponent<EquipmentSlot>().slotType = "Legs";
-        feet = GameObject.Find("Feet Slot");
-        feet.GetComponent<EquipmentSlot>().slotType = "Feet";
-        accessory = GameObject.Find("Accessory Slot");
-        accessory.GetComponent<EquipmentSlot>().slotType = "Accessory";
+        armor = GameObject.Find("Armor Slot");
+        armor.GetComponent<EquipmentSlot>().slotType = "Armor";
 
+    }
+
+    void OnEnable()
+    {
+        for (int i = 0; i < players.Length; i++)
+        {
+
+        }
     }
 
     void Update()
     {
+        this.transform.Find("Status Panel").GetChild(0).GetComponent<Text>().text = "\nHP : " + players[currPlayerUnit].GetComponent<UnitVariables>().HP.ToString() + "\nAP : " + players[currPlayerUnit].GetComponent<UnitVariables>().AP.ToString()
+                                                                                    + "\nInitiative : " + players[currPlayerUnit].GetComponent<UnitVariables>().Initiative.ToString();
 
+        this.transform.Find("Unit Name").GetChild(0).GetComponent<Text>().text = players[currPlayerUnit].name;
     }
 
     public void OnDrag(PointerEventData eventData)

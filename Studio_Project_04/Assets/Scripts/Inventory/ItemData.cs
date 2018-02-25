@@ -16,13 +16,14 @@ public class ItemData : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDra
     public int slot;
 
     public bool equipped;
-
+    public string equipSlot;
+    public bool dropped;
     private GameObject shopOverlay;
 
     private GameObject DragItemHolder;
     private InfoPanel infoPanel;
     private EquipmentInfoPanel equipmentInfoPanel;
-    private Transform originalParent;
+    public Transform originalParent;
     private Vector2 offset;
 
     void Start()
@@ -50,6 +51,7 @@ public class ItemData : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDra
             this.transform.position = eventData.position - offset;
             GetComponent<CanvasGroup>().blocksRaycasts = false;
             shopOverlay.GetComponent<Image>().raycastTarget = true;
+            dropped = false;
             infoPanel.Deactivate();
             equipmentInfoPanel.Deactivate();
         }
@@ -72,8 +74,16 @@ public class ItemData : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDra
         }
         else
         {
-            this.transform.SetParent(originalParent);
-            this.transform.position = originalParent.position;
+            if(dropped)
+            {
+                this.transform.SetParent(Inventory.Instance.slots[slot].transform);
+                this.transform.position = Inventory.Instance.slots[slot].transform.position;
+            }
+            else
+            {
+                this.transform.SetParent(originalParent);
+                this.transform.position = this.transform.parent.position;
+            }
         }
         GetComponent<CanvasGroup>().blocksRaycasts = true;
         shopOverlay.GetComponent<Image>().raycastTarget = false;

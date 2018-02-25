@@ -26,22 +26,23 @@ public class InventoryObject
 [System.Serializable]
 public class Inventory : GenericSingleton<Inventory>, IDragHandler
 {
-
+    GameObject buyConfirmDialog;
     GameObject inventoryPanel;
     GameObject slotPanel;
     public GameObject inventorySlot;
     public GameObject inventoryItem;
-
     private int slotAmount;
+    public int emptySlots;
 
     public List<InventoryObject> items = new List<InventoryObject>();
     public List<GameObject> slots = new List<GameObject>();
 
     void Start()
     {
-
-
+        buyConfirmDialog = GameObject.FindWithTag("BuyConfirmDialog");
+        buyConfirmDialog.SetActive(false);
         slotAmount = 20;
+        emptySlots = slotAmount;
         inventoryPanel = GameObject.Find("Inventory");
         slotPanel = inventoryPanel.transform.Find("Slot Panel").gameObject;
 
@@ -55,6 +56,21 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
 
         AddItem(0, 3);
         AddWeapon(0, 1);
+    }
+
+    void Update()
+    {
+        int no = 0;
+
+        for (int i = 0; i < items.Count; i++)
+        {
+            if(items[i].isEmpty)
+            {
+                no++;
+            }
+        }
+
+        emptySlots = no;
     }
 
     public void AddItem(int id, int no)
@@ -250,8 +266,8 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
 
         if (checkForItem(weaponToRemove))
         {
+            items[slot] = new InventoryObject();
             GameObject.Destroy(slots[slot].transform.GetChild(0).gameObject);
-            items[FindItemToRemove(weaponToRemove)] = new InventoryObject();
         }
     }
 

@@ -104,8 +104,8 @@ public class UnitVariables : MonoBehaviour {
 		Weapon.text = this._weapon.Title;
 
 		// Armor
-		Text Armor = UnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
-		Armor.text = this._armor.Title;
+		//Text Armor = UnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
+		//Armor.text = this._armor.Title;
 	}
 
 	public void SetOpponentUnitInfoWindow(bool isActive)

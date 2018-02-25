@@ -5,12 +5,12 @@ using UnityEngine.EventSystems;
 
 public class SellScript : MonoBehaviour, IDropHandler
 {
-    private GameObject confirmDialog;
+    [SerializeField]
+    private GameObject sellConfirmDialog;
 
     // Use this for initialization
     void Start () {
-        confirmDialog = GameObject.Find("ConfirmDialog");
-        confirmDialog.SetActive(false);
+        sellConfirmDialog.SetActive(false);
     }
 	
 	// Update is called once per frame
@@ -22,8 +22,7 @@ public class SellScript : MonoBehaviour, IDropHandler
     public void OnDrop(PointerEventData eventData)
     {
         ItemData soldItem = eventData.pointerDrag.GetComponent<ItemData>();
-        confirmDialog.SetActive(true);
-        confirmDialog.transform.GetChild(0).GetComponent<ButtonScript>().sellItemData = soldItem;
-
+        sellConfirmDialog.SetActive(true);
+        sellConfirmDialog.transform.GetChild(0).GetComponent<ButtonScript>().sellItemData = soldItem;
     }
 }
