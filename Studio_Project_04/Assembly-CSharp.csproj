@@ -46,7 +46,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\OpenWorldFade.cs" />
      <Compile Include="Assets\Scripts\AI.cs" />
      <Compile Include="Assets\Scripts\BackToMenu.cs" />
      <Compile Include="Assets\Scripts\BattleManager.cs" />
@@ -85,7 +84,9 @@
      <Compile Include="Assets\Scripts\UI Nonsense Scripts\FadeUI.cs" />
      <Compile Include="Assets\Scripts\UI Nonsense Scripts\FillingUI.cs" />
      <Compile Include="Assets\Scripts\UI Nonsense Scripts\OpenWorldChangeScene.cs" />
+     <Compile Include="Assets\Scripts\UI Nonsense Scripts\OpenWorldFade.cs" />
      <Compile Include="Assets\Scripts\UI Nonsense Scripts\OpenWorldTransferLocation.cs" />
+     <Compile Include="Assets\Scripts\UI Nonsense Scripts\SpawnUI.cs" />
      <Compile Include="Assets\UnityLitJson-Example\JsonExample.cs" />
      <Compile Include="Assets\UnityLitJson\Extensions.cs" />
      <Compile Include="Assets\UnityLitJson\IJsonWrapper.cs" />
