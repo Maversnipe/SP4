@@ -24,6 +24,7 @@ public class AI : MonoBehaviour {
 	Vector3 TargetMovement;
 
 	private UnitVariables Stats;
+	private int MaxAP;
 
 	// AI Unit's ID
 	private int ID;
@@ -53,6 +54,8 @@ public class AI : MonoBehaviour {
 		Stats = this.gameObject.GetComponent<UnitVariables> ();
 		//Gathers the stats from the Json File
 		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (Stats.Name));
+
+		MaxAP = Stats.AP;
 
 		// Set AI Unit's ID
 		ID = AICount;
@@ -191,12 +194,18 @@ public class AI : MonoBehaviour {
 		// Update Unit Info Window only if its Active
 		if (!PlayerManager.Instance.GetAbleToAttack ())
 			this.gameObject.GetComponent<UnitVariables> ().UpdateUnitInfo ();
-		
-		if (turnManager.GetCurrUnit() == null || turnManager.GetCurrUnit().GetID() != this.gameObject.GetComponent<AI>().GetID())
-		{
+
+		// Checks if it is this particular's AI turn
+		if (turnManager.GetCurrUnit () == null || turnManager.GetCurrUnit ().GetID () != this.gameObject.GetComponent<AI> ().GetID ()) {
 			return;
 		}
 
+
+		if (Stats.HP == 0) {
+			Destroy (this.gameObject);
+		}
+
+		// Acts only until the AP has reached 0
 		if (Stats.AP != 0) {
 			// print (this.gameObject.name + " " + Stats.AP);
 
@@ -268,20 +277,23 @@ public class AI : MonoBehaviour {
 				Path_Set = true;
 			} else {
 				if (!isAttacking) {
+					// Assigns a node while also removing the assigned node from the path
 					Nodes TempMove = currNode;
 					if (m_path.Count != 0) {
 						TempMove = m_path.Dequeue ();
 					}
+
+					// If the next area is or isn't the enemy target, act accordingly
 					if (TempMove != EnemyTarget) {
+						currNode.SetOccupiedNULL ();
 						currNode = TempMove;
 						currNode.SetOccupied (this.gameObject);
 					} else {
 						isAttacking = true;
-
+						TempMove.SetSelectable (false);
 						EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP--;
 					}
 				} else {
-					print (Stats.AP + "vs" + EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP);
 					UnitVariables Temp = EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ();
 					Temp.HP--;
 					EnemyTarget.GetOccupied ().GetComponent<Players> ().SetStats (Temp);
@@ -295,55 +307,7 @@ public class AI : MonoBehaviour {
 
 	void DefensiveAction()
 	{
-		if (EnemyTarget == null) {
-
-			Nodes Temp = null;
-
-			for (int x = 0; x < GridRef.GetRows (); ++x) {
-				for (int z = 0; z < GridRef.GetColumn (); ++z) {
-					if (GridRef.GetNode (x, z).GetOccupied () != null && GridRef.GetNode (x, z).GetOccupied ().tag == "PlayerUnit") {
-						if (Temp != null) { // Temp Magnitude is more than current grid magnitude, change Temp altogether
-							if ((Temp.GetOccupied ().transform.position - currNode.transform.position).magnitude > (GridRef.GetNode (x, z).GetOccupied ().transform.position - currNode.transform.position).magnitude) {
-								Temp = GridRef.GetNode (x, z);
-							}
-						} else { // Sets the first reference of Temp
-							Temp = GridRef.GetNode (x, z);
-						}
-					}
-				}
-			}
-
-			EnemyTarget = Temp;
-		} else {
-			if (!Path_Set) {
-				SetPath (currNode, EnemyTarget);
-				m_path.Dequeue ();
-				Path_Set = true;
-			} else {
-				if (!isAttacking) {
-					Nodes TempMove = currNode;
-					if (m_path.Count != 0) {
-						TempMove = m_path.Dequeue ();
-					}
-					if (TempMove != EnemyTarget) {
-						currNode = TempMove;
-						currNode.SetOccupied (this.gameObject);
-					} else {
-						isAttacking = true;
-
-						EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP--;
-					}
-				} else {
-					print (Stats.AP + "vs" + EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP);
-					UnitVariables Temp = EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ();
-					Temp.HP--;
-					EnemyTarget.GetOccupied ().GetComponent<Players> ().SetStats (Temp);
-					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateHealthBar ();
-					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateUnitInfo ();
-				}
-				this.Stats.AP--;
-			}
-		}
+		
 	}
 
 	void RandomAction()
@@ -373,6 +337,7 @@ public class AI : MonoBehaviour {
 		if (m_path.Count > 0)
 			m_path.Clear ();
 		Path_Set = false;
+		isAttacking = false;
 		// If nextNode is not null, update currNode to be nextNode
 		// And null nextNode
 		if (nextNode)
@@ -381,6 +346,8 @@ public class AI : MonoBehaviour {
 			nextNode = null;
 		}
 		turnManager.NextTurn ();
+
+		Stats.AP = MaxAP;
 	}
 
 	public void SetPath(Nodes m_start, Nodes m_end)

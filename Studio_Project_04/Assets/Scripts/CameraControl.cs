@@ -9,13 +9,56 @@ public class CameraControl : MonoBehaviour {
     int cameraMode = 0;
     Vector3 anchorPos;
     private TurnManager turnManager;
+	private PlayerManager playerManager;
+
+	private GameObject currFocus;
+
     // Use this for initialization
     void Start () {
 		turnManager = TurnManager.Instance;
+		playerManager = PlayerManager.Instance;
     }
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (turnManager.IsPlayerTurn()) {
+
+			if (Input.GetKey("w"))
+			{
+				transform.position += transform.up * 10 * Time.deltaTime;
+			}
+			if (Input.GetKey("a"))
+			{
+				transform.position -= transform.right * 10 * Time.deltaTime;
+			}
+			if (Input.GetKey("s"))
+			{
+				transform.position -= transform.up * 10 * Time.deltaTime;
+			}
+			if (Input.GetKey("d"))
+			{
+				transform.position += transform.right * 10 * Time.deltaTime;
+			}
+
+			if (playerManager.GetSelectedUnit () != null) {
+				currFocus = playerManager.GetSelectedUnit ().gameObject;
+			} else {
+				currFocus = null;
+			}
+		} else {
+			if (turnManager.GetCurrUnit () != null) {
+				currFocus = turnManager.GetCurrUnit ().gameObject;
+			}
+		}
+
+		if (currFocus != null) {
+			Vector3 TempPos = this.transform.position;
+
+			TempPos.x = currFocus.transform.position.x;
+			TempPos.z = currFocus.transform.position.z;
+			this.transform.position = TempPos;
+		}
 
         if (Input.GetKeyDown("b"))
         {
