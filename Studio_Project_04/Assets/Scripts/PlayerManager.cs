@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using System;
 
 public class PlayerManager : GenericSingleton<PlayerManager> {
@@ -74,54 +73,40 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		ableToMove = false;
 		// Set to not be able to attack
 		ableToAttack = false;
-		// Set Text for Attack Button
-		GameObject attButton = GameObject.FindGameObjectWithTag ("AttackButton");
-		//attButton.GetComponentInChildren <Text> ().text = "Attack\n" + selectedPlayer.GetStats ()._weapon.;
 		// Set unit is moving to false
 		isMoving = false;
-		// Set for menu to be open
-		if (selectedPlayer)
-		{
-			selectedPlayer.menuOpen = true;
-		}
 	}
 
 	// Update the menu for each unit
 	public void UpdateMenu()
-	{
+	{		
 		// Only render the unit's menu if no action is selected
 		// And if the unit is not moving
-		if(selectedPlayer.menuOpen && !ableToAttack && !isMoving)
+		if(!ableToAttack && !isMoving)
 		{ // If player still selecting menu options
 			// Find GO with ActionMenu tag
 			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu");
 			// Make GO's child active, which makes the menu appear
 			menu.transform.GetChild(0).gameObject.SetActive (true);
+
+			// Get the cancel button gameobject
+			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
+			// Set cancel button to active
+			cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 		}
-		else if(!selectedPlayer.menuOpen || isMoving || ableToAttack)
+		else if(isMoving || ableToAttack)
 		{ // If player already selected from menu options
 			// This makes the Canvas in the unit to be inactive
 			// Find GO with ActionMenu tag
 			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu");
 			// Make GO's child active, which makes the menu appear
 			menu.transform.GetChild(0).gameObject.SetActive (false);
-		}
 
-		if(selectedPlayer.menuOpen)
-		{
 			// Get the cancel button gameobject
 			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
 			// Set cancel button to active
-			cancelButton.transform.GetChild (0).gameObject.SetActive (true);
+			cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 		}
-		else
-		{
-			// Get the cancel button gameobject
-			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
-			// Set cancel button to Inactive
-			cancelButton.transform.GetChild (0).gameObject.SetActive (false);
-		}
-
 	}
 
 	// For deselecting an action
@@ -134,8 +119,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			// Make GO's child active, which makes the menu appear
 			menu.transform.GetChild (0).gameObject.SetActive (true);
 
-			selectedPlayer.menuOpen = true;
-			isMoving = true;
+			isMoving = false;
 			ableToMove = false;
 			RemoveSelectable ();
 		}
@@ -144,24 +128,20 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			// Find GO with ActionMenu tag
 			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu");
 			// Make GO's child active, which makes the menu appear
-			menu.transform.GetChild (0).gameObject.SetActive (false);
-
-			selectedPlayer.menuOpen = true;
+			menu.transform.GetChild (0).gameObject.SetActive (true);
+			// Set ableToAttack to false
 			ableToAttack = false;
 		}
-
-		// Change player back to default color
-		selectedPlayer.SetToDefaultColor ();
-
-		// Close Action Menu & Unit Info Windows
-		selectedPlayer.menuOpen = false;
-		selectedPlayer.GetStats ().SetUnitInfoWindow (false);
-		selectedPlayer.GetStats ().SetOpponentUnitInfoWindow (false);
 
 		// Get the cancel button gameobject
 		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
 		// Set cancel button to not active
-		cancelButton.transform.GetChild (0).gameObject.SetActive (false);
+		cancelButton.transform.GetChild(0).gameObject.SetActive (false);
+
+		// Get the cancel button gameobject
+		cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
+		// Set cancel button to not active
+		cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 	}
 
 	// Set the selected unit to be able to move
@@ -173,6 +153,16 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			isMoving = true;
 			ableToMove = true;
 			FindSelectableTiles ();
+
+			// Get the cancel button gameobject
+			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
+			// Set cancel button to active
+			cancelButton.transform.GetChild(0).gameObject.SetActive (false);
+
+			// Get the cancel button gameobject
+			cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+			// Set cancel button to active
+			cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 		}
 	}
 
@@ -183,6 +173,16 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		if(selectedPlayer && !ableToAttack)
 		{
 			ableToAttack = true;
+
+			// Get the cancel button gameobject
+			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
+			// Set cancel button to active
+			cancelButton.transform.GetChild(0).gameObject.SetActive (false);
+
+			// Get the cancel button gameobject
+			cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+			// Set cancel button to active
+			cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 		}
 	}
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Players : MonoBehaviour
 {
@@ -36,9 +37,6 @@ public class Players : MonoBehaviour
 	// Player's AP amount in the current turn
 	private int turnAP;
 
-	[SerializeField]
-	public bool menuOpen;
-
 	void Start ()
 	{
 		//Gathers the name from the Unit Variable
@@ -51,7 +49,6 @@ public class Players : MonoBehaviour
 		DefaultColor = rend.material.color;
 		// Code Optimising - Get UnitManager instance once only
 		turnManager = TurnManager.Instance;
-		menuOpen = false;
 		// Set a random initial position for unit
 		currNode = GridSystem.Instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
 		currNode.SetOccupied (this.gameObject);
@@ -76,14 +73,41 @@ public class Players : MonoBehaviour
 			return;
 		
 		// If it is Player's turn
-		if(turnManager.IsPlayerTurn () && turnAP > 0)
+		if (turnManager.IsPlayerTurn () && turnAP > 0)
 		{
 			// Change Unit To This Unit
 			PlayerManager.Instance.ChangeUnit (this);
 			// Find GO with ActionMenu2 tag
 			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu");
 			// Make GO's child active, which makes the menu appear
-			menu.transform.GetChild(0).gameObject.SetActive (true);
+			menu.transform.GetChild (0).gameObject.SetActive (true);
+
+			if (Stats.AP >= Stats._weapon.AP)
+			{
+				Debug.Log ("ATT POWAH");
+				// Set Text for Attack Button
+				GameObject attButton = GameObject.FindGameObjectWithTag ("AttackButton");
+				Debug.Log (attButton);
+				attButton.transform.GetChild(0).gameObject.GetComponentInChildren <Text> ().text = "Attack\n" + PlayerManager.Instance.GetSelectedUnit ().GetStats ()._weapon.AP + " AP";
+				attButton.transform.GetChild (0).gameObject.SetActive (true);
+
+				// Set not selectable attack button to false
+				attButton = GameObject.FindGameObjectWithTag ("AttackButtonNotSelectable");
+				attButton.transform.GetChild (0).gameObject.SetActive (false);
+			} 
+			else
+			{
+				Debug.Log ("ATT NO POWA");
+				// Set Text for Attack Button
+				GameObject attButton = GameObject.FindGameObjectWithTag ("AttackButtonNotSelectable");
+				Debug.Log (attButton);
+				attButton.transform.GetChild(0).gameObject.GetComponentInChildren <Text> ().text = "Attack\n" + PlayerManager.Instance.GetSelectedUnit ().GetStats ()._weapon.AP + " AP";
+				attButton.transform.GetChild (0).gameObject.SetActive (true);
+
+				// Set attack button to false
+				attButton = GameObject.FindGameObjectWithTag ("AttackButton");
+				attButton.transform.GetChild (0).gameObject.SetActive (false);
+			}
 		}
 	}
 
@@ -232,11 +256,17 @@ public class Players : MonoBehaviour
 			// Set next node to be null
 			nextNode = null;
 		}
-
+			
 		// Get the cancel button gameobject
-		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
 		// Set cancel button to not active
-		cancelButton.transform.GetChild (0).gameObject.SetActive (false);
+		if(cancelButton)
+			cancelButton.transform.GetChild(0).gameObject.SetActive (false);
+		// Get the cancel button gameobject
+		cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+		// Set cancel button to not active
+		if(cancelButton)
+			cancelButton.transform.GetChild(0).gameObject.SetActive (false);
 
 		// Get array of player units
 		GameObject[] ArrayOfPlayers = GameObject.FindGameObjectsWithTag ("PlayerUnit");

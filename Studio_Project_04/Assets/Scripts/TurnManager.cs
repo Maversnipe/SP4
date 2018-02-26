@@ -22,7 +22,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		if (listOfAIUnits.Count() == 0)
 			return;
 
-
 		// Sort List based on each unit's initiative
 		// But if same initiative, sort by ID
 		listOfAIUnits = listOfAIUnits.OrderBy(x => x.GetStats().Initiative).ThenBy(x => x.GetID()).ToArray ();
