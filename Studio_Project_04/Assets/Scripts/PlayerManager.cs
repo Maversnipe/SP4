@@ -277,8 +277,13 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 				break;
 			}
 		}
+		// If damage is not set, set it to normal damage with no advantage / disadvantage
 		if(damageDeal == -1)
 			damageDeal = normalDamage;
+		
+		// Decrease AP required to carry out the attack
+		attacker.GetComponent<UnitVariables> ().AP -= weapon.AP;
+
 		return damageDeal;
 	}
 		

@@ -7,6 +7,7 @@
     "stats":
     {
       "attack": 8,
+      "ap": 1,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -27,6 +28,7 @@
     "stats":
     {
       "attack": 10,
+      "ap": 2,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -47,6 +49,7 @@
     "stats":
     {
       "attack": 12,
+      "ap": 3,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -67,6 +70,7 @@
     "stats":
     {
       "attack": 14,
+      "ap": 4,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -87,6 +91,7 @@
     "stats":
     {
       "attack": 6969,
+      "ap": 1,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -107,6 +112,7 @@
     "stats":
     {
       "attack": 8,
+      "ap": 1,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,
@@ -127,6 +133,7 @@
     "stats":
     {
       "attack": 12,
+      "ap": 3,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,
@@ -153,6 +160,7 @@
     "stats":
     {
       "attack": 8,
+      "ap": 1,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -173,6 +181,7 @@
     "stats":
     {
       "attack": 10,
+      "ap": 2,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -193,6 +202,7 @@
     "stats":
     {
       "attack": 12,
+      "ap": 3,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -213,6 +223,7 @@
     "stats":
     {
       "attack": 14,
+      "ap": 4,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -233,6 +244,7 @@
     "stats":
     {
       "attack": 8,
+      "ap": 1,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,
@@ -253,6 +265,7 @@
     "stats": 
     {
       "attack": 12,
+      "ap": 3,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,
@@ -279,6 +292,7 @@
     "stats":
     {
       "attack": 8,
+      "ap": 1,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -299,6 +313,7 @@
     "stats":
     {
       "attack": 10,
+      "ap": 2,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -319,6 +334,7 @@
     "stats":
     {
       "attack": 12,
+      "ap": 3,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -339,6 +355,7 @@
     "stats":
     {
       "attack": 14,
+      "ap": 4,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -359,6 +376,7 @@
     "stats":
     {
       "attack": 8,
+      "ap": 1,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,
@@ -379,6 +397,7 @@
     "stats": 
     {
       "attack": 12,
+      "ap": 3,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,

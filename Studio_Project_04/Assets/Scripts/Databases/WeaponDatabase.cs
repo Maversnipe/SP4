@@ -53,7 +53,7 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase>
         for(int i = 0; i < weaponData.Count; i++)
         {
 			Weapon newWeapon = new Weapon ((int)weaponData[i]["id"], weaponData[i]["title"].ToString(), (int)weaponData[i]["value"],
-				weaponData[i]["type"].ToString(), (int)weaponData[i]["stats"]["attack"], (int)weaponData[i]["stats"]["range"],
+				weaponData[i]["type"].ToString(), (int)weaponData[i]["stats"]["attack"], (int)weaponData[i]["stats"]["ap"], (int)weaponData[i]["stats"]["range"],
 				(int)weaponData[i]["stats"]["strength"], (int)weaponData[i]["stats"]["vitality"], (int)weaponData[i]["stats"]["intelligence"],
 				(int)weaponData[i]["stats"]["dexterity"], weaponData[i]["description"].ToString(), (bool)weaponData[i]["stackable"],
 				weaponData[i]["rarity"].ToString(), weaponData[i]["icon"].ToString());
@@ -70,6 +70,7 @@ public class Weapon
     public int Value { get; set; }
     public string Type { get; set; }
     public int Attack { get; set; }
+	public int AP { get; set; }
 	public int Range { get; set; }
     public int Strength { get; set; }
     public int Vitality { get; set; }
@@ -82,7 +83,7 @@ public class Weapon
     public Sprite Sprite { get; set; }
 
 	public Weapon(int id, string title, int value,
-		string type, int attack, int range,
+		string type, int attack, int ap, int range,
 		int strength, int vitality, int intelligence,
 		int dexterity, string description, bool stackable,
 		string rarity, string icon)
@@ -92,6 +93,7 @@ public class Weapon
         this.Value = value;
         this.Type = type;
         this.Attack = attack;
+		this.AP = ap;
 		this.Range = range;
         this.Strength = strength;
         this.Vitality = vitality;

@@ -99,9 +99,6 @@ public class AI : MonoBehaviour {
 				// Update Opponent Unit Info
 				selectedUnitObject.GetStats ().UpdateOpponentUnitInfo(this.Stats);
 
-				// Set selected player unit's new AP
-				selectedUnitObject.SetAP (selectedUnitObject.GetAP () - 1);
-
 				int damageDeal = PlayerManager.Instance.CalculateDamage (selectedUnitObject.gameObject, this.gameObject);
 
 				Stats.HP -= damageDeal;
