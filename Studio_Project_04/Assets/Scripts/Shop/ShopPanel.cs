@@ -47,7 +47,15 @@ public class ShopPanel : MonoBehaviour
             buyButton.GetComponent<ButtonScript>().shopItemData = data;
             infoPanel.transform.GetChild(0).GetComponent<Image>().sprite = weapon.Sprite;
         }
-
+        else if (data.armor != null)
+        {
+            this.armor = data.armor;
+            ConstructWeaponDataString();
+            infoPanel.SetActive(true);
+            buyButton.SetActive(true);
+            buyButton.GetComponent<ButtonScript>().shopItemData = data;
+            infoPanel.transform.GetChild(0).GetComponent<Image>().sprite = armor.Sprite;
+        }
     }
 
     public void Deactivate()

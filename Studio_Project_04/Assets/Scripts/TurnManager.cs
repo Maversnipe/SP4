@@ -44,7 +44,7 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 		GameObject startbutton = GameObject.FindGameObjectWithTag ("StartBattleButton");
 		startbutton.SetActive (false);
-
+      
 //		// Get the action menu gameobject
 //		GameObject ActionMenu2 = GameObject.FindGameObjectWithTag ("ActionMenu2");
 //		// Set action menu to Inactive

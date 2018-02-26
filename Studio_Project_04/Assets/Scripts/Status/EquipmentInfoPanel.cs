@@ -36,6 +36,15 @@ public class EquipmentInfoPanel : MonoBehaviour {
             unequipButton.GetComponent<ButtonScript>().itemData = data;
             infoPanel.transform.GetChild(0).GetComponent<Image>().sprite = weapon.Sprite;
         }
+        if (data.armor != null)
+        {
+            this.armor = data.armor;
+            ConstructArmorDataString();
+            infoPanel.SetActive(true);
+            unequipButton.SetActive(true);
+            unequipButton.GetComponent<ButtonScript>().itemData = data;
+            infoPanel.transform.GetChild(0).GetComponent<Image>().sprite = armor.Sprite;
+        }
 
     }
 
