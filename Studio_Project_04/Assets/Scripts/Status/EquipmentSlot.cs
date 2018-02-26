@@ -37,17 +37,6 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler
                     this.isEmpty = false;
                 }       
             }
-            //if (this.slotType == "Weapon")
-            //{
-            //    if (droppedItem.weapon != null)
-            //    {
-            //        droppedItem.equipped = true;
-            //        droppedItem.transform.SetParent(this.transform);
-            //        droppedItem.transform.position = this.transform.position;
-            //        this.isEmpty = false;
-            //    }
-            //}
-
         }
         else
         {
@@ -69,21 +58,10 @@ public class EquipmentSlot : MonoBehaviour, IDropHandler
                     item.transform.position = Inventory.Instance.slots[droppedItem.slot].transform.position;
 
                     droppedItem.equipped = true;
-                    droppedItem.transform.SetParent(transform);
-                    droppedItem.transform.position = transform.position;
+                    droppedItem.originalParent = this.transform;
 
                 }
             }
-            
-            //Inventory.Instance.items[droppedItem.slot] = temp;
-
-            //Transform item = this.transform.GetChild(0);
-            //item.GetComponent<ItemData>().slot = droppedItem.slot;
-            //item.transform.SetParent(Inventory.Instance.slots[droppedItem.slot].transform);
-            //item.transform.position = Inventory.Instance.slots[droppedItem.slot].transform.position;
-            //droppedItem.slot = id;
-            //droppedItem.transform.SetParent(this.transform);
-            //droppedItem.transform.position = this.transform.position;
         }
     }
 }
