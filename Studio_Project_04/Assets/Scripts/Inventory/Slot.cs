@@ -10,7 +10,8 @@ public class Slot : MonoBehaviour, IDropHandler {
 
     // Use this for initialization
     void Start () {
-	}
+        
+    }
 
     public void OnDrop(PointerEventData eventData)
     {
