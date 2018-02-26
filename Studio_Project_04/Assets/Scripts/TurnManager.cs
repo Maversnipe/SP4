@@ -44,6 +44,11 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 		GameObject startbutton = GameObject.FindGameObjectWithTag ("StartBattleButton");
 		startbutton.SetActive (false);
+
+//		// Get the action menu gameobject
+//		GameObject ActionMenu2 = GameObject.FindGameObjectWithTag ("ActionMenu2");
+//		// Set action menu to Inactive
+//		ActionMenu2.transform.GetChild (0).gameObject.SetActive (false);
 	}
 
 	// Update is called once per frame
@@ -92,6 +97,10 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		// Set is moving to false
 		PlayerManager.Instance.SetIsMoving (false);
 
+		// Get the action menu gameobject
+		GameObject ActionMenu2 = GameObject.FindGameObjectWithTag ("ActionMenu2");
+		// Set action menu to active
+		ActionMenu2.transform.GetChild (0).gameObject.SetActive (true);
 		// Get the end button gameobject
 		GameObject endButton = GameObject.FindGameObjectWithTag ("EndTurnButton");
 		// Set end button to active

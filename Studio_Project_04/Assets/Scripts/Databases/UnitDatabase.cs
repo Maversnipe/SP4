@@ -83,7 +83,8 @@ public class UnitDatabase : GenericSingleton<UnitDatabase>
 	{
 		for(int i = 0; i < unitData.Count; i++)
 		{
-			UnitVariables newUnit = new UnitVariables(unitData[i]["name"].ToString(), (int)unitData[i]["hp"], (int)unitData[i]["ap"],
+			UnitVariables newUnit = gameObject.AddComponent<UnitVariables> ();
+			newUnit.SetUnitVariables (unitData[i]["name"].ToString(), (int)unitData[i]["hp"], (int)unitData[i]["ap"],
 				(int)unitData[i]["initiative"], (int)unitData[i]["id"], unitData[i]["weapon"].ToString(),
 				unitData[i]["armor"].ToString());
 

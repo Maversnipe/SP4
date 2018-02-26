@@ -2,7 +2,7 @@
   {
     "name": "Trainee",
     "hp": 20,
-    "ap": 7,
+    "ap": 5,
     "initiative": 9,
     "id": 0,
     "weapon": "Wooden Sword",
@@ -11,8 +11,8 @@
   ,
   {
     "name": "Mercenary",
-    "hp": 30,
-    "ap": 9,
+    "hp": 25,
+    "ap": 6,
     "initiative": 11,
     "id": 1,
     "weapon": "Iron Sword",
@@ -21,8 +21,8 @@
   ,
   {
     "name": "Myrmidon",
-    "hp": 40,
-    "ap": 11,
+    "hp": 30,
+    "ap": 7,
     "initiative": 13,
     "id": 2,
     "weapon": "Steel Sword",
@@ -31,8 +31,8 @@
   ,
   {
     "name": "Sword Master",
-    "hp": 50,
-    "ap": 13,
+    "hp": 35,
+    "ap": 8,
     "initiative": 15,
     "id": 3,
     "weapon": "Silver Sword",
@@ -42,7 +42,7 @@
   {
     "name": "Fighter",
     "hp": 20,
-    "ap": 7,
+    "ap": 5,
     "initiative": 9,
     "id": 4,
     "weapon": "Hatchet",
@@ -52,7 +52,7 @@
   {
     "name": "Warrior",
     "hp": 30,
-    "ap": 9,
+    "ap": 7,
     "initiative": 11,
     "id": 5,
     "weapon": "Hand Axe",
@@ -77,8 +77,8 @@
   ,
   {
     "name": "Pirate",
-    "hp": 40,
-    "ap": 5,
+    "hp": 35,
+    "ap": 4,
     "initiative": 7,
     "id": 7,
     "weapon": "Iron Hammer",
@@ -87,8 +87,8 @@
   ,
   {
     "name": "Corsair",
-    "hp": 50,
-    "ap": 7,
+    "hp": 40,
+    "ap": 5,
     "initiative": 9,
     "id": 8,
     "weapon": "Steel Hammer",
@@ -97,8 +97,8 @@
   ,
   {
     "name": "Berserker",
-    "hp": 60,
-    "ap": 9,
+    "hp": 45,
+    "ap": 6,
     "initiative": 11,
     "id": 9,
     "weapon": "Silver Hammer",
@@ -134,7 +134,7 @@
   {
     "name": "Novice",
     "hp": 10,
-    "ap": 5,
+    "ap": 4,
     "initiative": 7,
     "id": 12,
     "weapon": "Wooden Lance",
@@ -143,8 +143,8 @@
   ,
   {
     "name": "Squire",
-    "hp": 20,
-    "ap": 7,
+    "hp": 15,
+    "ap": 5,
     "initiative": 9,
     "id": 13,
     "weapon": "Iron Lance",
@@ -153,8 +153,8 @@
   ,
   {
     "name": "Adventurer",
-    "hp": 30,
-    "ap": 9,
+    "hp": 20,
+    "ap": 6,
     "initiative": 11,
     "id": 14,
     "weapon": "Steel Lance",
@@ -163,8 +163,8 @@
   ,
   {
     "name": "Hero",
-    "hp": 40,
-    "ap": 11,
+    "hp": 30,
+    "ap": 7,
     "initiative": 13,
     "id": 15,
     "weapon": "Silver Lance",
@@ -174,7 +174,7 @@
   {
     "name": "Archer",
     "hp": 10,
-    "ap": 5,
+    "ap": 4,
     "initiative": 7,
     "id": 16,
     "weapon": "Bow",
@@ -184,7 +184,7 @@
   {
     "name": "Sniper",
     "hp": 20,
-    "ap": 7,
+    "ap": 6,
     "initiative": 9,
     "id": 17,
     "weapon": "Cross Bow",
@@ -193,9 +193,9 @@
   ,
   {
     "name": "Hacker",
-    "hp": 1,
-    "ap": 999,
-    "initiative": 999,
+    "hp": 100,
+    "ap": 100,
+    "initiative": 100,
     "id": 17,
     "weapon": "The Hax Sword",
     "armor": "Nothing"
