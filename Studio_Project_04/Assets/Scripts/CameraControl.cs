@@ -24,6 +24,7 @@ public class CameraControl : MonoBehaviour {
 
 		if (turnManager.IsPlayerTurn()) {
 
+			//Directional Command
 			if (Input.GetKey("w"))
 			{
 				transform.position += transform.up * 10 * Time.deltaTime;
@@ -41,6 +42,25 @@ public class CameraControl : MonoBehaviour {
 				transform.position += transform.right * 10 * Time.deltaTime;
 			}
 
+			//Minimium Scroll Distance
+			if (Input.GetAxis ("Mouse ScrollWheel") > 0f) {
+				if (this.gameObject.transform.position.y > 15) {
+					Vector3 TempPos = this.transform.position;
+
+					TempPos.y -= Input.GetAxis ("Mouse ScrollWheel") * 3;
+					this.gameObject.transform.position = TempPos;
+				}
+			} 
+			// Maximum Scroll Distance
+			else if (Input.GetAxis ("Mouse ScrollWheel") < 0f) {
+				if (this.gameObject.transform.position.y < 30) {
+					Vector3 TempPos = this.transform.position;
+
+					TempPos.y -= Input.GetAxis ("Mouse ScrollWheel") * 3;
+					this.gameObject.transform.position = TempPos;
+				}
+			}
+
 			if (playerManager.GetSelectedUnit () != null) {
 				currFocus = playerManager.GetSelectedUnit ().gameObject;
 			} else {
@@ -52,7 +72,8 @@ public class CameraControl : MonoBehaviour {
 			}
 		}
 
-		if (currFocus != null) {
+		if (currFocus != null
+			&& (this.transform.position - currFocus.transform.position).magnitude < 0.1f) {
 			Vector3 TempPos = this.transform.position;
 
 			TempPos.x = currFocus.transform.position.x;
