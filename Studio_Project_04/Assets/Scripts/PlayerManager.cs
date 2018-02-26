@@ -145,6 +145,8 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
 		// Set cancel button to not active
 		cancelButton.transform.GetChild (0).gameObject.SetActive (false);
+
+		//selectedPlayer = null;
 	}
 
 	// Set the selected unit to be able to move
