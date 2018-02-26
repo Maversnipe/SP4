@@ -13,6 +13,8 @@ public class MainMenu : MonoBehaviour
 
 	bool Btn_Pressed = false;
 
+	string SceneName;
+
 	void Start()
 	{
 		FadeIn_Color.a = 1;
@@ -33,12 +35,18 @@ public class MainMenu : MonoBehaviour
 		}
 
 		if (FadeIn_Color.a >= 1 && Btn_Pressed == true) {
-			SceneManager.LoadScene ("SceneOpen");
+			SceneManager.LoadScene (SceneName);
 		}
 	}
 
-	public void ButtonPressed()
+	public void Pressed(string Works)
 	{
 		Btn_Pressed = true;
+		SceneName = Works;
+	}
+
+	public void Exit()
+	{
+		Application.Quit ();
 	}
 }
