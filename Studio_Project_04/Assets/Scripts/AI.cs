@@ -215,11 +215,13 @@ public class AI : MonoBehaviour {
 					AggressiveAction ();
 					break;
 				case(EnemyStrategy.DEFENSIVE):
+					DefensiveAction ();
 					break;
 				case(EnemyStrategy.RANDOM):
 					RandomAction ();
 					break;
 				case(EnemyStrategy.STRATEGIC):
+					StrategicAction ();
 					break;
 				}
 
@@ -296,7 +298,55 @@ public class AI : MonoBehaviour {
 
 	void DefensiveAction()
 	{
+		if (EnemyTarget == null) {
 
+			Nodes Temp = null;
+
+			for (int x = 0; x < GridRef.GetRows (); ++x) {
+				for (int z = 0; z < GridRef.GetColumn (); ++z) {
+					if (GridRef.GetNode (x, z).GetOccupied () != null && GridRef.GetNode (x, z).GetOccupied ().tag == "PlayerUnit") {
+						if (Temp != null) { // Temp Magnitude is more than current grid magnitude, change Temp altogether
+							if ((Temp.GetOccupied ().transform.position - currNode.transform.position).magnitude > (GridRef.GetNode (x, z).GetOccupied ().transform.position - currNode.transform.position).magnitude) {
+								Temp = GridRef.GetNode (x, z);
+							}
+						} else { // Sets the first reference of Temp
+							Temp = GridRef.GetNode (x, z);
+						}
+					}
+				}
+			}
+
+			EnemyTarget = Temp;
+		} else {
+			if (!Path_Set) {
+				SetPath (currNode, EnemyTarget);
+				m_path.Dequeue ();
+				Path_Set = true;
+			} else {
+				if (!isAttacking) {
+					Nodes TempMove = currNode;
+					if (m_path.Count != 0) {
+						TempMove = m_path.Dequeue ();
+					}
+					if (TempMove != EnemyTarget) {
+						currNode = TempMove;
+						currNode.SetOccupied (this.gameObject);
+					} else {
+						isAttacking = true;
+
+						EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP--;
+					}
+				} else {
+					print (Stats.AP + "vs" + EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP);
+					UnitVariables Temp = EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ();
+					Temp.HP--;
+					EnemyTarget.GetOccupied ().GetComponent<Players> ().SetStats (Temp);
+					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateHealthBar ();
+					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateUnitInfo ();
+				}
+				this.Stats.AP--;
+			}
+		}
 	}
 
 	void RandomAction()

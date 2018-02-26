@@ -54,13 +54,19 @@ public class OpenControl : MonoBehaviour {
 
 		// Check if mouseclick has collided with any buildings
 		if (Physics.Raycast (ray, out collide)) {
+
+			if (collide.collider.tag == "Player") {
+				return;
+			}
+
 			if (collide.collider.tag == "Building") {
 				TargetPosition = collide.transform.GetChild (0).transform.position;
 			} else if (collide.collider.tag == "NPC") {
 				TargetPosition = collide.transform.position;
+				collide.collider.GetComponent<NPC> ().SetMoving (false);
 			} else {
-				TargetPosition.x = this.transform.position.x + ray.direction.x * 30;
-				TargetPosition.z = this.transform.position.z + ray.direction.z * 30;
+				TargetPosition.x = this.transform.position.x + ray.direction.x * CameraRef.transform.position.y;
+				TargetPosition.z = this.transform.position.z + ray.direction.z * CameraRef.transform.position.y;
 			}
 		}
 

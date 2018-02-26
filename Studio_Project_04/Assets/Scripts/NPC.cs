@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class NPC : MonoBehaviour {
 
+	// All the variables needed to allow NPC interaction
 	[TextArea]
 	[SerializeField]
-	private string[] Dialogue;
+	private string[] Dialogue = null;
 
 	private bool Interacted;
 
@@ -18,17 +19,57 @@ public class NPC : MonoBehaviour {
 
 	private bool Seen = false;
 
+	// All the variables needed to allow basic patrolling Movement
+	[SerializeField]
+	private GameObject[] Waypoints = null;
+
+	private Vector3 TargetMovement;
+
+	[SerializeField]
+	private float Speed;
+
+	private bool isMoving;
+
 	// Use this for initialization
 	void Start () {
 		Interacted = false;
 		CameraRef = FindObjectOfType<Camera> ();
 
 		TextToShow = Dialogue[0];
+
+		if (Waypoints.Length != 0) {
+			TargetMovement = Waypoints [0].transform.position;
+		}
+
+		isMoving = true;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (Waypoints == null || isMoving == false) {
+			if (Interacted == false) {
+				if (FindObjectOfType<OpenControl> ().getTarget() != this.gameObject.transform.position) {
+					isMoving = true;
+				}
+			}
+			return;
+		}
+
+		if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
+			for (int i = 0; i < Waypoints.Length; ++i) {
+				if (TargetMovement == Waypoints [i].transform.position) {
+					if (i == Waypoints.Length - 1) {
+						TargetMovement = Waypoints [0].transform.position;
+					} else {
+						int temp = i + 1;
+						TargetMovement = Waypoints [temp].transform.position;
+					}
+					return;
+				}
+			}
+		}
+
+		this.transform.position += (TargetMovement - this.transform.position).normalized * Speed;
 	}
 
 	void OnGUI() {
@@ -64,6 +105,7 @@ public class NPC : MonoBehaviour {
 						Interacted = false;
 						FindObjectOfType<OpenControl> ().setAbleToMove (true);
 						TextToShow = Dialogue [0];
+						isMoving = true;
 					} else { // Seen is needed to ensure the code doesn't blitz past to the end
 						int temp = i + 1;
 						TextToShow = Dialogue [temp];
@@ -87,5 +129,10 @@ public class NPC : MonoBehaviour {
 				Interacted = true;
 			}
 		}
+	}
+
+	public void SetMoving(bool n_new)
+	{
+		isMoving = n_new;
 	}
 }
