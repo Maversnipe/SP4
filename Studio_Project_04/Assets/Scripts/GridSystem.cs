@@ -19,7 +19,7 @@ public class GridSystem : GenericSingleton<GridSystem>
 	private float width;
 	private float height;
 
-	void Awake()
+	void Start()
 	{
 		// Create Grid based on input number of rows and columns
 		Grid = new GameObject[Rows, Columns];

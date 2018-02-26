@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
 public class Nodes : MonoBehaviour
 {
@@ -39,6 +40,9 @@ public class Nodes : MonoBehaviour
 	// The Parent Node
 	private Nodes parent;
 
+	// Text to render on node
+	TextMesh amtOfAP;
+
 	void Start ()
 	{
 		// Code Optimising - Get Renderer Component once only
@@ -54,7 +58,8 @@ public class Nodes : MonoBehaviour
 		parent = null;
 		// Set the dist to 0
 		dist = 0;
-
+		// Initialise amtOfAP to the text mesh component of this gameobject's child
+		amtOfAP = gameObject.transform.GetChild (0).gameObject.GetComponent <TextMesh>();
 	}
 
 	// Run only when Mouse click onto the unit
@@ -76,7 +81,8 @@ public class Nodes : MonoBehaviour
 				// Check if the clicked node is selectable
 				if(this.selectable)
 				{
-					Debug.Log ("Dist: " + dist);
+					// Set Amount Of AP Text
+					amtOfAP.text = "";
 					// Set the player's path
 					playerManager.SetPath (this);
 					// Set the player's next node
@@ -109,6 +115,8 @@ public class Nodes : MonoBehaviour
 					// Change Visibility of Node to opague
 					HoverColor.a = 1.0f;
 					rend.material.color = HoverColor;
+					// Set Amount Of AP Text
+					amtOfAP.text = dist.ToString () + " AP";
 				}
 			}
 		}
@@ -122,7 +130,10 @@ public class Nodes : MonoBehaviour
 		{
 			if (playerManager.GetAbleToMove () || playerManager.GetAbleToAttack ()) 
 			{
+				// Change the color of the node back to its normal color
 				ChangeColour ();
+				// Set Amount Of AP Text
+				amtOfAP.text = "";
 			}
 		}
 	}

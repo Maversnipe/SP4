@@ -35,7 +35,7 @@ public class UnitVariables : MonoBehaviour {
 	public Weapon _weapon;
 	public Armor _armor;
 
-	public UnitVariables (string name, int hp, int ap,
+	public void SetUnitVariables (string name, int hp, int ap,
 		int initiative, int id, string weapon,
 		string armor)
 	{
