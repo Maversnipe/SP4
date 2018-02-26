@@ -5,9 +5,11 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour {
 
 	[SerializeField]
-	GameObject FollowTarget;
+	GameObject FollowTarget = null;
 
 	Vector3 Pos;
+
+	Vector3 TempPos;
 
 	// Use this for initialization
 	void Start () {
@@ -22,6 +24,20 @@ public class CameraFollow : MonoBehaviour {
 			Pos.y = this.gameObject.transform.position.y;
 
 			this.gameObject.transform.position = Pos;
+		}
+
+		TempPos = this.gameObject.transform.position;
+
+		if (Input.GetAxis ("Mouse ScrollWheel") > 0f) {
+			if (this.gameObject.transform.position.y > 15) {
+				TempPos.y -= Input.GetAxis ("Mouse ScrollWheel") * 3;
+				this.gameObject.transform.position = TempPos;
+			}
+		} else if (Input.GetAxis ("Mouse ScrollWheel") < 0f) {
+			if (this.gameObject.transform.position.y < 30) {
+				TempPos.y -= Input.GetAxis ("Mouse ScrollWheel") * 3;
+				this.gameObject.transform.position = TempPos;
+			}
 		}
 	}
 }
