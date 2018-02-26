@@ -76,7 +76,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		ableToAttack = false;
 		// Set Text for Attack Button
 		GameObject attButton = GameObject.FindGameObjectWithTag ("AttackButton");
-		attButton.GetComponentInChildren <Text> ().text = "Attack\n" + selectedPlayer.GetStats ()._weapon.;
+		//attButton.GetComponentInChildren <Text> ().text = "Attack\n" + selectedPlayer.GetStats ()._weapon.;
 		// Set unit is moving to false
 		isMoving = false;
 		// Set for menu to be open
@@ -294,8 +294,13 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 				break;
 			}
 		}
+		// If damage is not set, set it to normal damage with no advantage / disadvantage
 		if(damageDeal == -1)
 			damageDeal = normalDamage;
+		
+		// Decrease AP required to carry out the attack
+		attacker.GetComponent<UnitVariables> ().AP -= weapon.AP;
+
 		return damageDeal;
 	}
 		

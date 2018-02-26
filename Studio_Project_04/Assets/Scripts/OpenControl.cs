@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
@@ -52,30 +53,41 @@ public class OpenControl : MonoBehaviour {
 		RaycastHit collide;
 		Ray ray = CameraRef.ScreenPointToRay(Input.mousePosition);
 
-		// Check if mouseclick has collided with any buildings
-		if (Physics.Raycast (ray, out collide)) {
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            // Check if mouseclick has collided with any buildings
+            if (Physics.Raycast(ray, out collide))
+            {
 
-			if (collide.collider.tag == "Player") {
-				return;
-			}
+                if (collide.collider.tag == "Player")
+                {
+                    return;
+                }
 
-			if (collide.collider.tag == "Building") {
-				TargetPosition = collide.transform.GetChild (0).transform.position;
-			} else if (collide.collider.tag == "NPC") {
-				TargetPosition = collide.transform.position;
-				collide.collider.GetComponent<NPC> ().SetMoving (false);
-			} else {
-				TargetPosition.x = this.transform.position.x + ray.direction.x * CameraRef.transform.position.y;
-				TargetPosition.z = this.transform.position.z + ray.direction.z * CameraRef.transform.position.y;
-			}
-		}
+                if (collide.collider.tag == "Building")
+                {
+                    TargetPosition = collide.transform.GetChild(0).transform.position;
+                }
+                else if (collide.collider.tag == "NPC")
+                {
+                    TargetPosition = collide.transform.position;
+                    collide.collider.GetComponent<NPC>().SetMoving(false);
+                }
+                else
+                {
+                    TargetPosition.x = this.transform.position.x + ray.direction.x * CameraRef.transform.position.y;
+                    TargetPosition.z = this.transform.position.z + ray.direction.z * CameraRef.transform.position.y;
+                }
+            }
 
-		Quaternion Temp = Quaternion.Euler (90, 0, 0);
-		if (MovePointRef != null) {
-			Destroy (MovePointRef);
-		}
+            Quaternion Temp = Quaternion.Euler(90, 0, 0);
+            if (MovePointRef != null)
+            {
+                Destroy(MovePointRef);
+            }
 
-		MovePointRef = (Instantiate (MovePoint, TargetPosition, Temp));
+            MovePointRef = (Instantiate(MovePoint, TargetPosition, Temp));
+        }  
 	}
 
 	// Instantly stops the player from moving but does not prevent the player from moving further

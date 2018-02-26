@@ -6,7 +6,8 @@
     "type": "Slash",
     "stats":
     {
-      "attack": 5,
+      "attack": 8,
+      "ap": 1,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -26,7 +27,8 @@
     "type": "Slash",
     "stats":
     {
-      "attack": 6,
+      "attack": 10,
+      "ap": 2,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -46,7 +48,8 @@
     "type": "Slash",
     "stats":
     {
-      "attack": 7,
+      "attack": 12,
+      "ap": 3,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -66,7 +69,8 @@
     "type": "Slash",
     "stats":
     {
-      "attack": 8,
+      "attack": 14,
+      "ap": 4,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -87,6 +91,7 @@
     "stats":
     {
       "attack": 6969,
+      "ap": 1,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -106,7 +111,8 @@
     "type": "Slash",
     "stats":
     {
-      "attack": 2,
+      "attack": 8,
+      "ap": 1,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,
@@ -126,7 +132,8 @@
     "type": "Slash",
     "stats":
     {
-      "attack": 3,
+      "attack": 12,
+      "ap": 3,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,
@@ -152,7 +159,8 @@
     "type": "Pierce",
     "stats":
     {
-      "attack": 5,
+      "attack": 8,
+      "ap": 1,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -172,7 +180,8 @@
     "type": "Pierce",
     "stats":
     {
-      "attack": 6,
+      "attack": 10,
+      "ap": 2,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -192,7 +201,8 @@
     "type": "Pierce",
     "stats":
     {
-      "attack": 7,
+      "attack": 12,
+      "ap": 3,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -212,7 +222,8 @@
     "type": "Pierce",
     "stats":
     {
-      "attack": 8,
+      "attack": 14,
+      "ap": 4,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -232,7 +243,8 @@
     "type": "Pierce",
     "stats":
     {
-      "attack": 2,
+      "attack": 8,
+      "ap": 1,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,
@@ -252,7 +264,8 @@
     "type": "Pierce",
     "stats": 
     {
-      "attack": 3,
+      "attack": 12,
+      "ap": 3,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,
@@ -278,7 +291,8 @@
     "type": "Blunt",
     "stats":
     {
-      "attack": 5,
+      "attack": 8,
+      "ap": 1,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -298,7 +312,8 @@
     "type": "Blunt",
     "stats":
     {
-      "attack": 6,
+      "attack": 10,
+      "ap": 2,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -318,7 +333,8 @@
     "type": "Blunt",
     "stats":
     {
-      "attack": 7,
+      "attack": 12,
+      "ap": 3,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -338,7 +354,8 @@
     "type": "Blunt",
     "stats":
     {
-      "attack": 8,
+      "attack": 14,
+      "ap": 4,
       "range": 1,
       "strength": 6969,
       "vitality": 6969,
@@ -358,7 +375,8 @@
     "type": "Blunt",
     "stats":
     {
-      "attack": 2,
+      "attack": 8,
+      "ap": 1,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,
@@ -378,7 +396,8 @@
     "type": "Blunt",
     "stats": 
     {
-      "attack": 3,
+      "attack": 12,
+      "ap": 3,
       "range": 2,
       "strength": 6969,
       "vitality": 6969,

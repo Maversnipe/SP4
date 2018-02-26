@@ -51,7 +51,7 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
             items.Add(new InventoryObject());
             slots.Add(Instantiate(inventorySlot));
             slots[i].GetComponent<Slot>().id = i;
-            slots[i].transform.SetParent(slotPanel.transform);
+            slots[i].transform.SetParent(slotPanel.transform, false);
         }
 
         AddItem(0, 3);
