@@ -35,7 +35,7 @@ public class UnitVariables : MonoBehaviour {
 	public Weapon _weapon;
 	public Armor _armor;
 
-	public UnitVariables (string name, int hp, int ap,
+	public void SetUnitVariables (string name, int hp, int ap,
 		int initiative, int id, string weapon,
 		string armor)
 	{
@@ -104,8 +104,8 @@ public class UnitVariables : MonoBehaviour {
 		Weapon.text = this._weapon.Title;
 
 		// Armor
-		//Text Armor = UnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
-		//Armor.text = this._armor.Title;
+		Text Armor = UnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
+		Armor.text = this._armor.Title;
 	}
 
 	public void SetOpponentUnitInfoWindow(bool isActive)

@@ -109,7 +109,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		{
 			// Get the cancel button gameobject
 			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
-			// Set cancel button to active
+			// Set cancel button to Inactive
 			cancelButton.transform.GetChild (0).gameObject.SetActive (false);
 		}
 
@@ -136,8 +136,10 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// Change player back to default color
 		selectedPlayer.SetToDefaultColor ();
 
-		// Close Action Menu
+		// Close Action Menu & Unit Info Windows
 		selectedPlayer.menuOpen = false;
+		selectedPlayer.GetStats ().SetUnitInfoWindow (false);
+		selectedPlayer.GetStats ().SetOpponentUnitInfoWindow (false);
 
 		// Get the cancel button gameobject
 		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
@@ -181,6 +183,10 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		GameObject endButton = GameObject.FindGameObjectWithTag ("EndTurnButton");
 		// Set end button to not active
 		endButton.transform.GetChild (0).gameObject.SetActive (false);
+		// Get the action menu gameobject
+		GameObject ActionMenu2 = GameObject.FindGameObjectWithTag ("ActionMenu2");
+		// Set action menu to Inactive
+		ActionMenu2.transform.GetChild (0).gameObject.SetActive (false);
 	}
 
 	// Set & Get Selected Unit
@@ -271,8 +277,13 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 				break;
 			}
 		}
+		// If damage is not set, set it to normal damage with no advantage / disadvantage
 		if(damageDeal == -1)
 			damageDeal = normalDamage;
+		
+		// Decrease AP required to carry out the attack
+		attacker.GetComponent<UnitVariables> ().AP -= weapon.AP;
+
 		return damageDeal;
 	}
 		
