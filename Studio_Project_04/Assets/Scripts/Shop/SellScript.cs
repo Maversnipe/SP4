@@ -21,8 +21,11 @@ public class SellScript : MonoBehaviour, IDropHandler
 
     public void OnDrop(PointerEventData eventData)
     {
-        ItemData soldItem = eventData.pointerDrag.GetComponent<ItemData>();
-        sellConfirmDialog.SetActive(true);
-        sellConfirmDialog.transform.GetChild(0).GetComponent<ButtonScript>().sellItemData = soldItem;
+        if(!eventData.pointerDrag.GetComponent<ItemData>().equipped)
+        {
+            ItemData soldItem = eventData.pointerDrag.GetComponent<ItemData>();
+            sellConfirmDialog.SetActive(true);
+            sellConfirmDialog.transform.GetChild(0).GetComponent<ButtonScript>().sellItemData = soldItem;
+        }
     }
 }

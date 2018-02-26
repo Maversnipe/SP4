@@ -56,6 +56,7 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
 
         AddItem(0, 3);
         AddWeapon(0, 1);
+        AddArmor(1, 1);
     }
 
     void Update()
@@ -265,6 +266,100 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
         Weapon weaponToRemove = WeaponDatabase.Instance.FetchWeaponByID(id);
 
         if (checkForItem(weaponToRemove))
+        {
+            items[slot] = new InventoryObject();
+            GameObject.Destroy(slots[slot].transform.GetChild(0).gameObject);
+        }
+    }
+
+    public void AddArmor(int id, int no)
+    {
+        Armor armorToAdd = ArmorDatabase.Instance.FetchArmorByID(id);
+
+        if (armorToAdd.Stackable && checkForItem(armorToAdd))
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (!items[i].isEmpty && items[i].armor != null)
+                {
+                    if (items[i].weapon.ID == id)
+                    {
+                        ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
+                        data.amount += no;
+                        data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (items[i].isEmpty)
+                {
+                    items[i].armor = armorToAdd;
+                    GameObject itemObj = Instantiate(inventoryItem);
+                    itemObj.GetComponent<ItemData>().armor = armorToAdd;
+                    itemObj.GetComponent<ItemData>().slot = i;
+                    itemObj.transform.SetParent(slots[i].transform);
+                    itemObj.transform.localPosition = Vector2.zero;
+                    itemObj.GetComponent<Image>().sprite = armorToAdd.Sprite;
+                    itemObj.name = armorToAdd.Title;
+                    ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
+                    if (armorToAdd.Stackable)
+                    {
+                        data.amount += no;
+                        data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
+                    }
+                    else
+                    {
+                        data.amount++;
+                        data.transform.GetChild(0).gameObject.SetActive(false);
+                    }
+                    data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
+                    items[i].isEmpty = false;
+                    items[i].itemType = "Armor";
+                    break;
+                }
+            }
+        }
+    }
+
+    public void RemoveArmor(int id, int no)
+    {
+        Armor armorToRemove = ArmorDatabase.Instance.FetchArmorByID(id);
+
+        bool removeItem = false;
+
+        if (armorToRemove.Stackable && checkForItem(armorToRemove))
+        {
+            for (int i = 0; i < items.Count; i++)
+            {
+                if (!items[i].isEmpty && items[i].armor != null)
+                {
+                    if (items[i].weapon.ID == id)
+                    {
+                        ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
+                        if ((data.amount - no) <= 0)
+                        {
+                            removeItem = true;
+                            break;
+                        }
+                        data.amount -= no;
+                        data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
+                        break;
+                    }
+                }
+            }
+        }
+    }
+
+    public void RemoveArmor(int id, int no, int slot)
+    {
+        Armor armorToRemove = ArmorDatabase.Instance.FetchArmorByID(id);
+
+        if (checkForItem(armorToRemove))
         {
             items[slot] = new InventoryObject();
             GameObject.Destroy(slots[slot].transform.GetChild(0).gameObject);
