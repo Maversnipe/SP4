@@ -30,6 +30,10 @@ public class OpenWorldFade : MonoBehaviour {
 			}
 		}
 
+        if(Temp.a <= 0.0f)
+        {
+            this.gameObject.SetActive(false);
+        }
 		GetComponent<Image> ().color = Temp;
 	}
 

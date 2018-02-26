@@ -50,7 +50,7 @@ public class Shop : MonoBehaviour, IDragHandler {
             shopItems.Add(new ShopObject());
             slots.Add(Instantiate(shopSlot));
             slots[i].GetComponent<ShopSlot>().id = i;
-            slots[i].transform.SetParent(slotPanel.transform);
+            slots[i].transform.SetParent(slotPanel.transform, false);
         }
 
         AddShopItem(0);

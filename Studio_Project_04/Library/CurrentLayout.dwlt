@@ -41,8 +41,13 @@ MonoBehaviour:
     x: 0
     y: 30
     width: 1536
+<<<<<<< HEAD
     height: 731
   m_MinSize: {x: 883, y: 492}
+=======
+    height: 771
+  m_MinSize: {x: 681, y: 492}
+>>>>>>> 8d3f67a3f0e908241d9c7f52ce4cda968c1fc3a9
   m_MaxSize: {x: 14004, y: 14042}
   vertical: 0
   controlID: 99
@@ -63,7 +68,11 @@ MonoBehaviour:
     x: 1225
     y: 0
     width: 311
+<<<<<<< HEAD
     height: 731
+=======
+    height: 771
+>>>>>>> 8d3f67a3f0e908241d9c7f52ce4cda968c1fc3a9
   m_MinSize: {x: 277, y: 71}
   m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 14}
@@ -88,9 +97,15 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 303
+<<<<<<< HEAD
     height: 442
   m_MinSize: {x: 202, y: 221}
   m_MaxSize: {x: 4002, y: 4021}
+=======
+    height: 466
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
+>>>>>>> 8d3f67a3f0e908241d9c7f52ce4cda968c1fc3a9
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
@@ -142,7 +157,11 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 1536
+<<<<<<< HEAD
     height: 781
+=======
+    height: 821
+>>>>>>> 8d3f67a3f0e908241d9c7f52ce4cda968c1fc3a9
   m_MinSize: {x: 950, y: 542}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &7
@@ -205,8 +224,13 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 1225
+<<<<<<< HEAD
     height: 731
   m_MinSize: {x: 606, y: 492}
+=======
+    height: 771
+  m_MinSize: {x: 404, y: 492}
+>>>>>>> 8d3f67a3f0e908241d9c7f52ce4cda968c1fc3a9
   m_MaxSize: {x: 10002, y: 14042}
   vertical: 1
   controlID: 100
@@ -229,9 +253,15 @@ MonoBehaviour:
     x: 0
     y: 0
     width: 1225
+<<<<<<< HEAD
     height: 442
   m_MinSize: {x: 606, y: 221}
   m_MaxSize: {x: 6054, y: 4021}
+=======
+    height: 466
+  m_MinSize: {x: 404, y: 221}
+  m_MaxSize: {x: 8004, y: 4021}
+>>>>>>> 8d3f67a3f0e908241d9c7f52ce4cda968c1fc3a9
   vertical: 0
   controlID: 101
 --- !u!114 &11
@@ -328,15 +358,25 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
+<<<<<<< HEAD
   - Assets/Town Creator Kit LITE
+=======
+  - Assets
+>>>>>>> 8d3f67a3f0e908241d9c7f52ce4cda968c1fc3a9
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\Froust Lim\Documents\SP4\Studio_Project_04
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
+<<<<<<< HEAD
     m_SelectedIDs: 24250000
     m_LastClickedID: 9508
     m_ExpandedIDs: 00000000242500005027000056270000942700009c270000ae270000c0270000d22a0000d42a000000ca9a3bffffff7f
+=======
+    m_SelectedIDs: ac280000
+    m_LastClickedID: 10412
+    m_ExpandedIDs: 00000000ac28000046290000f8290000322a0000442a0000562a0000942a0000ee2a0000b42c0000b62c000000ca9a3bffffff7f
+>>>>>>> 8d3f67a3f0e908241d9c7f52ce4cda968c1fc3a9
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -364,7 +404,11 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
+<<<<<<< HEAD
     m_ExpandedIDs: 00000000242500005027000056270000942700009c270000ae270000c0270000d22a0000d42a0000
+=======
+    m_ExpandedIDs: 00000000ac28000046290000f8290000322a0000442a0000562a0000942a0000ee2a0000b42c0000b62c0000
+>>>>>>> 8d3f67a3f0e908241d9c7f52ce4cda968c1fc3a9
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -482,7 +526,11 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
+<<<<<<< HEAD
     m_ExpandedIDs: e8fbffff00000000
+=======
+    m_ExpandedIDs: b2fbffff00000000
+>>>>>>> 8d3f67a3f0e908241d9c7f52ce4cda968c1fc3a9
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
