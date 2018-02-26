@@ -78,8 +78,12 @@ public class Players : MonoBehaviour
 		// If it is Player's turn
 		if(turnManager.IsPlayerTurn () && turnAP > 0)
 		{
+			// Change Unit To This Unit
 			PlayerManager.Instance.ChangeUnit (this);
-			this.transform.GetChild (0).gameObject.SetActive (true);
+			// Find GO with ActionMenu2 tag
+			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu");
+			// Make GO's child active, which makes the menu appear
+			menu.transform.GetChild(0).gameObject.SetActive (true);
 		}
 	}
 
@@ -205,8 +209,10 @@ public class Players : MonoBehaviour
 	// The reset for the end of each Unit's turn
 	public void TurnEnd()
 	{
-		// If it is a playable unit
-		this.transform.GetChild (0).gameObject.SetActive (false);
+		// Find GO with ActionMenu2 tag
+		GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu");
+		// Make GO's child active, which makes the menu not appear
+		menu.transform.GetChild(0).gameObject.SetActive (false);
 
 		// De-Spawn Unit Info Window
 		Stats.SetUnitInfoWindow(false);

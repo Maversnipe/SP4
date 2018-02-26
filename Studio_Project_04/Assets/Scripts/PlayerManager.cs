@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using System;
 
 public class PlayerManager : GenericSingleton<PlayerManager> {
@@ -73,6 +74,9 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		ableToMove = false;
 		// Set to not be able to attack
 		ableToAttack = false;
+		// Set Text for Attack Button
+		GameObject attButton = GameObject.FindGameObjectWithTag ("AttackButton");
+		attButton.GetComponentInChildren <Text> ().text = "Attack\n" + selectedPlayer.GetStats ()._weapon.;
 		// Set unit is moving to false
 		isMoving = false;
 		// Set for menu to be open
@@ -89,13 +93,18 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// And if the unit is not moving
 		if(selectedPlayer.menuOpen && !ableToAttack && !isMoving)
 		{ // If player still selecting menu options
-			// This makes the Canvas in the unit to be active
-			selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
+			// Find GO with ActionMenu tag
+			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu");
+			// Make GO's child active, which makes the menu appear
+			menu.transform.GetChild(0).gameObject.SetActive (true);
 		}
 		else if(!selectedPlayer.menuOpen || isMoving || ableToAttack)
 		{ // If player already selected from menu options
 			// This makes the Canvas in the unit to be inactive
-			selectedPlayer.transform.GetChild (0).gameObject.SetActive (false);
+			// Find GO with ActionMenu tag
+			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu");
+			// Make GO's child active, which makes the menu appear
+			menu.transform.GetChild(0).gameObject.SetActive (false);
 		}
 
 		if(selectedPlayer.menuOpen)
@@ -120,7 +129,11 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	{
 		if (ableToMove)
 		{ // If move is clicked, you can deselect move
-			selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
+			// Find GO with ActionMenu tag
+			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu");
+			// Make GO's child active, which makes the menu appear
+			menu.transform.GetChild (0).gameObject.SetActive (true);
+
 			selectedPlayer.menuOpen = true;
 			isMoving = true;
 			ableToMove = false;
@@ -128,7 +141,11 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		}
 		if (ableToAttack)
 		{ // If attack is clicked, you can deselect attack
-			selectedPlayer.transform.GetChild (0).gameObject.SetActive (true);
+			// Find GO with ActionMenu tag
+			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu");
+			// Make GO's child active, which makes the menu appear
+			menu.transform.GetChild (0).gameObject.SetActive (false);
+
 			selectedPlayer.menuOpen = true;
 			ableToAttack = false;
 		}
