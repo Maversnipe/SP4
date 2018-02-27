@@ -96,7 +96,7 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 		// Set Camera position to be the last player unit's position
 		Players theLastPlayer = ArrayOfPlayers [ArrayOfPlayers.Count () - 1].GetComponent <Players> ();
-		Camera.main.transform.position = new Vector3(theLastPlayer.transform.position.x, Camera.main.transform.position.y, theLastPlayer.transform.position.z);
+		Camera.main.GetComponent<CameraControl> ().setFocus (theLastPlayer.gameObject);
 
 		// Set to not be able to move unit
 		PlayerManager.Instance.SetAbleToMove (false);

@@ -227,7 +227,7 @@ public class Players : MonoBehaviour
 		// Set object to be highlighted
 		rend.material.color = HoverColor;
 		// Set Camera position to be the Unit's position
-		Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
+		//Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
 	}
 
 	// The reset for the end of each Unit's turn

@@ -338,7 +338,7 @@ public class AI : MonoBehaviour {
 		// Reset nextNode to null
 		nextNode = null;
 		// Set Camera position to be the Unit's position
-		Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
+		Camera.main.GetComponent<CameraControl> ().setFocus (this.gameObject);
 		Stats.AP = Stats.startAP;
 	}
 
@@ -399,7 +399,9 @@ public class AI : MonoBehaviour {
 				Temp = GridRef.GetNode (Temp.GetXIndex () - 1, Temp.GetZIndex ());
 			}
 
-			Temp.SetSelectable (true);
+			if (Temp != EnemyTarget) {
+				Temp.SetSelectable (true);
+			}
 			Temp.ChangeColour ();
 			m_path.Enqueue (Temp);
 			AP_Ref--;
