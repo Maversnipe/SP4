@@ -18,7 +18,7 @@ public class UnitVariables : MonoBehaviour {
 
 	[SerializeField]
 	private Image healthbar;
-	private int startHp;
+	public int startHp;
 
 	[SerializeField]
 	private GameObject UnitInfoObject;
@@ -101,13 +101,19 @@ public class UnitVariables : MonoBehaviour {
 
 		// Weapon
 		Text WeaponT = UnitInfoWindow.Find("Weapon variable").GetChild(0).GetComponent<Text>();
-		WeaponT.text = this._weapon.Title;
+        if(this._weapon == null)
+            WeaponT.text = "";
+        else
+            WeaponT.text = this._weapon.Title;
 		Image WeaponI = UnitInfoWindow.Find("Weapon variable").GetChild(1).GetComponent<Image>();
 		WeaponI.sprite = Resources.Load<Sprite>("Sprite/Items/Weapons/" + this._weapon.Icon);
 
 		// Armor
 		Text ArmorT = UnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
-		ArmorT.text = this._armor.Title;
+        if(this._armor == null)
+			ArmorT.text = "";
+        else
+        	ArmorT.text = this._armor.Title;
 		Image ArmorI = UnitInfoWindow.Find("Armor variable").GetChild(1).GetComponent<Image>();
 		ArmorI.sprite = Resources.Load<Sprite>("Sprite/Items/Armors/" + this._armor.Icon);
 	}
@@ -140,13 +146,19 @@ public class UnitVariables : MonoBehaviour {
 
 		// Weapon
 		Text WeaponT = OpponentUnitInfoWindow.Find("Weapon variable").GetChild(0).GetComponent<Text>();
-		WeaponT.text = OpponentStats._weapon.Title;
+		if(OpponentStats._weapon == null)
+			WeaponT.text = "";
+		else
+			WeaponT.text = OpponentStats._weapon.Title;
 		Image WeaponI = OpponentUnitInfoWindow.Find("Weapon variable").GetChild(1).GetComponent<Image>();
 		WeaponI.sprite = Resources.Load<Sprite>("Sprite/Items/Weapons/" + OpponentStats._weapon.Icon);
 
 		// Armor
 		Text ArmorT = OpponentUnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
-		ArmorT.text = OpponentStats._armor.Title;
+		if(OpponentStats._armor == null)
+			ArmorT.text = "";
+		else
+			ArmorT.text = OpponentStats._armor.Title;
 		Image ArmorI = OpponentUnitInfoWindow.Find("Armor variable").GetChild(1).GetComponent<Image>();
 		ArmorI.sprite = Resources.Load<Sprite>("Sprite/Items/Armors/" + OpponentStats._armor.Icon);
 	}

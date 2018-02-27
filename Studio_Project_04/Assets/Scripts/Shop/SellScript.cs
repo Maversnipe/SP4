@@ -5,11 +5,11 @@ using UnityEngine.EventSystems;
 
 public class SellScript : MonoBehaviour, IDropHandler
 {
-    [SerializeField]
     private GameObject sellConfirmDialog;
 
     // Use this for initialization
     void Start () {
+        sellConfirmDialog = GameObject.FindGameObjectWithTag("SellConfirmDialog");
         sellConfirmDialog.SetActive(false);
     }
 	

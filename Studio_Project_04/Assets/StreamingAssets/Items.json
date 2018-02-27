@@ -4,7 +4,7 @@
     "title": "Health Potion",
     "value": 25,
     "type": "Consumable",
-    "modifier": "hp",
+    "modifier": "HP",
     "modifier_value": 50,
     "description": "Restores 50 HP.",
     "stackable": true,

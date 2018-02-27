@@ -65,6 +65,7 @@
      <Compile Include="Assets\Scripts\Inventory\ItemData.cs" />
      <Compile Include="Assets\Scripts\Inventory\Slot.cs" />
      <Compile Include="Assets\Scripts\ItemScripts\ConsumableItem.cs" />
+     <Compile Include="Assets\Scripts\ItemScripts\UnitPanelScript.cs" />
      <Compile Include="Assets\Scripts\ItemScripts\UnitSelectScript.cs" />
      <Compile Include="Assets\Scripts\MainMenu.cs" />
      <Compile Include="Assets\Scripts\NPC.cs" />
