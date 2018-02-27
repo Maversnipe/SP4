@@ -103,7 +103,7 @@ public class Weapon
         this.Stackable = stackable;
         this.Rarity = rarity;
         this.Icon = icon;
-        this.Sprite = Resources.Load<Sprite>("Sprite/Items/" + icon);
+        this.Sprite = Resources.Load<Sprite>("Sprite/Items/Weapons/" + icon);
     }
 
     public Weapon()

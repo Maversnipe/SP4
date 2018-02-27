@@ -35,7 +35,7 @@ public class Players : MonoBehaviour
 	private Stack<Nodes> path;
 
 	// Player's AP amount in the current turn
-	private int turnAP;
+	public int turnAP;
 
 	void Start ()
 	{
@@ -148,13 +148,13 @@ public class Players : MonoBehaviour
 
 	void Update()
 	{
+		// Kill player if hp reach 0
+		if (this.Stats.HP <= 0)
+			Destroy (this.gameObject);
+		
 		this.gameObject.GetComponent<UnitVariables> ().Copy (Stats);
 		// Update Unit Info Window
 		this.gameObject.GetComponent<UnitVariables> ().UpdateUnitInfo ();
-
-		// Cheat key to lose scene
-		if(Input.GetKeyDown("q"))
-			SceneManager.LoadScene ("SceneDefeated");
 
 		if (!turnManager.IsPlayerTurn ())
 			return;
@@ -227,7 +227,7 @@ public class Players : MonoBehaviour
 		// Set object to be highlighted
 		rend.material.color = HoverColor;
 		// Set Camera position to be the Unit's position
-		Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
+		//Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
 	}
 
 	// The reset for the end of each Unit's turn

@@ -5,13 +5,14 @@ using UnityEngine;
 public class CameraControl : MonoBehaviour {
 
     bool freecam = false;
-    bool isPanning = false;
-    int cameraMode = 0;
-    Vector3 anchorPos;
+	float Timer;
+
+	//References to Player & Turn Manager
     private TurnManager turnManager;
 	private PlayerManager playerManager;
 
-	private GameObject currFocus;
+	//Variable to move the camera towards the game object
+	private GameObject currFocus = null;
 
     // Use this for initialization
     void Start () {
@@ -22,73 +23,86 @@ public class CameraControl : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		if (turnManager.IsPlayerTurn()) {
+		Timer -= Time.deltaTime;
 
-			//Directional Command
-			if (Input.GetKey("w"))
-			{
-				transform.position += transform.up * 10 * Time.deltaTime;
-			}
-			if (Input.GetKey("a"))
-			{
-				transform.position -= transform.right * 10 * Time.deltaTime;
-			}
-			if (Input.GetKey("s"))
-			{
-				transform.position -= transform.up * 10 * Time.deltaTime;
-			}
-			if (Input.GetKey("d"))
-			{
-				transform.position += transform.right * 10 * Time.deltaTime;
-			}
+		// If it is currently the player's turn
+		if (turnManager.IsPlayerTurn ()) {
+			if (currFocus != null) {
+				Vector3 TempPos = currFocus.transform.position;
 
-			//Minimium Scroll Distance
-			if (Input.GetAxis ("Mouse ScrollWheel") > 0f) {
-				if (this.gameObject.transform.position.y > 15) {
-					Vector3 TempPos = this.transform.position;
+				TempPos.y = this.transform.position.y;
 
-					TempPos.y -= Input.GetAxis ("Mouse ScrollWheel") * 3;
-					this.gameObject.transform.position = TempPos;
+				// Regular WASD Movement
+				if (Input.GetKey("w"))
+				{
+					transform.position += transform.up * 10 * Time.deltaTime;
+					Timer = 1;
 				}
-			} 
-			// Maximum Scroll Distance
-			else if (Input.GetAxis ("Mouse ScrollWheel") < 0f) {
-				if (this.gameObject.transform.position.y < 30) {
-					Vector3 TempPos = this.transform.position;
-
-					TempPos.y -= Input.GetAxis ("Mouse ScrollWheel") * 3;
-					this.gameObject.transform.position = TempPos;
+				if (Input.GetKey("a"))
+				{
+					transform.position -= transform.right * 10 * Time.deltaTime;
+					Timer = 1;
 				}
-			}
+				if (Input.GetKey("s"))
+				{
+					transform.position -= transform.up * 10 * Time.deltaTime;
+					Timer = 1;
+				}
+				if (Input.GetKey("d"))
+				{
+					transform.position += transform.right * 10 * Time.deltaTime;
+					Timer = 1;
+				}
 
-			if (playerManager.GetSelectedUnit () != null) {
-				currFocus = playerManager.GetSelectedUnit ().gameObject;
+				// If the current Focused target isn't the same as the player manager one
+				if (playerManager.GetSelectedUnit() != null &&
+					currFocus != playerManager.GetSelectedUnit ().gameObject) {
+					currFocus = playerManager.GetSelectedUnit ().gameObject;
+				}
+
+				if (Timer <= 0) {
+					if ((this.transform.position - TempPos).magnitude > 5) {
+						if ((this.transform.position - TempPos).magnitude > 0.5f) {
+							this.transform.position += (TempPos - this.transform.position).normalized * 0.5f;
+						}
+					} else {
+						if ((this.transform.position - TempPos).magnitude > 0.1f) {
+							this.transform.position += (TempPos - this.transform.position).normalized * 0.1f;
+						}
+					}
+				}
 			} else {
-				currFocus = null;
+				if (playerManager.GetSelectedUnit () != null) {
+					currFocus = playerManager.GetSelectedUnit ().gameObject;
+				}
 			}
 		} else {
-			if (turnManager.GetCurrUnit () != null) {
-				currFocus = turnManager.GetCurrUnit ().gameObject;
+			if (currFocus != null) {
+				Vector3 TempPos = currFocus.transform.position;
+
+				TempPos.y = this.transform.position.y;
+
+				// If the current Focused target isn't the same as the turn manager one
+				if (turnManager.GetCurrUnit () != null &&
+					currFocus != turnManager.GetCurrUnit ().gameObject) {
+					currFocus = turnManager.GetCurrUnit ().gameObject;
+				}
+
+				if ((this.transform.position - TempPos).magnitude > 5) {
+					if ((this.transform.position - TempPos).magnitude > 0.5f) {
+						this.transform.position += (TempPos - this.transform.position).normalized * 0.5f;
+					}
+				} else {
+					if ((this.transform.position - TempPos).magnitude > 0.1f) {
+						this.transform.position += (TempPos - this.transform.position).normalized * 0.1f;
+					}
+				}
+			} else {
+				if (turnManager.GetCurrUnit () != null) {
+					currFocus = turnManager.GetCurrUnit ().gameObject;
+				}
 			}
 		}
-
-		if (currFocus != null
-			&& (this.transform.position - currFocus.transform.position).magnitude < 0.1f) {
-			Vector3 TempPos = this.transform.position;
-
-			TempPos.x = currFocus.transform.position.x;
-			TempPos.z = currFocus.transform.position.z;
-			this.transform.position = TempPos;
-		}
-
-        if (Input.GetKeyDown("b"))
-        {
-            cameraMode = 0;
-        }
-        if (Input.GetKeyDown("n"))
-        {
-            cameraMode = 1;
-        }
 
         if (!freecam)
         {
@@ -106,51 +120,34 @@ public class CameraControl : MonoBehaviour {
 				transform.position = new Vector3(turnManager.GetCurrUnit ().transform.position.x, transform.position.y, turnManager.GetCurrUnit ().transform.position.z);
             }
 
-            if (cameraMode == 0)
-            {
-                if (Input.GetKey("w"))
-                {
-                    transform.position += transform.up * 10 * Time.deltaTime;
-                }
-                if (Input.GetKey("a"))
-                {
-                    transform.position -= transform.right * 10 * Time.deltaTime;
-                }
-                if (Input.GetKey("s"))
-                {
-                    transform.position -= transform.up * 10 * Time.deltaTime;
-                }
-                if (Input.GetKey("d"))
-                {
-                    transform.position += transform.right * 10 * Time.deltaTime;
-                }
-            }
-
-            if(cameraMode == 1)
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    isPanning = true;
-                    anchorPos = Input.mousePosition;
-
-                }
-
-                if(!Input.GetMouseButton(0))
-                {
-                    isPanning = false;
-                }
-
-                if(isPanning)
-                {
-                    Vector3 pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - anchorPos);
-
-                    Vector3 move = new Vector3(pos.x * 2, pos.y * 2, 0);
-                    transform.Translate(move, Space.Self);
-                }
-  
-            }
+			if (Input.GetKey("w"))
+			{
+				transform.position += transform.up * 10 * Time.deltaTime;
+			}
+			if (Input.GetKey("a"))
+			{
+				transform.position -= transform.right * 10 * Time.deltaTime;
+			}
+			if (Input.GetKey("s"))
+			{
+				transform.position -= transform.up * 10 * Time.deltaTime;
+			}
+			if (Input.GetKey("d"))
+			{
+				transform.position += transform.right * 10 * Time.deltaTime;
+			}
 
         }
         
     }
+
+	public void setFocus(GameObject new_Focus)
+	{
+		currFocus = new_Focus;
+	}
+
+	public GameObject getFocus()
+	{
+		return currFocus;
+	}
 }
