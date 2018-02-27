@@ -18,7 +18,7 @@ public class UnitVariables : MonoBehaviour {
 
 	[SerializeField]
 	private Image healthbar;
-	private int startHp;
+	public int startHp;
 
 	[SerializeField]
 	private GameObject UnitInfoObject;
@@ -101,11 +101,25 @@ public class UnitVariables : MonoBehaviour {
 
 		// Weapon
 		Text Weapon = UnitInfoWindow.Find("Weapon variable").GetChild(0).GetComponent<Text>();
-		Weapon.text = this._weapon.Title;
+        if(this._weapon == null)
+        {
+            Weapon.text = "";
+        }
+        else
+        {
+            Weapon.text = this._weapon.Title;
+        }
 
 		// Armor
 		Text Armor = UnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
-		Armor.text = this._armor.Title;
+        if(this._armor == null)
+        {
+            Armor.text = "";
+        }
+        else
+        {
+            Armor.text = this._armor.Title;
+        }
 	}
 
 	public void SetOpponentUnitInfoWindow(bool isActive)

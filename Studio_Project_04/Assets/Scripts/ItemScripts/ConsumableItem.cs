@@ -4,14 +4,18 @@ using UnityEngine;
 
 public class ConsumableItem : MonoBehaviour {
 
-    public GameObject unitSelectPanel;
-
 	void Start () {
 		
 	}
 
-    public void Use()
+    public void Use(int unit)
     {
+        if(this.gameObject.GetComponent<ItemData>().item.Modifier == "HP")
+        {
+            StatusMenu.Instance.players[unit].GetComponent<UnitVariables>().HP += this.gameObject.GetComponent<ItemData>().item.ModifierValue;
+            Inventory.Instance.RemoveItem(this.gameObject.GetComponent<ItemData>().item.ID, 1);
+            Debug.Log("Item used");
+        }
         
     }
 }
