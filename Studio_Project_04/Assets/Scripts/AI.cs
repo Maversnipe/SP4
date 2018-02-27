@@ -102,7 +102,7 @@ public class AI : MonoBehaviour {
 				// Update Opponent Unit Info
 				selectedUnitObject.GetStats ().UpdateOpponentUnitInfo(this.Stats);
 
-				int damageDeal = PlayerManager.Instance.CalculateDamage (selectedUnitObject.gameObject, this.gameObject);
+				int damageDeal = turnManager.CalculateDamage (selectedUnitObject.gameObject, this.gameObject);
 
 				Stats.HP -= damageDeal;
 				if (Stats.HP <= 0)

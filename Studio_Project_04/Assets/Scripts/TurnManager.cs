@@ -172,4 +172,90 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	// Get & Set player done count
 	public int GetPlayerDoneCount() { return playerDoneCount; }
 	public void SetPlayerDoneCount(int _playerDoneCount) { playerDoneCount = _playerDoneCount; }
+
+	// Return calculated Damage Value for attacking - Need to pass in GameObjects of Attacker and Victim
+	public int CalculateDamage(GameObject attacker, GameObject victim)
+	{
+		// Weapon of player and Armor of enemy informations
+		Weapon weapon = attacker.GetComponent<UnitVariables>()._weapon;
+		Armor armor = victim.GetComponent<UnitVariables>()._armor;
+
+		// Damage Calculations
+		int damageDeal = -1;
+		int advantagedDamage = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 1.5f);
+		int disadvantagedDamage = (int)Mathf.Max(1, (weapon.Attack - armor.Defence) * 0.5f);
+		int normalDamage = Mathf.Max(1, weapon.Attack - armor.Defence);
+
+		switch (weapon.Type)
+		{
+		case "Slash":
+			{
+				switch (armor.Type) 
+				{
+				// Strong against
+				case "Light":
+					{
+						damageDeal = advantagedDamage;
+						break;
+					}
+					// Weak against
+				case "Heavy":
+					{
+						damageDeal = disadvantagedDamage;
+						break;
+					}
+				}
+				break;
+			}
+		case "Pierce":
+			{
+				switch (armor.Type) 
+				{
+				// Strong against
+				case "Medium":
+					{
+						damageDeal = advantagedDamage;
+						break;
+					}
+					// Weak against
+				case "Light":
+					{
+						damageDeal = disadvantagedDamage;
+						break;
+					}
+				}
+				break;
+			}
+		case "Blunt":
+			{
+				switch (armor.Type) {
+				// Strong against
+				case "Heavy":
+					{
+						damageDeal = advantagedDamage;
+						break;
+					}
+					// Weak against
+				case "Medium":
+					{
+						damageDeal = disadvantagedDamage;
+						break;
+					}
+				}
+				break;
+			}
+		}
+		// If damage is not set, set it to normal damage with no advantage / disadvantage
+		if(damageDeal == -1)
+			damageDeal = normalDamage;
+
+		// Decrease AP required to carry out the attack
+		attacker.GetComponent<UnitVariables> ().AP -= weapon.AP;
+
+		// Decrease AP from plater required to carry out the attack
+		if (attacker.GetComponent<Players> () != null)
+			attacker.GetComponent<Players> ().turnAP -= weapon.AP;
+
+		return damageDeal;
+	}
 }

@@ -35,7 +35,7 @@ public class Players : MonoBehaviour
 	private Stack<Nodes> path;
 
 	// Player's AP amount in the current turn
-	private int turnAP;
+	public int turnAP;
 
 	void Start ()
 	{
