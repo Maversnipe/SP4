@@ -57,9 +57,17 @@ public class StatusMenu : GenericSingleton<StatusMenu>, IDragHandler
         {
             players[currPlayerUnit].GetComponent<UnitVariables>()._weapon = this.transform.Find("Equipment Slot Panel " + currPlayerUnit).Find("Weapon Slot").GetChild(0).GetComponent<ItemData>().weapon;
         }
+        else
+        {
+            players[currPlayerUnit].GetComponent<UnitVariables>()._weapon = null;
+        }
         if (this.transform.Find("Equipment Slot Panel " + currPlayerUnit).Find("Armor Slot").childCount > 0)
         {
             players[currPlayerUnit].GetComponent<UnitVariables>()._armor = this.transform.Find("Equipment Slot Panel " + currPlayerUnit).Find("Armor Slot").GetChild(0).GetComponent<ItemData>().armor;
+        }
+        else
+        {
+            players[currPlayerUnit].GetComponent<UnitVariables>()._armor = null;
         }
         players[currPlayerUnit].GetComponent<UnitVariables>().UpdateUnitInfo(); 
     }

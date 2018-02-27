@@ -32,7 +32,9 @@ public class UnitVariables : MonoBehaviour {
 	public int startAP;
 	public int Initiative;
 	public int ID;
-	public Weapon _weapon;
+    [SerializeField]
+    public Weapon _weapon;
+    [SerializeField]
 	public Armor _armor;
 
 	public void SetUnitVariables (string name, int hp, int ap,
@@ -104,18 +106,21 @@ public class UnitVariables : MonoBehaviour {
         if(this._weapon == null)
             WeaponT.text = "";
         else
+        {
             WeaponT.text = this._weapon.Title;
-		Image WeaponI = UnitInfoWindow.Find("Weapon variable").GetChild(1).GetComponent<Image>();
-		WeaponI.sprite = Resources.Load<Sprite>("Sprite/Items/Weapons/" + this._weapon.Icon);
-
+            Image WeaponI = UnitInfoWindow.Find("Weapon variable").GetChild(1).GetComponent<Image>();
+            WeaponI.sprite = Resources.Load<Sprite>("Sprite/Items/Weapons/" + this._weapon.Icon);
+        }
 		// Armor
 		Text ArmorT = UnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
         if(this._armor == null)
 			ArmorT.text = "";
         else
-        	ArmorT.text = this._armor.Title;
-		Image ArmorI = UnitInfoWindow.Find("Armor variable").GetChild(1).GetComponent<Image>();
-		ArmorI.sprite = Resources.Load<Sprite>("Sprite/Items/Armors/" + this._armor.Icon);
+        {
+            ArmorT.text = this._armor.Title;
+            Image ArmorI = UnitInfoWindow.Find("Armor variable").GetChild(1).GetComponent<Image>();
+            ArmorI.sprite = Resources.Load<Sprite>("Sprite/Items/Armors/" + this._armor.Icon);
+        }
 	}
 
 	public void SetOpponentUnitInfoWindow(bool isActive)
