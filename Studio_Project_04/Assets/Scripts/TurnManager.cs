@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TurnManager : GenericSingleton<TurnManager> {
 	// List of the units in battle
@@ -14,6 +15,8 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	private bool PlayerTurn = false;
 
 	private int playerDoneCount = 0;
+
+	private bool loadedDefeat = false;
 
 	// This is called whenever the player starts a battle
 	public void StartBattle()
@@ -52,8 +55,14 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 	// Update is called once per frame
 	void Update () {
-		// Update player health barx	
-		//PlayerManager.Instance.GetSelectedUnit ().GetStats ().UpdateHealthBar ();
+
+		// Get all players into an array - if empty, load defeat scene
+		GameObject[] ArrayOfPlayers = GameObject.FindGameObjectsWithTag ("PlayerUnit");
+		if (!loadedDefeat && ArrayOfPlayers.Length <= 0) {
+			SceneManager.LoadScene ("SceneDefeated");
+			loadedDefeat = true;
+		}
+		
 		// Enter Player Update only if it is Player's turn
 		if(PlayerTurn)
 		{

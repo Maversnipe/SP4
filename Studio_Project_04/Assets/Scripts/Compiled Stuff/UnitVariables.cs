@@ -104,14 +104,12 @@ public class UnitVariables : MonoBehaviour {
 		WeaponT.text = this._weapon.Title;
 		Image WeaponI = UnitInfoWindow.Find("Weapon variable").GetChild(1).GetComponent<Image>();
 		WeaponI.sprite = Resources.Load<Sprite>("Sprite/Items/Weapons/" + this._weapon.Icon);
-		Debug.Log (this._weapon.Icon);
 
 		// Armor
 		Text ArmorT = UnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
 		ArmorT.text = this._armor.Title;
 		Image ArmorI = UnitInfoWindow.Find("Armor variable").GetChild(1).GetComponent<Image>();
 		ArmorI.sprite = Resources.Load<Sprite>("Sprite/Items/Armors/" + this._armor.Icon);
-		Debug.Log (this._armor.Icon);
 	}
 
 	public void SetOpponentUnitInfoWindow(bool isActive)

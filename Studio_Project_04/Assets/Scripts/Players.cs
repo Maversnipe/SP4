@@ -148,13 +148,13 @@ public class Players : MonoBehaviour
 
 	void Update()
 	{
+		// Kill player if hp reach 0
+		if (this.Stats.HP <= 0)
+			Destroy (this.gameObject);
+		
 		this.gameObject.GetComponent<UnitVariables> ().Copy (Stats);
 		// Update Unit Info Window
 		this.gameObject.GetComponent<UnitVariables> ().UpdateUnitInfo ();
-
-		// Cheat key to lose scene
-		if(Input.GetKeyDown("q"))
-			SceneManager.LoadScene ("SceneDefeated");
 
 		if (!turnManager.IsPlayerTurn ())
 			return;
