@@ -13,8 +13,8 @@ public class ButtonScript : MonoBehaviour {
     public ShopItemData boughtItemData;
     public ShopItemData shopItemData;
 
-    public GameObject statusMenu;
     public GameObject equipmentSlotPanel;
+    private GameObject unitSelectPanel;
     public EquipmentInfoPanel equipmentInfoPanel;
     private GameObject buyConfirmDialog;
     public GameObject sellAmountField;
@@ -23,16 +23,16 @@ public class ButtonScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         buyConfirmDialog = GameObject.FindWithTag("BuyConfirmDialog");
+        unitSelectPanel = GameObject.FindWithTag("UnitSelectPanel");
         sellAmountField = GameObject.Find("SellAmountField");
         buyAmountField = GameObject.Find("BuyAmountField");
-        statusMenu = GameObject.Find("StatusMenu");
         equipmentInfoPanel = StatusMenu.Instance.GetComponent<EquipmentInfoPanel>();
-        equipmentSlotPanel = statusMenu.transform.Find("Equipment Slot Panel " + statusMenu.GetComponent<StatusMenu>().currPlayerUnit).gameObject;
+        equipmentSlotPanel = StatusMenu.Instance.gameObject.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).gameObject;
     }
 
     private void Update()
     {
-        equipmentSlotPanel = statusMenu.transform.Find("Equipment Slot Panel " + statusMenu.GetComponent<StatusMenu>().currPlayerUnit).gameObject;
+        equipmentSlotPanel = StatusMenu.Instance.gameObject.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).gameObject;
     }
 	
     public void closePanel()
@@ -160,9 +160,8 @@ public class ButtonScript : MonoBehaviour {
 
     public void useItem()
     {
-        Inventory.Instance.slots[itemData.slot].transform.GetChild(0).GetComponent<ConsumableItem>().Use();
-        int itemID = itemData.item.ID;
-        Inventory.Instance.RemoveItem(itemID, 1);
+        unitSelectPanel.SetActive(true);
+        unitSelectPanel.GetComponent<UnitPanelScript>().data = itemData;
     }
 
     public void activateConfirmDialog()

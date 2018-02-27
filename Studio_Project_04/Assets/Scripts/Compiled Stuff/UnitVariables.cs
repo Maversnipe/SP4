@@ -18,7 +18,7 @@ public class UnitVariables : MonoBehaviour {
 
 	[SerializeField]
 	private Image healthbar;
-	private int startHp;
+	public int startHp;
 
 	[SerializeField]
 	private GameObject UnitInfoObject;
@@ -100,12 +100,22 @@ public class UnitVariables : MonoBehaviour {
 		AP.text = this.AP.ToString();
 
 		// Weapon
-		Text Weapon = UnitInfoWindow.Find("Weapon variable").GetChild(0).GetComponent<Text>();
-		Weapon.text = this._weapon.Title;
+		Text WeaponT = UnitInfoWindow.Find("Weapon variable").GetChild(0).GetComponent<Text>();
+        if(this._weapon == null)
+            WeaponT.text = "";
+        else
+            WeaponT.text = this._weapon.Title;
+		Image WeaponI = UnitInfoWindow.Find("Weapon variable").GetChild(1).GetComponent<Image>();
+		WeaponI.sprite = Resources.Load<Sprite>("Sprite/Items/Weapons/" + this._weapon.Icon);
 
 		// Armor
-		Text Armor = UnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
-		Armor.text = this._armor.Title;
+		Text ArmorT = UnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
+        if(this._armor == null)
+			ArmorT.text = "";
+        else
+        	ArmorT.text = this._armor.Title;
+		Image ArmorI = UnitInfoWindow.Find("Armor variable").GetChild(1).GetComponent<Image>();
+		ArmorI.sprite = Resources.Load<Sprite>("Sprite/Items/Armors/" + this._armor.Icon);
 	}
 
 	public void SetOpponentUnitInfoWindow(bool isActive)
@@ -135,11 +145,21 @@ public class UnitVariables : MonoBehaviour {
 		AP.text = OpponentStats.AP.ToString();
 
 		// Weapon
-		Text Weapon = OpponentUnitInfoWindow.Find("Weapon variable").GetChild(0).GetComponent<Text>();
-		Weapon.text = OpponentStats._weapon.Title;
+		Text WeaponT = OpponentUnitInfoWindow.Find("Weapon variable").GetChild(0).GetComponent<Text>();
+		if(OpponentStats._weapon == null)
+			WeaponT.text = "";
+		else
+			WeaponT.text = OpponentStats._weapon.Title;
+		Image WeaponI = OpponentUnitInfoWindow.Find("Weapon variable").GetChild(1).GetComponent<Image>();
+		WeaponI.sprite = Resources.Load<Sprite>("Sprite/Items/Weapons/" + OpponentStats._weapon.Icon);
 
 		// Armor
-		Text Armor = OpponentUnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
-		Armor.text = OpponentStats._armor.Title;
+		Text ArmorT = OpponentUnitInfoWindow.Find("Armor variable").GetChild(0).GetComponent<Text>();
+		if(OpponentStats._armor == null)
+			ArmorT.text = "";
+		else
+			ArmorT.text = OpponentStats._armor.Title;
+		Image ArmorI = OpponentUnitInfoWindow.Find("Armor variable").GetChild(1).GetComponent<Image>();
+		ArmorI.sprite = Resources.Load<Sprite>("Sprite/Items/Armors/" + OpponentStats._armor.Icon);
 	}
 }

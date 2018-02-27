@@ -1,7 +1,7 @@
 [
   {
     "id": 0,
-    "title": "Nothing",
+    "title": "Old Rag",
     "value": 25,
     "type": "Light",
     "stats":
@@ -15,7 +15,7 @@
     "description": "Worn by Archer and Sniper.",
     "stackable": false,
     "rarity": "Common",
-    "icon": "nothing"
+    "icon": "old_rag"
   }
   ,
   {

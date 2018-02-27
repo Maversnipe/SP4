@@ -102,7 +102,7 @@ public class AI : MonoBehaviour {
 				// Update Opponent Unit Info
 				selectedUnitObject.GetStats ().UpdateOpponentUnitInfo(this.Stats);
 
-				int damageDeal = PlayerManager.Instance.CalculateDamage (selectedUnitObject.gameObject, this.gameObject);
+				int damageDeal = turnManager.CalculateDamage (selectedUnitObject.gameObject, this.gameObject);
 
 				Stats.HP -= damageDeal;
 				if (Stats.HP <= 0)
@@ -206,7 +206,7 @@ public class AI : MonoBehaviour {
 		}
 
 		// Acts only until the AP has reached 0
-		if (Stats.AP != 0) {
+		if (Stats.AP > 0) {
 			// print (this.gameObject.name + " " + Stats.AP);
 
 			if ((this.transform.position - TargetMovement).magnitude < 0.1f) {
@@ -291,14 +291,26 @@ public class AI : MonoBehaviour {
 					} else {
 						isAttacking = true;
 						TempMove.SetSelectable (false);
-						EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP--;
+						int damageDeal = turnManager.CalculateDamage (this.gameObject, EnemyTarget.GetOccupied());
+						EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP -= damageDeal;
+						if (EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP <= 0)
+							EnemyTarget = null;
 					}
 				} else {
+					// prevent error - if player died
+					if (EnemyTarget.GetOccupied () == null) {
+						EnemyTarget = null;
+						return;
+					}
+					
 					UnitVariables Temp = EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ();
-					Temp.HP--;
+					int damageDeal = turnManager.CalculateDamage (this.gameObject, EnemyTarget.GetOccupied());
+					Temp.HP -= damageDeal;
 					EnemyTarget.GetOccupied ().GetComponent<Players> ().SetStats (Temp);
 					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateHealthBar ();
 					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateUnitInfo ();
+					if (EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP <= 0)
+						EnemyTarget = null;
 				}
 				this.Stats.AP--;
 			}
@@ -326,7 +338,7 @@ public class AI : MonoBehaviour {
 		// Reset nextNode to null
 		nextNode = null;
 		// Set Camera position to be the Unit's position
-		Camera.main.transform.position = new Vector3(transform.position.x, Camera.main.transform.position.y, transform.position.z);
+		Camera.main.GetComponent<CameraControl> ().setFocus (this.gameObject);
 		Stats.AP = Stats.startAP;
 	}
 
@@ -387,7 +399,9 @@ public class AI : MonoBehaviour {
 				Temp = GridRef.GetNode (Temp.GetXIndex () - 1, Temp.GetZIndex ());
 			}
 
-			Temp.SetSelectable (true);
+			if (Temp != EnemyTarget) {
+				Temp.SetSelectable (true);
+			}
 			Temp.ChangeColour ();
 			m_path.Enqueue (Temp);
 			AP_Ref--;
