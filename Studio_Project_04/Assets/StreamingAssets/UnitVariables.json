@@ -35,7 +35,7 @@
     "ap": 8,
     "initiative": 15,
     "id": 3,
-    "weapon": "Silver Sword",
+    "weapon": "Zanpaktou",
     "armor": "Upgraded Iron"
   }
   ,
@@ -81,7 +81,7 @@
     "ap": 4,
     "initiative": 7,
     "id": 7,
-    "weapon": "Iron Hammer",
+    "weapon": "Spike Rod",
     "armor": "Upgraded Steel"
   }
   ,
@@ -91,7 +91,7 @@
     "ap": 5,
     "initiative": 9,
     "id": 8,
-    "weapon": "Steel Hammer",
+    "weapon": "Stone Hammer",
     "armor": "Silver"
   }
   ,
@@ -101,7 +101,7 @@
     "ap": 6,
     "initiative": 11,
     "id": 9,
-    "weapon": "Silver Hammer",
+    "weapon": "Mythril Hammer",
     "armor": "Upgraded Silver"
   }
   ,
@@ -178,7 +178,7 @@
     "initiative": 7,
     "id": 16,
     "weapon": "Bow",
-    "armor": "Nothing"
+    "armor": "Old Rag"
   }
   ,
   {
@@ -188,7 +188,7 @@
     "initiative": 9,
     "id": 17,
     "weapon": "Cross Bow",
-    "armor": "Nothing"
+    "armor": "Old Rag"
   }
   ,
   {
@@ -198,6 +198,6 @@
     "initiative": 100,
     "id": 17,
     "weapon": "The Hax Sword",
-    "armor": "Nothing"
+    "armor": "Old Rag"
   }
 ]

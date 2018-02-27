@@ -1,23 +1,12 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-<<<<<<< HEAD
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Players.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Compiled Stuff\UnitVariables.cs">
     <Files>
-      <File FileName="Assets\Scripts\PlayerManager.cs" Line="144" Column="66" />
-      <File FileName="Assets\Scripts\Players.cs" Line="91" Column="48" />
-      <File FileName="Assets\Scripts\TurnManager.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\NPC.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\Nodes.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CameraControl.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MainMenu.cs" Line="1" Column="1" />
-=======
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\CameraControl.cs">
-    <Files>
-      <File FileName="Assets\Scripts\UI Nonsense Scripts\OpenWorldChangeScene.cs" Line="22" Column="2" />
-      <File FileName="Assets\Scripts\UI Nonsense Scripts\OpenWorldFade.cs" Line="24" Column="5" />
-      <File FileName="Assets\Scripts\CameraFollow.cs" Line="30" Column="3" />
-      <File FileName="Assets\Scripts\CameraControl.cs" Line="63" Column="4" />
->>>>>>> cfb0e72d7490b3324a91118b5485f54d3122cdb8
+      <File FileName="Assets\Scripts\Compiled Stuff\UnitVariables.cs" Line="153" Column="63" />
+      <File FileName="Assets\Scripts\Databases\ArmorDatabase.cs" Line="101" Column="67" />
+      <File FileName="Assets\Scripts\Databases\UnitDatabase.cs" Line="22" Column="1" />
+      <File FileName="Assets\Scripts\Databases\WeaponDatabase.cs" Line="106" Column="68" />
+      <File FileName="Assets\Scripts\Databases\ItemDatabase.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
