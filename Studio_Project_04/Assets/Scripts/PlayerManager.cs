@@ -13,6 +13,9 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Represents the selected Unit
 	private Players selectedPlayer;
 
+	// Player's current quest number
+	private int currQuest;
+
 	// Breadth First Search Stuff
 	public bool[,] visited;
 	public List<Nodes> selectableNodes = new List<Nodes> ();
@@ -30,6 +33,8 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		selectedPlayer =  null;
 		// Init visited array
 		visited = new bool[GridSystem.Instance.GetRows(), GridSystem.Instance.GetRows ()];
+		// Set player's current quest
+		currQuest = 0;
 	}
 
 	// Update Player during Player's turn
@@ -221,6 +226,10 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Set & Get Unit Stop Moving
 	public bool GetIsMoving() {return isMoving;}
 	public void SetIsMoving(bool _stopMove) {isMoving = _stopMove;}
+
+	// Set & Get Player's Current Quest Number
+	public int GetCurrQuest() {return currQuest;}
+	public void SetCurrQuest(int _currQuest) {currQuest = _currQuest;}
 
 	// Return calculated Damage Value for attacking - Need to pass in GameObjects of Attacker and Victim
 	public int CalculateDamage(GameObject attacker, GameObject victim)

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class TurnManager : GenericSingleton<TurnManager> {
 	// List of the units in battle
@@ -15,12 +16,21 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 	private int playerDoneCount = 0;
 
+	void Start()
+	{
+		Debug.Log ("Hihihi");
+		StartBattle ();
+	}
+	
 	// This is called whenever the player starts a battle
 	public void StartBattle()
 	{
+		// Set the game mode
 		listOfAIUnits = FindObjectsOfType<AI> ();
 		if (listOfAIUnits.Count() == 0)
 			return;
+
+		Debug.Log (listOfAIUnits.Count ());
 
 		// Sort List based on each unit's initiative
 		// But if same initiative, sort by ID
@@ -40,20 +50,10 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		// Add player to back of queue list
 		// Player is represented as -1 in the queue
 		queueOfUnits.Enqueue(-1);
-
-		GameObject startbutton = GameObject.FindGameObjectWithTag ("StartBattleButton");
-		startbutton.SetActive (false);
-      
-//		// Get the action menu gameobject
-//		GameObject ActionMenu2 = GameObject.FindGameObjectWithTag ("ActionMenu2");
-//		// Set action menu to Inactive
-//		ActionMenu2.transform.GetChild (0).gameObject.SetActive (false);
 	}
 
 	// Update is called once per frame
 	void Update () {
-		// Update player health barx	
-		//PlayerManager.Instance.GetSelectedUnit ().GetStats ().UpdateHealthBar ();
 		// Enter Player Update only if it is Player's turn
 		if(PlayerTurn)
 		{
@@ -81,6 +81,7 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		for(int i = 0; i < ArrayOfPlayers.Count (); ++i)
 		{
 			Players thePlayer = ArrayOfPlayers [i].GetComponent <Players> ();
+			Debug.Log (thePlayer.GetStats());
 			// Set each of Player's unit's AP at start of player's turn
 			thePlayer.SetAP (thePlayer.GetStats ().startAP); 
 		}
@@ -104,6 +105,9 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		GameObject endButton = GameObject.FindGameObjectWithTag ("EndTurnButton");
 		// Set end button to active
 		endButton.transform.GetChild (0).gameObject.SetActive (true);
+
+		// Set number of players done to 0
+		playerDoneCount = 0;
 	}
 
 	// Exit Player's Turn
@@ -144,6 +148,8 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		}
 		else
 		{
+			// Set the number of turns left
+			BattleManager.Instance.SetNumOfTurns (BattleManager.Instance.GetNumOfTurns () - 1);
 			// Start Player's Turn
 			EnterPlayerTurn ();
 		}

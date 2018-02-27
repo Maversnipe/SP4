@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 // This represents the game mode that the player is in
 public enum GAMEMODE
 {
 	// When the player is in open world
-	OPEN_WORLD = 0,
+	NONE = 0,
 	// When the player has to kill all enemies to win game
 	KILL_ALL_ENEMIES,
 	// When the player has to protect a unit from the enemies' attack
@@ -19,6 +20,12 @@ public class BattleManager : GenericSingleton<BattleManager>
 	// Represents the game mode the player is playing in
 	private GAMEMODE game_mode;
 
+	// Total Num Of Enemies
+	public int TOTAL_ENEMIES = 5;
+
+	// Total Num Of Turns
+	public int TOTAL_TURNS = 30;
+
 	// Keeps track of number of enemies in battle
 	private int numOfEnemies;
 
@@ -28,23 +35,29 @@ public class BattleManager : GenericSingleton<BattleManager>
 	// The unit that has to be protected
 	private AI protectUnit;
 
+	[SerializeField]
+	private GameObject PrefabAI;
+
 	// Use this for initialization
 	void Start () {
 		// Set game mode to none
-		game_mode = GAMEMODE.OPEN_WORLD;
+		game_mode = GAMEMODE.NONE;
 		// Set num of enemies to 0
 		numOfEnemies = 0;
 		// Set num or turns to 0
 		numOfTurns = 0;
 		// Set protectUnit to null
 		protectUnit = null;
+
+		BattleManager.Instance.SetGameMode ();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		switch(game_mode)
 		{
-			case GAMEMODE.OPEN_WORLD:
+			case GAMEMODE.NONE:
+				// If in open world, don't do anything
 				break;
 			case GAMEMODE.KILL_ALL_ENEMIES:
 				// Checks if enemy count is less than or equal to 0
@@ -53,9 +66,18 @@ public class BattleManager : GenericSingleton<BattleManager>
 					// Game Win
 					SceneManager.LoadScene ("SceneCleared");
 				}
+				// Set the text for BattleInfo
+				GameObject.FindGameObjectWithTag ("BattleInfo").GetComponentInChildren<Text> ().text = "Enemies Left: " + numOfEnemies;
 				break;
-			case GAMEMODE.PROTECT_THE_PRESIDENT:
-				
+			case GAMEMODE.PROTECT_THE_PRESIDENT:	
+				// Checks if num of turns is less than or equal to 0
+				if(numOfTurns <= 0)
+				{
+					// Game Win
+					SceneManager.LoadScene ("SceneCleared");
+				}
+				// Set the text for BattleInfo
+				GameObject.FindGameObjectWithTag ("BattleInfo").GetComponentInChildren<Text> ().text = "Turns Left: " + numOfTurns;
 				break;
 		}
 	}
@@ -72,13 +94,54 @@ public class BattleManager : GenericSingleton<BattleManager>
 	// Start Kill All Game Mode
 	public void StartKillAll()
 	{
-		
+		// Set Game Mode
+		game_mode = GAMEMODE.KILL_ALL_ENEMIES;
+		// Set total num of enemies
+		numOfEnemies = TOTAL_ENEMIES;
+		// Set the text for BattleInfo
+		GameObject.FindGameObjectWithTag ("BattleInfo").GetComponentInChildren<Text> ().text = "Enemies Left: " + numOfEnemies;
+		// Do spawning of AI & Player
+//		for(int i = 0; i < TOTAL_ENEMIES; ++i)
+//		{
+//			GameObject Temp;
+//			Temp = Instantiate (PrefabAI,new Vector3(0,0,0), Quaternion.Euler (0,0,0));
+//		}
 	}
 
 	// Start Protect The President Game Mode
 	public void StartProtect()
 	{
-		
+		// Set Game Mode
+		game_mode = GAMEMODE.PROTECT_THE_PRESIDENT;
+		// Set total num of turns
+		numOfTurns = TOTAL_TURNS;
+		// Set the text for BattleInfo
+		GameObject.FindGameObjectWithTag ("BattleInfo").GetComponentInChildren<Text> ().text = "Turns Left: " + numOfTurns;
+		// Do spawning of AI & Player
+//		for(int i = 0; i < TOTAL_ENEMIES; ++i)
+//		{
+//			GameObject Temp;
+//			Temp = Instantiate (PrefabAI,new Vector3(0,0,0), Quaternion.Euler (0,0,0));
+//		}
+	}
+
+	// Set Game Mode
+	public void SetGameMode()
+	{
+		// Set based on the player's current mission
+		switch(PlayerManager.Instance.GetCurrQuest ())
+		{
+			case 0:
+				// Start Kill All Enemies Game Mode
+				StartKillAll ();
+				break;
+			case 1:
+				// Start Protect The President Game Mode
+				StartProtect ();
+				break;
+			default:
+				break;
+		}
 	}
 		
 	// Get & Set num of enemies in battle

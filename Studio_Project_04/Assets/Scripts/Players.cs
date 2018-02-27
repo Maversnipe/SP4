@@ -43,7 +43,7 @@ public class Players : MonoBehaviour
 		Stats = this.gameObject.GetComponent<UnitVariables> ();
 		//Gathers the stats from the Json File
 		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (Stats.Name));
-
+		Debug.Log ("Stats " + Stats);
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
 		DefaultColor = rend.material.color;
@@ -261,7 +261,7 @@ public class Players : MonoBehaviour
 		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
 		// Set cancel button to not active
 		if(cancelButton)
-			cancelButton.transform.GetChild(0).gameObject.SetActive (false);
+			cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 		// Get the cancel button gameobject
 		cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
 		// Set cancel button to not active
