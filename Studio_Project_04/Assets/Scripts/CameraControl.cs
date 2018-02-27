@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CameraControl : MonoBehaviour {
 
     bool freecam = false;
 	float Timer;
+	float TurnTimer;
 
 	//References to Player & Turn Manager
     private TurnManager turnManager;
@@ -14,10 +16,14 @@ public class CameraControl : MonoBehaviour {
 	//Variable to move the camera towards the game object
 	private GameObject currFocus = null;
 
+	// Variable to show turn image
+	private GameObject Turn;
+
     // Use this for initialization
     void Start () {
 		turnManager = TurnManager.Instance;
 		playerManager = PlayerManager.Instance;
+		Turn = GameObject.FindGameObjectWithTag ("Turn");
     }
 	
 	// Update is called once per frame
@@ -68,7 +74,8 @@ public class CameraControl : MonoBehaviour {
 					} else {
 						if ((this.transform.position - TempPos).magnitude > 0.1f) {
 							this.transform.position += (TempPos - this.transform.position).normalized * 0.1f;
-						}
+						} else
+							Turn.transform.GetChild (0).gameObject.SetActive (false);
 					}
 				}
 			} else {
@@ -95,7 +102,8 @@ public class CameraControl : MonoBehaviour {
 				} else {
 					if ((this.transform.position - TempPos).magnitude > 0.1f) {
 						this.transform.position += (TempPos - this.transform.position).normalized * 0.1f;
-					}
+					} else
+						Turn.transform.GetChild (0).gameObject.SetActive (false);
 				}
 			} else {
 				if (turnManager.GetCurrUnit () != null) {
@@ -144,6 +152,11 @@ public class CameraControl : MonoBehaviour {
 	public void setFocus(GameObject new_Focus)
 	{
 		currFocus = new_Focus;
+		if (new_Focus.GetComponent<Players> () != null)
+			Turn.transform.GetChild (0).gameObject.GetComponent<Image> ().sprite = Resources.Load<Sprite> ("Sprite/UI/Player_Turn");
+		else
+			Turn.transform.GetChild (0).gameObject.GetComponent<Image>().sprite = Resources.Load<Sprite>("Sprite/UI/Enemy_Turn");
+		Turn.transform.GetChild (0).gameObject.SetActive (true);
 	}
 
 	public GameObject getFocus()
