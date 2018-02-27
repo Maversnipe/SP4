@@ -64,7 +64,7 @@
   ,
   {
     "id": 3,
-    "title": "Silver Sword",
+    "title": "Zanpaktou",
     "value": 450,
     "type": "Slash",
     "stats":
@@ -77,10 +77,10 @@
       "intelligence": 6969,
       "dexterity": 6969
     },
-    "description": "Silver sword used by SwordMaster.",
+    "description": "Zanpaktou used by SwordMaster.",
     "stackable": false,
     "rarity": "Legendary",
-    "icon": "silver_sword"
+    "icon": "zanpaktou"
   }
   ,
   {
@@ -307,7 +307,7 @@
   ,
   {
     "id": 14,
-    "title": "Iron Hammer",
+    "title": "Spike Rod",
     "value": 250,
     "type": "Blunt",
     "stats":
@@ -320,15 +320,15 @@
       "intelligence": 6969,
       "dexterity": 6969
     },
-    "description": "Iron Hammer used by Pirate.",
+    "description": "Spike Rod used by Pirate.",
     "stackable": false,
     "rarity": "Rare",
-    "icon": "iron_hammer"
+    "icon": "spike_rod"
   }
   ,
   {
     "id": 15,
-    "title": "Steel Hammer",
+    "title": "Stone Hammer",
     "value": 350,
     "type": "Blunt",
     "stats":
@@ -341,15 +341,15 @@
       "intelligence": 6969,
       "dexterity": 6969
     },
-    "description": "Steel Hammer used by Corsair.",
+    "description": "Stone Hammer used by Corsair.",
     "stackable": false,
     "rarity": "Epic",
-    "icon": "steel_hammer"
+    "icon": "stone_hammer"
   }
   ,
   {
     "id": 16,
-    "title": "Silver Hammer",
+    "title": "Mythril Hammer",
     "value": 450,
     "type": "Blunt",
     "stats":
@@ -362,10 +362,10 @@
       "intelligence": 6969,
       "dexterity": 6969
     },
-    "description": "Silver Hammer used by Berserker.",
+    "description": "Mythril Hammer used by Berserker.",
     "stackable": false,
     "rarity": "Legendary",
-    "icon": "silver_hammer"
+    "icon": "mythril_hammer"
   }
   ,
   {
