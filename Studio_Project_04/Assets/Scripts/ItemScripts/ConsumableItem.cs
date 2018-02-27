@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class ConsumableItem : MonoBehaviour {
 
+    public GameObject unitSelectPanel;
+
 	void Start () {
 		
 	}
 
     public void Use()
     {
-        Debug.Log("Item used");
+        
     }
 }

@@ -17,7 +17,6 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase>
         armorData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Armors.json"));
 
         ConstructArmorDatabase();
-
 	}
 
     public Armor FetchArmorByName(string name)

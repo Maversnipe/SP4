@@ -72,9 +72,38 @@ public class ButtonScript : MonoBehaviour {
                 itemData.equipped = true;
                 itemData.transform.SetParent(equipmentSlotPanel.transform.Find("Weapon Slot").transform);
                 itemData.transform.position = equipmentSlotPanel.transform.Find("Weapon Slot").transform.position;
+            }
+        }
+        if(itemData.armor != null)
+        {
+            if (equipmentSlotPanel.transform.Find("Armor Slot").GetComponent<EquipmentSlot>().isEmpty)
+            {
+                itemData.equipped = true;
+                itemData.transform.SetParent(equipmentSlotPanel.transform.Find("Armor Slot").transform);
+                itemData.transform.position = equipmentSlotPanel.transform.Find("Armor Slot").transform.position;
+                equipmentSlotPanel.transform.Find("Armor Slot").GetComponent<EquipmentSlot>().temp = Inventory.Instance.items[itemData.slot];
+                Inventory.Instance.items[itemData.slot] = new InventoryObject();
+                equipmentSlotPanel.transform.Find("Armor Slot").GetComponent<EquipmentSlot>().isEmpty = false;
+            }
+            else if (!equipmentSlotPanel.transform.Find("Armor Slot").GetComponent<EquipmentSlot>().isEmpty)
+            {
+                Transform item = equipmentSlotPanel.transform.Find("Armor Slot").transform.GetChild(0);
 
-               
-                
+                item.GetComponent<ItemData>().equipped = false;
+                item.GetComponent<ItemData>().slot = itemData.slot;
+                InventoryObject temp2 = equipmentSlotPanel.transform.Find("Armor Slot").GetComponent<EquipmentSlot>().temp;
+
+                equipmentSlotPanel.transform.Find("Armor Slot").GetComponent<EquipmentSlot>().temp = Inventory.Instance.items[itemData.slot];
+                Inventory.Instance.items[itemData.slot] = new InventoryObject();
+                Inventory.Instance.items[itemData.slot] = temp2;
+
+
+                item.transform.SetParent(Inventory.Instance.slots[itemData.slot].transform);
+                item.transform.position = Inventory.Instance.slots[itemData.slot].transform.position;
+
+                itemData.equipped = true;
+                itemData.transform.SetParent(equipmentSlotPanel.transform.Find("Armor Slot").transform);
+                itemData.transform.position = equipmentSlotPanel.transform.Find("Armor Slot").transform.position;
             }
         }
     }
@@ -93,6 +122,7 @@ public class ButtonScript : MonoBehaviour {
                     {
                         itemData.slot = i;
                         itemData.equipped = false;
+                        StatusMenu.Instance.players[StatusMenu.Instance.currPlayerUnit].GetComponent<UnitVariables>()._weapon = null;
                         Inventory.Instance.items[i] = equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().temp;
                         equipmentSlotPanel.transform.Find("Weapon Slot").GetComponent<EquipmentSlot>().isEmpty = true;
                         itemData.transform.SetParent(Inventory.Instance.slots[i].transform);
@@ -103,7 +133,29 @@ public class ButtonScript : MonoBehaviour {
                 }
             }
         }
-        
+        if (itemData.armor != null)
+        {
+            if (!equipmentSlotPanel.transform.Find("Armor Slot").GetComponent<EquipmentSlot>().isEmpty)
+            {
+                itemData.equipped = false;
+                equipmentInfoPanel.Deactivate();
+                for (int i = 0; i < Inventory.Instance.items.Count; i++)
+                {
+                    if (Inventory.Instance.items[i].isEmpty)
+                    {
+                        itemData.slot = i;
+                        itemData.equipped = false;
+                        StatusMenu.Instance.players[StatusMenu.Instance.currPlayerUnit].GetComponent<UnitVariables>()._armor = null;
+                        Inventory.Instance.items[i] = equipmentSlotPanel.transform.Find("Armor Slot").GetComponent<EquipmentSlot>().temp;
+                        equipmentSlotPanel.transform.Find("Armor Slot").GetComponent<EquipmentSlot>().isEmpty = true;
+                        itemData.transform.SetParent(Inventory.Instance.slots[i].transform);
+                        itemData.transform.position = Inventory.Instance.slots[i].transform.position;
+                        break;
+
+                    }
+                }
+            }
+        }
     }
 
     public void useItem()
@@ -155,6 +207,32 @@ public class ButtonScript : MonoBehaviour {
                 }
             }
         }
+        else if (boughtItemData.armor != null)
+        {
+            int itemID = boughtItemData.armor.ID;
+
+            if (boughtItemData.weapon.Stackable)
+            {
+                Inventory.Instance.AddArmor(itemID, amount);
+                amount = 0;
+                buyAmountField.GetComponent<InputField>().text = "";
+                this.transform.parent.gameObject.SetActive(false);
+            }
+            else if (!boughtItemData.armor.Stackable)
+            {
+                if (amount <= Inventory.Instance.emptySlots)
+                {
+                    for (int i = 0; i < amount; i++)
+                    {
+                        Inventory.Instance.AddArmor(itemID, 1);
+
+                    }
+                    buyAmountField.GetComponent<InputField>().text = "";
+                    this.transform.parent.gameObject.SetActive(false);
+                    amount = 0;
+                }
+            }
+        }
     }
 
     public void sellItem()
@@ -182,11 +260,21 @@ public class ButtonScript : MonoBehaviour {
             sellAmountField.GetComponent<InputField>().text = "";
             this.transform.parent.gameObject.SetActive(false);
         }
-        //if (shopItemData.armor != null)
-        //{
-        //    int itemID = shopItemData.item.ID;
-        //    inv.GetComponent<Inventory>().AddItem(itemID);
-        //}
+        else if (sellItemData.armor != null)
+        {
+            int itemID = sellItemData.armor.ID;
+            if (sellItemData.armor.Stackable)
+            {
+                Inventory.Instance.RemoveArmor(itemID, amount);
+            }
+            else
+            {
+                Inventory.Instance.RemoveArmor(itemID, amount, sellItemData.slot);
+            }
+            amount = 0;
+            sellAmountField.GetComponent<InputField>().text = "";
+            this.transform.parent.gameObject.SetActive(false);
+        }
     }
 
     public void setSellAmount()

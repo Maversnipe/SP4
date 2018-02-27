@@ -108,6 +108,30 @@ public class Shop : MonoBehaviour, IDragHandler {
         }
     }
 
+    public void AddShopArmor(int id)
+    {
+        Armor armorToAdd = ArmorDatabase.Instance.FetchArmorByID(id);
+
+        for (int i = 0; i < shopItems.Count; i++)
+        {
+            if (shopItems[i].isEmpty)
+            {
+                shopItems[i].armor = armorToAdd;
+                GameObject itemObj = Instantiate(shopItem);
+                itemObj.GetComponent<ShopItemData>().armor = armorToAdd;
+                itemObj.GetComponent<ShopItemData>().slot = i;
+                itemObj.transform.SetParent(slots[i].transform);
+                itemObj.transform.localPosition = Vector2.zero;
+                itemObj.GetComponent<Image>().sprite = armorToAdd.Sprite;
+                itemObj.name = armorToAdd.Title;
+                ShopItemData data = slots[i].transform.GetChild(0).GetComponent<ShopItemData>();
+                shopItems[i].isEmpty = false;
+                shopItems[i].itemType = "Armor";
+                break;
+            }
+        }
+    }
+
     bool checkForItem(Item item)
     {
         for (int i = 0; i < shopItems.Count; i++)

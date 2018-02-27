@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class StatusMenu : GenericSingleton<StatusMenu>, IDragHandler
 {
 
-    private GameObject[] players;
+    public GameObject[] players;
 
     public int currPlayerUnit;
 

@@ -27,6 +27,14 @@ public class Slot : MonoBehaviour, IDropHandler {
                 StatusMenu.Instance.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).Find(droppedItem.equipSlot).GetComponent<EquipmentSlot>().isEmpty = true;
                 StatusMenu.Instance.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).Find(droppedItem.equipSlot).GetComponent<EquipmentSlot>().temp = new InventoryObject();
                 droppedItem.slot = id;
+                if(droppedItem.GetComponent<ItemData>().weapon != null)
+                {
+                    StatusMenu.Instance.players[StatusMenu.Instance.currPlayerUnit].GetComponent<UnitVariables>()._weapon = null;
+                }
+                if (droppedItem.GetComponent<ItemData>().armor != null)
+                {
+                    StatusMenu.Instance.players[StatusMenu.Instance.currPlayerUnit].GetComponent<UnitVariables>()._armor = null;
+                }
             }
             else
             {
@@ -56,6 +64,7 @@ public class Slot : MonoBehaviour, IDropHandler {
                         Inventory.Instance.items[id] = StatusMenu.Instance.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).Find(droppedItem.equipSlot).GetComponent<EquipmentSlot>().temp;
                         StatusMenu.Instance.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).Find(droppedItem.equipSlot).GetComponent<EquipmentSlot>().temp = new InventoryObject();
                         StatusMenu.Instance.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).Find(droppedItem.equipSlot).GetComponent<EquipmentSlot>().temp = temp2;
+                        StatusMenu.Instance.players[StatusMenu.Instance.currPlayerUnit].GetComponent<UnitVariables>()._weapon = null;
                     }
                 }
                 if (droppedItem.equipSlot == "Armor Slot")
@@ -73,6 +82,7 @@ public class Slot : MonoBehaviour, IDropHandler {
                         Inventory.Instance.items[id] = StatusMenu.Instance.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).Find(droppedItem.equipSlot).GetComponent<EquipmentSlot>().temp;
                         StatusMenu.Instance.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).Find(droppedItem.equipSlot).GetComponent<EquipmentSlot>().temp = new InventoryObject();
                         StatusMenu.Instance.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).Find(droppedItem.equipSlot).GetComponent<EquipmentSlot>().temp = temp2;
+                        StatusMenu.Instance.players[StatusMenu.Instance.currPlayerUnit].GetComponent<UnitVariables>()._armor = null;
                     }
                 }
                
