@@ -13,14 +13,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_PixelRect:
     serializedVersion: 2
-    x: 127
-    y: 52
+    x: 231
+    y: 51
     width: 1280
     height: 805
   m_ShowMode: 4
   m_Title: 
   m_RootView: {fileID: 6}
-  m_MinSize: {x: 950, y: 542}
+  m_MinSize: {x: 950, y: 300}
   m_MaxSize: {x: 10000, y: 10000}
 --- !u!114 &2
 MonoBehaviour:
@@ -42,10 +42,10 @@ MonoBehaviour:
     y: 30
     width: 1280
     height: 755
-  m_MinSize: {x: 681, y: 492}
+  m_MinSize: {x: 683, y: 492}
   m_MaxSize: {x: 14004, y: 14042}
   vertical: 0
-  controlID: 62
+  controlID: 9
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -89,8 +89,8 @@ MonoBehaviour:
     y: 0
     width: 243
     height: 456
-  m_MinSize: {x: 200, y: 200}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 202, y: 221}
+  m_MaxSize: {x: 4002, y: 4021}
   m_ActualView: {fileID: 15}
   m_Panes:
   - {fileID: 15}
@@ -206,10 +206,10 @@ MonoBehaviour:
     y: 0
     width: 998
     height: 755
-  m_MinSize: {x: 404, y: 492}
+  m_MinSize: {x: 406, y: 492}
   m_MaxSize: {x: 10002, y: 14042}
   vertical: 1
-  controlID: 63
+  controlID: 10
 --- !u!114 &10
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -230,10 +230,10 @@ MonoBehaviour:
     y: 0
     width: 998
     height: 456
-  m_MinSize: {x: 404, y: 221}
-  m_MaxSize: {x: 8004, y: 4021}
+  m_MinSize: {x: 406, y: 221}
+  m_MaxSize: {x: 8006, y: 4021}
   vertical: 0
-  controlID: 64
+  controlID: 11
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -309,8 +309,8 @@ MonoBehaviour:
   m_DepthBufferBits: 0
   m_Pos:
     serializedVersion: 2
-    x: 127
-    y: 557
+    x: 231
+    y: 556
     width: 996
     height: 278
   m_SearchFilter:
@@ -324,19 +324,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Resources/Sprite/Items/Weapons
+    - Assets/Resources
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Resources/Sprite/Items/Weapons
+  - Assets/Resources
   m_LastFoldersGridSize: -1
   m_LastProjectPath: C:\Users\For work\Downloads\SP4\Studio_Project_04
   m_IsLocked: 0
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 139.46635}
-    m_SelectedIDs: 3c3b0000
-    m_LastClickedID: 15164
-    m_ExpandedIDs: 000000001c280000c028000098290000d4290000e6290000002a0000402a0000702a0000502f0000522f0000542f0000562f000000ca9a3bffffff7f
+    scrollPos: {x: 0, y: 104}
+    m_SelectedIDs: 92270000
+    m_LastClickedID: 10130
+    m_ExpandedIDs: 0000000028250000dc250000d62600001a270000302700004c27000092270000c82700000e2d0000102d0000122d0000142d000000ca9a3bffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -364,7 +364,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 000000001c280000c028000098290000d4290000e6290000002a0000402a0000502f0000522f0000542f0000562f0000
+    m_ExpandedIDs: 0000000028250000dc250000d62600001a270000302700004c27000092270000c82700000e2d0000102d0000122d0000142d0000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -441,8 +441,8 @@ MonoBehaviour:
   m_DepthBufferBits: 0
   m_Pos:
     serializedVersion: 2
-    x: 1127
-    y: 101
+    x: 1231
+    y: 100
     width: 280
     height: 734
   m_ScrollPosition: {x: 0, y: 0}
@@ -474,15 +474,15 @@ MonoBehaviour:
   m_DepthBufferBits: 0
   m_Pos:
     serializedVersion: 2
-    x: 127
-    y: 101
+    x: 231
+    y: 100
     width: 241
     height: 435
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 3c3b0000
+    m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 20fbffff00000000
+    m_ExpandedIDs: e6fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -527,8 +527,8 @@ MonoBehaviour:
   m_DepthBufferBits: 32
   m_Pos:
     serializedVersion: 2
-    x: 372
-    y: 101
+    x: 476
+    y: 100
     width: 751
     height: 435
   m_SceneLighting: 1
@@ -564,7 +564,7 @@ MonoBehaviour:
   m_Rotation:
     m_Target: {x: -0.17330043, y: -0.03781149, z: 0.0066585187, w: -0.9841201}
     speed: 2
-    m_Value: {x: -0.17330047, y: -0.037811503, z: 0.0066585205, w: -0.98412037}
+    m_Value: {x: -0.17330043, y: -0.03781149, z: 0.0066585187, w: -0.9841201}
   m_Size:
     m_Target: 680.31445
     speed: 2
