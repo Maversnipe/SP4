@@ -59,7 +59,7 @@ public class OpenControl : MonoBehaviour {
             if (Physics.Raycast(ray, out collide))
             {
 
-                if (collide.collider.tag == "Player")
+				if (collide.collider.tag == "Player" || collide.collider.tag == "Unselectable")
                 {
                     return;
                 }
@@ -104,5 +104,13 @@ public class OpenControl : MonoBehaviour {
 	public void setAbleToMove(bool Setter)
 	{
 		CanMove = Setter;
+	}
+
+	void OnTriggerStay(Collider other)
+	{
+		if (other.tag == "Unselectable") {
+			this.transform.position -= (getTarget () - this.transform.position) * 0.1f;
+			StopMoving ();
+		}
 	}
 }
