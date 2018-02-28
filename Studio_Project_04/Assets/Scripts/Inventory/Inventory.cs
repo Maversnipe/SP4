@@ -41,7 +41,6 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
     {
         buyConfirmDialog = GameObject.FindGameObjectWithTag("BuyConfirmDialog");
         buyConfirmDialog.SetActive(false);
-        Debug.Log("meme");
         slotAmount = 20;
         emptySlots = slotAmount;
         inventoryPanel = GameObject.Find("Inventory");
@@ -60,6 +59,7 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
         AddItem(0, 3);
         AddWeapon(0, 1);
         AddArmor(1, 1);
+
     }
 
     void Update()

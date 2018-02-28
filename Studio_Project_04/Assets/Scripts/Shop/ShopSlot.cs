@@ -13,7 +13,7 @@ public class ShopSlot : MonoBehaviour, IDropHandler
     // Use this for initialization
     void Start()
     {
-        inv = GameObject.Find("Inventory").GetComponent<Inventory>();
+        //inv = GameObject.Find("Inventory").GetComponent<Inventory>();
     }
 
     public void OnDrop(PointerEventData eventData)

@@ -23,7 +23,6 @@ public class ButtonScript : MonoBehaviour {
     // Use this for initialization
     void Start () {
         buyConfirmDialog = GameObject.FindWithTag("BuyConfirmDialog");
-        Debug.Log(buyConfirmDialog);
         unitSelectPanel = GameObject.FindWithTag("UnitSelectPanel");
         sellAmountField = GameObject.Find("SellAmountField");
         buyAmountField = GameObject.Find("BuyAmountField");
@@ -35,7 +34,7 @@ public class ButtonScript : MonoBehaviour {
     {
         equipmentSlotPanel = StatusMenu.Instance.gameObject.transform.Find("Equipment Slot Panel " + StatusMenu.Instance.currPlayerUnit).gameObject;
     }
-	
+
     public void closePanel()
     {
         this.transform.parent.gameObject.SetActive(false);
@@ -161,8 +160,11 @@ public class ButtonScript : MonoBehaviour {
 
     public void useItem()
     {
-        unitSelectPanel.SetActive(true);
-        unitSelectPanel.GetComponent<UnitPanelScript>().data = itemData;
+        if(itemData.amount > 0)
+        {
+            unitSelectPanel.SetActive(true);
+            unitSelectPanel.GetComponent<UnitPanelScript>().data = itemData;
+        }
     }
 
     public void activateConfirmDialog()
