@@ -27,7 +27,6 @@ public class Shop : MonoBehaviour, IDragHandler {
 
     private int slotAmount;
 
-    
     GameObject shopPanel;
     GameObject slotPanel;
     public GameObject shopSlot;
@@ -40,7 +39,6 @@ public class Shop : MonoBehaviour, IDragHandler {
 
     void Start()
     {
-        
         slotAmount = 20;
         shopPanel = GameObject.Find("Shop");
         slotPanel = shopPanel.transform.Find("Shop Slot Panel").gameObject;
