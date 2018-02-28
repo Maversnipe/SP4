@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using LitJson;
 using System.IO;
+using UnityEngine.Networking;
 
 [System.Serializable]
 public class UnitDatabase : GenericSingleton<UnitDatabase>
@@ -12,15 +13,31 @@ public class UnitDatabase : GenericSingleton<UnitDatabase>
 
 	private JsonData unitData;
 
-	// Use this for initialization
-	void Start () {
+    public string filePath = System.IO.Path.Combine(Application.dataPath, "/StreamingAssets/UnitVariables.json");
+    public string result = "";
+
+    // Use this for initialization
+    void Start () {
 		unitData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/UnitVariables.json"));
 
 		ConstructUnitDatabase();
 
 	}
 
-	public UnitVariables FetchUnitByName(string _name)
+    IEnumerator Example()
+    {
+        if (filePath.Contains("://"))
+        {
+            UnityWebRequest www = UnityWebRequest.Get(filePath);
+            yield return www.Send();
+            result = www.downloadHandler.text;
+            unitData = JsonMapper.ToObject(File.ReadAllText(result));
+        }
+        else
+            unitData = JsonMapper.ToObject(System.IO.File.ReadAllText(filePath));
+    }
+
+    public UnitVariables FetchUnitByName(string _name)
 	{
 		for(int i = 0; i < unitDatabase.Count; i++)
 		{

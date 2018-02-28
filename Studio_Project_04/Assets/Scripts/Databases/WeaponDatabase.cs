@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using LitJson;
+using UnityEngine.Networking;
 
 using System.IO;
 
@@ -12,13 +13,29 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase>
     public static List<Weapon> weaponDatabase = new List<Weapon>();
     private JsonData weaponData;
 
-	// Use this for initialization
-	void Start () {
-        weaponData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Weapons.json"));
+    public string filePath = System.IO.Path.Combine(Application.dataPath, "/StreamingAssets/Weapons.json");
+    public string result = "";
 
+    // Use this for initialization
+    void Start () {
+        //weaponData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Weapons.json"));
+        Example();
         ConstructWeaponDatabase();
 
 	}
+
+    IEnumerator Example()
+    {
+        if (filePath.Contains("://"))
+        {
+            UnityWebRequest www = UnityWebRequest.Get(filePath);
+            yield return www.Send();
+            result = www.downloadHandler.text;
+            weaponData = JsonMapper.ToObject(File.ReadAllText(result));
+        }
+        else
+            weaponData = JsonMapper.ToObject(System.IO.File.ReadAllText(filePath));
+    }
 
     public Weapon FetchWeaponByName(string name)
     {

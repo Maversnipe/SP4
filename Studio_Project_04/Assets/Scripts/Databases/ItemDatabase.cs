@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using LitJson;
-
+using UnityEngine.Networking;
 using System.IO;
 
 [System.Serializable]
@@ -12,13 +12,29 @@ public class ItemDatabase : GenericSingleton<ItemDatabase>
     public static List<Item> itemDatabase = new List<Item>();
     private JsonData itemData;
 
-	// Use this for initialization
-	void Start () {
+    public string filePath = System.IO.Path.Combine(Application.dataPath, "/StreamingAssets/Items.json");
+    public string result = "";
+
+    // Use this for initialization
+    void Start () {
         itemData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Items.json"));
 
         ConstructItemDatabase();
 
 	}
+
+    IEnumerator Example()
+    {
+        if (filePath.Contains("://"))
+        {
+            UnityWebRequest www = UnityWebRequest.Get(filePath);
+            yield return www.Send();
+            result = www.downloadHandler.text;
+            itemData = JsonMapper.ToObject(File.ReadAllText(result));
+        }
+        else
+            itemData = JsonMapper.ToObject(System.IO.File.ReadAllText(filePath));
+    }
 
     public Item FetchItemByName(string name)
     {
