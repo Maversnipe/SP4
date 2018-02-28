@@ -15,6 +15,10 @@ public class ConsumableItem : MonoBehaviour {
             StatusMenu.Instance.players[unit].GetComponent<UnitVariables>().HP += this.gameObject.GetComponent<ItemData>().item.ModifierValue;
             Inventory.Instance.RemoveItem(this.gameObject.GetComponent<ItemData>().item.ID, 1);
             Debug.Log("Item used");
+            if (StatusMenu.Instance.players[unit].GetComponent<UnitVariables>().HP > StatusMenu.Instance.players[unit].GetComponent<UnitVariables>().startHp)
+            {
+                StatusMenu.Instance.players[unit].GetComponent<UnitVariables>().HP = StatusMenu.Instance.players[unit].GetComponent<UnitVariables>().startHp;
+            }
         }
         
     }

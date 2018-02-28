@@ -1,5 +1,6 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+<<<<<<< HEAD
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\AI.cs">
     <Files>
       <File FileName="Assets\Scripts\TurnManager.cs" Line="170" Column="4" />
@@ -12,6 +13,9 @@
       <File FileName="Assets\Scripts\Compiled Stuff\UnitVariables.cs" Line="51" Column="3" />
     </Files>
   </MonoDevelop.Ide.Workbench>
+=======
+  <MonoDevelop.Ide.Workbench />
+>>>>>>> 7905664110d9fd79161994573e9d920e19a4c4de
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
