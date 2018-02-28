@@ -13,29 +13,32 @@ public class UnitDatabase : GenericSingleton<UnitDatabase>
 
 	private JsonData unitData;
 
-    public string filePath = System.IO.Path.Combine(Application.dataPath, "/StreamingAssets/UnitVariables.json");
-    public string result = "";
-
-    // Use this for initialization
-    void Start () {
-		unitData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/UnitVariables.json"));
-
-		ConstructUnitDatabase();
-
-	}
-
-    IEnumerator Example()
+    IEnumerator loadStreamingAsset(string fileName)
     {
-        if (filePath.Contains("://"))
+        string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
+
+        string result;
+        if (filePath.Contains("://") || filePath.Contains(":///"))
         {
-            UnityWebRequest www = UnityWebRequest.Get(filePath);
-            yield return www.Send();
-            result = www.downloadHandler.text;
+            WWW www = new WWW(filePath);
+            yield return www;
+            result = www.text;
             unitData = JsonMapper.ToObject(File.ReadAllText(result));
         }
         else
-            unitData = JsonMapper.ToObject(System.IO.File.ReadAllText(filePath));
+        {
+            result = System.IO.File.ReadAllText(filePath);
+            unitData = JsonMapper.ToObject(result);
+        }
     }
+
+    // Use this for initialization
+    void Start () {
+        //unitData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/UnitVariables.json"));
+        StartCoroutine(loadStreamingAsset("UnitVariables.json"));
+        ConstructUnitDatabase();
+
+	}
 
     public UnitVariables FetchUnitByName(string _name)
 	{

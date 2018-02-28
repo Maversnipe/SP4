@@ -54,7 +54,7 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
             slots[i].transform.SetParent(slotPanel.transform, false);
         }
 
-        gold += 500;
+        gold += 99999;
 
         AddItem(0, 3);
         AddWeapon(0, 1);

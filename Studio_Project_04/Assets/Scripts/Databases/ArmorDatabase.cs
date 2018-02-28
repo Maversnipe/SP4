@@ -12,28 +12,31 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase>
     public static List<Armor> armorDatabase = new List<Armor>();
     private JsonData armorData;
 
-    public string filePath = System.IO.Path.Combine(Application.dataPath, "/StreamingAssets/Armors.json");
-    public string result = "";
-
-    // Use this for initialization
-    void Start () {
-        armorData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Armors.json"));
-
-        ConstructArmorDatabase();
-	}
-
-    IEnumerator Example()
+    IEnumerator loadStreamingAsset(string fileName)
     {
-        if (filePath.Contains("://"))
+        string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
+
+        string result;
+        if (filePath.Contains("://") || filePath.Contains(":///"))
         {
-            UnityWebRequest www = UnityWebRequest.Get(filePath);
-            yield return www.Send();
-            result = www.downloadHandler.text;
+            WWW www = new WWW(filePath);
+            yield return www;
+            result = www.text;
             armorData = JsonMapper.ToObject(File.ReadAllText(result));
         }
         else
-            armorData = JsonMapper.ToObject(System.IO.File.ReadAllText(filePath));
+        {
+            result = System.IO.File.ReadAllText(filePath);
+            armorData = JsonMapper.ToObject(result);
+        }
     }
+
+    // Use this for initialization
+    void Start () {
+        //armorData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Armors.json"));
+        StartCoroutine(loadStreamingAsset("Armors.json"));
+        ConstructArmorDatabase();
+	}
 
     public Armor FetchArmorByName(string name)
     {

@@ -13,29 +13,32 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase>
     public static List<Weapon> weaponDatabase = new List<Weapon>();
     private JsonData weaponData;
 
-    public string filePath = System.IO.Path.Combine(Application.dataPath, "/StreamingAssets/Weapons.json");
-    public string result = "";
+    IEnumerator loadStreamingAsset(string fileName)
+    {
+        string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
+
+        string result;
+        if (filePath.Contains("://") || filePath.Contains(":///"))
+        {
+            WWW www = new WWW(filePath);
+            yield return www;
+            result = www.text;
+            weaponData = JsonMapper.ToObject(File.ReadAllText(result));
+        }
+        else
+        {
+            result = System.IO.File.ReadAllText(filePath);
+            weaponData = JsonMapper.ToObject(result);
+        }
+    }
 
     // Use this for initialization
     void Start () {
         //weaponData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Weapons.json"));
-        Example();
+        StartCoroutine(loadStreamingAsset("Weapons.json"));
         ConstructWeaponDatabase();
 
 	}
-
-    IEnumerator Example()
-    {
-        if (filePath.Contains("://"))
-        {
-            UnityWebRequest www = UnityWebRequest.Get(filePath);
-            yield return www.Send();
-            result = www.downloadHandler.text;
-            weaponData = JsonMapper.ToObject(File.ReadAllText(result));
-        }
-        else
-            weaponData = JsonMapper.ToObject(System.IO.File.ReadAllText(filePath));
-    }
 
     public Weapon FetchWeaponByName(string name)
     {
