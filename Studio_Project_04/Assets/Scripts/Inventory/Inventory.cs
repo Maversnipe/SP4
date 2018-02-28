@@ -33,14 +33,15 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
     public GameObject inventoryItem;
     private int slotAmount;
     public int emptySlots;
-
+    public int gold;
     public List<InventoryObject> items = new List<InventoryObject>();
     public List<GameObject> slots = new List<GameObject>();
 
     void Start()
     {
-        buyConfirmDialog = GameObject.FindWithTag("BuyConfirmDialog");
+        buyConfirmDialog = GameObject.FindGameObjectWithTag("BuyConfirmDialog");
         buyConfirmDialog.SetActive(false);
+        Debug.Log("meme");
         slotAmount = 20;
         emptySlots = slotAmount;
         inventoryPanel = GameObject.Find("Inventory");
@@ -53,6 +54,8 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
             slots[i].GetComponent<Slot>().id = i;
             slots[i].transform.SetParent(slotPanel.transform, false);
         }
+
+        gold += 500;
 
         AddItem(0, 3);
         AddWeapon(0, 1);
@@ -72,6 +75,8 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
         }
 
         emptySlots = no;
+
+        this.transform.Find("Gold Panel").Find("Gold").GetComponent<Text>().text = gold.ToString();
     }
 
     public void AddItem(int id, int no)

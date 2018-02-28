@@ -24,6 +24,7 @@ public class StatusMenu : GenericSingleton<StatusMenu>, IDragHandler
     {
         currPlayerUnit = 0;
 
+
         players = GameObject.FindGameObjectsWithTag("PlayerUnit");
         equipmentPanel = GameObject.Find("Equipment Slot Panel " + currPlayerUnit);
 
