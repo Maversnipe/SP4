@@ -47,7 +47,7 @@ public class AI : MonoBehaviour {
 	private GridSystem GridRef;
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		rend = GetComponent<Renderer> ();
 
 		//Gathers the name from the Unit Variable
@@ -89,36 +89,41 @@ public class AI : MonoBehaviour {
 		{
 			// Get information from Units class
 			Players selectedUnitObject = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
-
-			if ((selectedUnitObject.GetCurrNode ().GetXIndex () + 1 == currNode.GetXIndex () 
-				&& selectedUnitObject.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
-				(selectedUnitObject.GetCurrNode ().GetXIndex () - 1 == currNode.GetXIndex () 
-					&& selectedUnitObject.GetCurrNode ().GetZIndex () ==  currNode.GetZIndex ()) ||
-				(selectedUnitObject.GetCurrNode ().GetZIndex () + 1 ==  currNode.GetZIndex () 
-					&& selectedUnitObject.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()) ||
-				(selectedUnitObject.GetCurrNode ().GetZIndex () - 1 ==  currNode.GetZIndex ()
-					&& selectedUnitObject.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()))
+			Debug.Log ("Rangeeee " + selectedUnitObject.GetStats ()._weapon.Range);
+			for (int i = 1; i <= selectedUnitObject.GetStats ()._weapon.Range; ++i)
 			{
-				// Update Opponent Unit Info
-				selectedUnitObject.GetStats ().UpdateOpponentUnitInfo(this.Stats);
-
-				int damageDeal = turnManager.CalculateDamage (selectedUnitObject.gameObject, this.gameObject);
-
-				Stats.HP -= damageDeal;
-				if (Stats.HP <= 0)
+				if ((selectedUnitObject.GetCurrNode ().GetXIndex () + i == currNode.GetXIndex ()
+					&& selectedUnitObject.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
+					(selectedUnitObject.GetCurrNode ().GetXIndex () - i == currNode.GetXIndex ()
+						&& selectedUnitObject.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
+					(selectedUnitObject.GetCurrNode ().GetZIndex () + i == currNode.GetZIndex ()
+						&& selectedUnitObject.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()) ||
+					(selectedUnitObject.GetCurrNode ().GetZIndex () - i == currNode.GetZIndex ()
+						&& selectedUnitObject.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()))
 				{
-					Destroy (this);
-					SceneManager.LoadScene ("SceneCleared");
+					// Update Opponent Unit Info
+					selectedUnitObject.GetStats ().UpdateOpponentUnitInfo (this.Stats);
+
+					int damageDeal = turnManager.CalculateDamage (selectedUnitObject.gameObject, this.gameObject);
+
+					Stats.HP -= damageDeal;
+					if (Stats.HP <= 0)
+					{
+						Destroy (this);
+						PlayerManager.Instance.SetPlayerCount (0);
+						SceneManager.LoadScene ("SceneCleared");
+					}
+					PlayerManager.Instance.SetAbleToAttack (false);
+					// End the turn of the player node
+					selectedUnitObject.TurnEnd ();
+					// Change unit back to no unit
+					PlayerManager.Instance.ChangeUnit (null);
+
+					// De-Spawn Opponent Unit Info Window
+					selectedUnitObject.GetStats ().SetOpponentUnitInfoWindow (false);
+
+					break;
 				}
-				PlayerManager.Instance.SetAbleToAttack (false);
-				// End the turn of the player node
-				selectedUnitObject.TurnEnd ();
-				// Change unit back to no unit
-				PlayerManager.Instance.ChangeUnit (null);
-
-				// De-Spawn Opponent Unit Info Window
-				selectedUnitObject.GetStats ().SetOpponentUnitInfoWindow (false);
-
 			}
 		}
 	}
@@ -145,16 +150,21 @@ public class AI : MonoBehaviour {
 
 			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
 
-			if ((selectedUnitClass.GetCurrNode ().GetXIndex () + 1 == currNode.GetXIndex ()
-			    && selectedUnitClass.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
-			    (selectedUnitClass.GetCurrNode ().GetXIndex () - 1 == currNode.GetXIndex ()
-			    && selectedUnitClass.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
-			    (selectedUnitClass.GetCurrNode ().GetZIndex () + 1 == currNode.GetZIndex ()
-			    && selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()) ||
-			    (selectedUnitClass.GetCurrNode ().GetZIndex () - 1 == currNode.GetZIndex ()
-			    && selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ())) {
-				// Change Visibility of Node to opague
-				rend.material.color = HoverColor;
+			for(int i = 1; i <= selectedUnitClass.GetStats ()._weapon.Range; ++i)
+			{
+				if ((selectedUnitClass.GetCurrNode ().GetXIndex () + i == currNode.GetXIndex ()
+					&& selectedUnitClass.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
+					(selectedUnitClass.GetCurrNode ().GetXIndex () - i == currNode.GetXIndex ()
+						&& selectedUnitClass.GetCurrNode ().GetZIndex () == currNode.GetZIndex ()) ||
+					(selectedUnitClass.GetCurrNode ().GetZIndex () + i == currNode.GetZIndex ()
+						&& selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ()) ||
+					(selectedUnitClass.GetCurrNode ().GetZIndex () - i == currNode.GetZIndex ()
+						&& selectedUnitClass.GetCurrNode ().GetXIndex () == currNode.GetXIndex ())) 
+				{
+					// Change Visibility of Node to opague
+					rend.material.color = HoverColor;
+					break;
+				}
 			}
 		}
 		else

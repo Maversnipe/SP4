@@ -2,6 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
+
+public struct PlayerItems
+{
+	public int _id;
+	public Weapon _weapon;
+	public Armor _armor;
+}
 
 public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Determine if can move selected unit
@@ -12,13 +20,18 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	private bool isMoving;
 	// Represents the selected Unit
 	private Players selectedPlayer;
+	// Player Count
+	private int playerCount;
 
 	// Player's current quest number
 	private int currQuest;
 
 	// Breadth First Search Stuff
-	public bool[,] visited;
-	public List<Nodes> selectableNodes = new List<Nodes> ();
+	private bool[,] visited;
+	private List<Nodes> selectableNodes = new List<Nodes> ();
+
+	// List of players
+	private List<PlayerItems> ListOfPlayerItems;
 
 	// Use this for initialization
 	void Start ()
@@ -35,6 +48,10 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		visited = new bool[GridSystem.Instance.GetRows(), GridSystem.Instance.GetRows ()];
 		// Set player's current quest
 		currQuest = 0;
+		// Init list of players
+		ListOfPlayerItems = new List<PlayerItems>();
+		// Set player count to 0
+		playerCount = 0;
 	}
 
 	// Update Player during Player's turn
@@ -211,6 +228,37 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		ActionMenu2.transform.GetChild (0).gameObject.SetActive (false);
 	}
 
+	// Update Player's Items
+	public void UpdatePlayerItems()
+	{
+		// Find an array of player units
+		GameObject[] _arrayOfPlayers = GameObject.FindGameObjectsWithTag ("PlayerUnit");
+
+		for (int i = 0; i < _arrayOfPlayers.Length; ++i)
+		{
+			// The player's items
+			PlayerItems thePlayerItems;
+			// Get the current player's items
+			Players temp = _arrayOfPlayers [i].GetComponent <Players> ();
+			// Assign the ID
+			thePlayerItems._id = temp.GetID ();
+			// Assign the Weapon
+			thePlayerItems._weapon = temp.GetStats ()._weapon;
+			// Assign the Armor
+			thePlayerItems._armor = temp.GetStats ()._armor;
+			// Check to see if there are any repeating PlayerItems with same ID in the list
+			PlayerItems toDelete = ListOfPlayerItems.FirstOrDefault (x => x._id == thePlayerItems._id);
+			if(toDelete.Equals(default(PlayerItems)))
+			{
+				// Remove the old PlayerItems from list
+				ListOfPlayerItems.Remove (toDelete);
+				--i;
+			}
+			// Add the new PlayerItems to list
+			ListOfPlayerItems.Add (thePlayerItems);
+		}
+	}
+
 	// Set & Get Selected Unit
 	public Players GetSelectedUnit() {return selectedPlayer;}
 	public void SetSelectedUnit(Players _nextPlayerUnit) {selectedPlayer = _nextPlayerUnit;}
@@ -230,6 +278,13 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Set & Get Player's Current Quest Number
 	public int GetCurrQuest() {return currQuest;}
 	public void SetCurrQuest(int _currQuest) {currQuest = _currQuest;}
+
+	// Set & Get Player Count
+	public int GetPlayerCount() {return playerCount;}
+	public void SetPlayerCount(int _count) {playerCount = _count;}
+
+	// Get List Of Player's Items
+	public List<PlayerItems> GetListOfPlayerItems() {return ListOfPlayerItems;}
 
 	// BFS for unit
 	public void FindSelectableTiles()

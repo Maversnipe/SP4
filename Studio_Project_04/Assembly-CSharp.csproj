@@ -80,6 +80,7 @@
      <Compile Include="Assets\Scripts\Shop\ShopItemData.cs" />
      <Compile Include="Assets\Scripts\Shop\ShopPanel.cs" />
      <Compile Include="Assets\Scripts\Shop\ShopSlot.cs" />
+     <Compile Include="Assets\Scripts\Spawner.cs" />
      <Compile Include="Assets\Scripts\Status\EquipmentInfoPanel.cs" />
      <Compile Include="Assets\Scripts\Status\EquipmentSlot.cs" />
      <Compile Include="Assets\Scripts\Status\StatusMenu.cs" />

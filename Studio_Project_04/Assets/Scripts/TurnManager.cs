@@ -18,7 +18,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 	void Start()
 	{
-		Debug.Log ("Hihihi");
 		StartBattle ();
 	}
 
@@ -29,10 +28,9 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	{
 		// Set the game mode
 		listOfAIUnits = FindObjectsOfType<AI> ();
+
 		if (listOfAIUnits.Count() == 0)
 			return;
-
-		Debug.Log (listOfAIUnits.Count ());
 
 		// Sort List based on each unit's initiative
 		// But if same initiative, sort by ID
@@ -60,6 +58,7 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		// Get all players into an array - if empty, load defeat scene
 		GameObject[] ArrayOfPlayers = GameObject.FindGameObjectsWithTag ("PlayerUnit");
 		if (!loadedDefeat && ArrayOfPlayers.Length <= 0) {
+			PlayerManager.Instance.SetPlayerCount (0);
 			SceneManager.LoadScene ("SceneDefeated");
 			loadedDefeat = true;
 		}
@@ -69,10 +68,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		{
 			// Update Player
 			PlayerManager.Instance.UpdatePlayerUnits();
-		}
-		else
-		{
-			// Update Enemy
 		}
 	}
 
@@ -188,6 +183,9 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	// Get & Set player done count
 	public int GetPlayerDoneCount() { return playerDoneCount; }
 	public void SetPlayerDoneCount(int _playerDoneCount) { playerDoneCount = _playerDoneCount; }
+
+	// Get List Of AI
+	public AI[] GetListOfAI() {return listOfAIUnits;}
 
 	// Return calculated Damage Value for attacking - Need to pass in GameObjects of Attacker and Victim
 	public int CalculateDamage(GameObject attacker, GameObject victim)

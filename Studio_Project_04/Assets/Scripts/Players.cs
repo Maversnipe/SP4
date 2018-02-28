@@ -28,7 +28,6 @@ public class Players : MonoBehaviour
 
 	// Unit's ID
 	private int ID;
-	private static int PlayerCount = 0;
 	private float counter = 0.0f;
 
 	// Player's path
@@ -37,13 +36,12 @@ public class Players : MonoBehaviour
 	// Player's AP amount in the current turn
 	public int turnAP;
 
-	void Start ()
+	void Awake ()
 	{
 		//Gathers the name from the Unit Variable
 		Stats = this.gameObject.GetComponent<UnitVariables> ();
 		//Gathers the stats from the Json File
 		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (Stats.Name));
-		Debug.Log ("Stats " + Stats);
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
 		DefaultColor = rend.material.color;
@@ -55,8 +53,8 @@ public class Players : MonoBehaviour
 		transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
 
 		// Set Unit's ID
-		ID = PlayerCount;
-		++PlayerCount;
+		ID = PlayerManager.Instance.GetPlayerCount ();
+		PlayerManager.Instance.SetPlayerCount (PlayerManager.Instance.GetPlayerCount () + 1);
 
 		// Init the path
 		path = new Stack<Nodes>();
@@ -84,7 +82,6 @@ public class Players : MonoBehaviour
 
 			if (Stats.AP >= Stats._weapon.AP)
 			{
-				Debug.Log ("ATT POWAH");
 				// Set Text for Attack Button
 				GameObject attButton = GameObject.FindGameObjectWithTag ("AttackButton");
 				Debug.Log (attButton);
@@ -97,7 +94,6 @@ public class Players : MonoBehaviour
 			} 
 			else
 			{
-				Debug.Log ("ATT NO POWA");
 				// Set Text for Attack Button
 				GameObject attButton = GameObject.FindGameObjectWithTag ("AttackButtonNotSelectable");
 				Debug.Log (attButton);
@@ -150,7 +146,10 @@ public class Players : MonoBehaviour
 	{
 		// Kill player if hp reach 0
 		if (this.Stats.HP <= 0)
+		{
+			PlayerManager.Instance.SetPlayerCount (PlayerManager.Instance.GetPlayerCount () - 1);
 			Destroy (this.gameObject);
+		}
 		
 		this.gameObject.GetComponent<UnitVariables> ().Copy (Stats);
 		// Update Unit Info Window

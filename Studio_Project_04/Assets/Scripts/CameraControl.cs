@@ -5,9 +5,7 @@ using UnityEngine.UI;
 
 public class CameraControl : MonoBehaviour {
 
-    bool freecam = false;
 	float Timer;
-	float TurnTimer;
 
 	//References to Player & Turn Manager
     private TurnManager turnManager;
@@ -74,8 +72,10 @@ public class CameraControl : MonoBehaviour {
 					} else {
 						if ((this.transform.position - TempPos).magnitude > 0.1f) {
 							this.transform.position += (TempPos - this.transform.position).normalized * 0.1f;
-						} else
-							Turn.transform.GetChild (0).gameObject.SetActive (false);
+						} else {
+							if (Turn)
+								Turn.transform.GetChild (0).gameObject.SetActive (false);
+						}
 					}
 				}
 			} else {
@@ -103,50 +103,15 @@ public class CameraControl : MonoBehaviour {
 					if ((this.transform.position - TempPos).magnitude > 0.1f) {
 						this.transform.position += (TempPos - this.transform.position).normalized * 0.1f;
 					} else
-						Turn.transform.GetChild (0).gameObject.SetActive (false);
+						if (Turn)
+							Turn.transform.GetChild (0).gameObject.SetActive (false);
 				}
 			} else {
 				if (turnManager.GetCurrUnit () != null) {
 					currFocus = turnManager.GetCurrUnit ().gameObject;
 				}
 			}
-		}
-
-        if (!freecam)
-        {
-            if (Input.GetKeyDown("c"))
-            {
-                freecam = true;
-            }
-
-        }
-        if (freecam)
-        {
-            if (Input.GetKeyDown("v"))
-            {
-                freecam = false;
-				transform.position = new Vector3(turnManager.GetCurrUnit ().transform.position.x, transform.position.y, turnManager.GetCurrUnit ().transform.position.z);
-            }
-
-			if (Input.GetKey("w"))
-			{
-				transform.position += transform.up * 10 * Time.deltaTime;
-			}
-			if (Input.GetKey("a"))
-			{
-				transform.position -= transform.right * 10 * Time.deltaTime;
-			}
-			if (Input.GetKey("s"))
-			{
-				transform.position -= transform.up * 10 * Time.deltaTime;
-			}
-			if (Input.GetKey("d"))
-			{
-				transform.position += transform.right * 10 * Time.deltaTime;
-			}
-
-        }
-        
+		}      
     }
 
 	public void setFocus(GameObject new_Focus)
@@ -159,8 +124,5 @@ public class CameraControl : MonoBehaviour {
 		Turn.transform.GetChild (0).gameObject.SetActive (true);
 	}
 
-	public GameObject getFocus()
-	{
-		return currFocus;
-	}
+	public GameObject getFocus() { return currFocus; }
 }
