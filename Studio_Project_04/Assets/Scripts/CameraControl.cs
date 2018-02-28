@@ -74,8 +74,10 @@ public class CameraControl : MonoBehaviour {
 					} else {
 						if ((this.transform.position - TempPos).magnitude > 0.1f) {
 							this.transform.position += (TempPos - this.transform.position).normalized * 0.1f;
-						} else
-							Turn.transform.GetChild (0).gameObject.SetActive (false);
+						} else {
+							if (Turn)
+								Turn.transform.GetChild (0).gameObject.SetActive (false);
+						}
 					}
 				}
 			} else {
@@ -103,7 +105,8 @@ public class CameraControl : MonoBehaviour {
 					if ((this.transform.position - TempPos).magnitude > 0.1f) {
 						this.transform.position += (TempPos - this.transform.position).normalized * 0.1f;
 					} else
-						Turn.transform.GetChild (0).gameObject.SetActive (false);
+						if (Turn)
+							Turn.transform.GetChild (0).gameObject.SetActive (false);
 				}
 			} else {
 				if (turnManager.GetCurrUnit () != null) {

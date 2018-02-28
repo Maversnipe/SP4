@@ -35,9 +35,6 @@ public class BattleManager : GenericSingleton<BattleManager>
 	// The unit that has to be protected
 	private AI protectUnit;
 
-	[SerializeField]
-	private GameObject PrefabAI;
-
 	// Use this for initialization
 	void Start () {
 		// Set game mode to none
@@ -61,9 +58,10 @@ public class BattleManager : GenericSingleton<BattleManager>
 				break;
 			case GAMEMODE.KILL_ALL_ENEMIES:
 				// Checks if enemy count is less than or equal to 0
-				if(numOfEnemies <= 0)
+				if (numOfEnemies <= 0)
 				{
 					// Game Win
+					PlayerManager.Instance.SetPlayerCount (0);
 					SceneManager.LoadScene ("SceneCleared");
 				}
 				// Set the text for BattleInfo
@@ -74,6 +72,7 @@ public class BattleManager : GenericSingleton<BattleManager>
 				if(numOfTurns <= 0)
 				{
 					// Game Win
+					PlayerManager.Instance.SetPlayerCount (0);
 					SceneManager.LoadScene ("SceneCleared");
 				}
 				// Set the text for BattleInfo
@@ -101,11 +100,9 @@ public class BattleManager : GenericSingleton<BattleManager>
 		// Set the text for BattleInfo
 		GameObject.FindGameObjectWithTag ("BattleInfo").GetComponentInChildren<Text> ().text = "Enemies Left: " + numOfEnemies;
 		// Do spawning of AI & Player
-//		for(int i = 0; i < TOTAL_ENEMIES; ++i)
-//		{
-//			GameObject Temp;
-//			Temp = Instantiate (PrefabAI,new Vector3(0,0,0), Quaternion.Euler (0,0,0));
-//		}
+		Spawner spawner = GameObject.FindGameObjectWithTag ("Spawner").GetComponent <Spawner>();
+		spawner.SpawnEnemies ();
+		spawner.SpawnPlayers ();
 	}
 
 	// Start Protect The President Game Mode
