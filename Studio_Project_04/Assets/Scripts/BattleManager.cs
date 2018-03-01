@@ -99,10 +99,9 @@ public class BattleManager : GenericSingleton<BattleManager>
 		numOfEnemies = TOTAL_ENEMIES;
 		// Set the text for BattleInfo
 		GameObject.FindGameObjectWithTag ("BattleInfo").GetComponentInChildren<Text> ().text = "Enemies Left: " + numOfEnemies;
-		// Do spawning of AI & Player
+		// Do spawning of AI
 		Spawner spawner = GameObject.FindGameObjectWithTag ("Spawner").GetComponent <Spawner>();
 		spawner.SpawnEnemies ();
-		spawner.SpawnPlayers ();
 	}
 
 	// Start Protect The President Game Mode
@@ -114,12 +113,9 @@ public class BattleManager : GenericSingleton<BattleManager>
 		numOfTurns = TOTAL_TURNS;
 		// Set the text for BattleInfo
 		GameObject.FindGameObjectWithTag ("BattleInfo").GetComponentInChildren<Text> ().text = "Turns Left: " + numOfTurns;
-		// Do spawning of AI & Player
-//		for(int i = 0; i < TOTAL_ENEMIES; ++i)
-//		{
-//			GameObject Temp;
-//			Temp = Instantiate (PrefabAI,new Vector3(0,0,0), Quaternion.Euler (0,0,0));
-//		}
+		// Do spawning of AI
+		Spawner spawner = GameObject.FindGameObjectWithTag ("Spawner").GetComponent <Spawner>();
+		spawner.SpawnEnemies ();
 	}
 
 	// Set Game Mode
