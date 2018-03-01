@@ -130,11 +130,11 @@ public class BattleManager : GenericSingleton<BattleManager>
 		// Set based on the player's current mission
 		switch(PlayerManager.Instance.GetCurrQuest ())
 		{
-			case 1:
+			case 0:
 				// Start Kill All Enemies Game Mode
 				StartKillAll ();
 				break;
-			case 0:
+			case 1:
 				// Start Protect The President Game Mode
 				StartProtect ();
 				break;

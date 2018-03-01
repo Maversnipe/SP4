@@ -12,6 +12,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	private bool isMoving;
 	// Represents the selected Unit
 	private Players selectedPlayer;
+	private GameObject Indication;
 	// Player Count
 	private int playerCount;
 
@@ -39,6 +40,8 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		currQuest = 0;
 		// Set player count to 0
 		playerCount = 0;
+		// Indication ring
+		Indication = GameObject.FindGameObjectWithTag ("Indication");
 	}
 
 	// Update Player during Player's turn
@@ -50,6 +53,11 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// Check if there is a unit selected
 		if (selectedPlayer)
 		{
+			// Indication ring position to selected player unit
+			Indication.transform.GetChild (0).gameObject.SetActive (true);
+			Indication.transform.GetChild (0).transform.position = new Vector3(selectedPlayer.transform.position.x, 
+				Indication.transform.GetChild (0).transform.position.y, selectedPlayer.transform.position.z);
+
 			// Update the unit's heathbar image
 			selectedPlayer.GetComponent<UnitVariables>().UpdateHealthBar();
 
@@ -59,6 +67,8 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			// Only update menu when selected unit is not null
 			UpdateMenu();
 		}
+		else // De-Spawn Indication ring
+			Indication.transform.GetChild (0).gameObject.SetActive (false);
 	}
 
 	// If Player selects another unit
@@ -90,7 +100,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	{		
 		// Only render the unit's menu if no action is selected
 		// And if the unit is not moving
-		if(!ableToAttack && !isMoving)
+		if(!ableToAttack && !isMoving && selectedPlayer.GetStats ().AP > 0)
 		{ // If player still selecting menu options
 			// Find GO with ActionMenu tag
 			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu");
@@ -270,6 +280,9 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 				// This ensures that the player will not have more than the max health
 			selectedPlayer.GetStats ().HP = selectedPlayer.GetStats ().startHP;
 		}
+
+		// Deselect unit
+		ChangeUnit (null);
 	}
 
 	// Set & Get Selected Unit

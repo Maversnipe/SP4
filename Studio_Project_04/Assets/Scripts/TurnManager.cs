@@ -56,7 +56,7 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	void Update () {
 		if(Input.GetKey("q"))
 		{
-			PlayerManager.Instance.SetCurrQuest (1);
+			PlayerManager.Instance.SetCurrQuest (PlayerManager.Instance.GetCurrQuest () + 1);
 			SceneManager.LoadScene ("SceneCleared");
 		}
 		// Get all players into an array - if empty, load defeat scene

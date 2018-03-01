@@ -126,9 +126,10 @@ public class Players : MonoBehaviour
 		// If it is Player's turn
 		if (turnManager.IsPlayerTurn ())
 		{
-			// De-Spawn Unit Info Window
-			Stats.SetUnitInfoWindow(false);
-
+			if (PlayerManager.Instance.GetSelectedUnit () == null) {
+				// De-Spawn Unit Info Window
+				Stats.SetUnitInfoWindow (false);
+			}
 			// Change Color of unit back to DefaultColor
 			rend.material.color = DefaultColor;
 		}
