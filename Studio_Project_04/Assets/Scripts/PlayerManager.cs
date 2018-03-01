@@ -102,6 +102,32 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
 			// Set cancel button to active
 			cancelButton.transform.GetChild(0).gameObject.SetActive (true);
+
+			// Checks if player's HP is at it's max
+			if (selectedPlayer.GetStats ().HP == selectedPlayer.GetStats ().startHP)
+			{
+				// Find GO with RestButton tag
+				GameObject restButton = GameObject.FindGameObjectWithTag ("RestButton");
+				// Set rest button to false
+				restButton.transform.GetChild (0).gameObject.SetActive (false);
+
+				// Find GO with RestButtonNotSelectable tag
+				restButton = GameObject.FindGameObjectWithTag ("RestButtonNotSelectable");
+				// Set RestButtonNotSelectable to true
+				restButton.transform.GetChild (0).gameObject.SetActive (true);
+			} 
+			else
+			{
+				// Find GO with RestButton tag
+				GameObject restButton = GameObject.FindGameObjectWithTag ("RestButton");
+				// Set rest button to true
+				restButton.transform.GetChild (0).gameObject.SetActive (true);
+
+				// Find GO with RestButtonNotSelectable tag
+				restButton = GameObject.FindGameObjectWithTag ("RestButtonNotSelectable");
+				// Set RestButtonNotSelectable to false
+				restButton.transform.GetChild (0).gameObject.SetActive (false);
+			}
 		}
 		else if(isMoving || ableToAttack)
 		{ // If player already selected from menu options
@@ -198,6 +224,11 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Skip current turn
 	public void SkipTurn()
 	{
+		// Remove selectable nodes
+		if(selectableNodes.Count > 0)
+		{
+			RemoveSelectable ();
+		}
 		// Check if unit is available
 		if(selectedPlayer)
 		{
@@ -215,7 +246,32 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		ActionMenu2.transform.GetChild (0).gameObject.SetActive (false);
 	}
 
-	// 
+	// Player rest
+	public void RestTurn()
+	{
+		// Get the remaining AP
+		int hpAmtToAdd = selectedPlayer.GetStats().AP;
+		// Set remaining AP in unit to 0
+		selectedPlayer.GetStats ().AP = 0;
+		// Dividing the amount of HP to add by 2
+		hpAmtToAdd /= 2;
+		// Checks if the amount to add is less than 1
+		if (hpAmtToAdd < 1)
+		{
+			// If it is, set the amount to add to 1
+				// This ensures that player will always receive at least 1HP
+			hpAmtToAdd = 1;
+		}
+		// Add to the amount of HP
+		selectedPlayer.GetStats ().HP += hpAmtToAdd;
+		// Checks if the HP amount is more than the max HP
+		if(selectedPlayer.GetStats ().HP > selectedPlayer.GetStats ().startHP)
+		{
+			// If the HP is more than the max HP, set the HP to max HP
+				// This ensures that the player will not have more than the max health
+			selectedPlayer.GetStats ().HP = selectedPlayer.GetStats ().startHP;
+		}
+	}
 
 	// Set & Get Selected Unit
 	public Players GetSelectedUnit() {return selectedPlayer;}
@@ -264,7 +320,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			Nodes temp = theQueue.Dequeue ();
 
 			// Do not check tiles if the dist of furthest tile is more than max dist
-			if (temp.GetDist () < selectedPlayer.GetAP ())
+			if (temp.GetDist () < selectedPlayer.GetStats ().AP)
 			{
 				// Get the nodes adjacent to the temp node
 				Nodes tempUp = null; 

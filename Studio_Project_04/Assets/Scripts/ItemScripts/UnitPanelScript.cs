@@ -25,7 +25,7 @@ public class UnitPanelScript : MonoBehaviour, IDragHandler
         {
             this.transform.Find("Unit " + i).gameObject.SetActive(true);
             this.transform.Find("Unit " + i).GetChild(0).GetComponent<UnitSelectScript>().unit = i;
-            this.transform.Find("Unit " + i).GetChild(0).GetChild(0).GetComponent<Text>().text = "\nHP : " + StatusMenu.Instance.players[i].GetComponent<UnitVariables>().HP.ToString() + " / " + StatusMenu.Instance.players[i].GetComponent<UnitVariables>().startHp.ToString() + "\nAP : " + StatusMenu.Instance.players[i].GetComponent<UnitVariables>().AP.ToString();
+            this.transform.Find("Unit " + i).GetChild(0).GetChild(0).GetComponent<Text>().text = "\nHP : " + StatusMenu.Instance.players[i].GetComponent<UnitVariables>().HP.ToString() + " / " + StatusMenu.Instance.players[i].GetComponent<UnitVariables>().startAP.ToString() + "\nAP : " + StatusMenu.Instance.players[i].GetComponent<UnitVariables>().AP.ToString();
             this.transform.Find("Unit " + i).GetChild(0).GetComponent<UnitSelectScript>().data = data;
         }
     }

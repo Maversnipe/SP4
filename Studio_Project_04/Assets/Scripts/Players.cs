@@ -33,9 +33,6 @@ public class Players : MonoBehaviour
 	// Player's path
 	private Stack<Nodes> path;
 
-	// Player's AP amount in the current turn
-	public int turnAP;
-
 	void Start ()
 	{
 		//Gathers the name from the Unit Variable
@@ -58,9 +55,6 @@ public class Players : MonoBehaviour
 
 		// Init the path
 		path = new Stack<Nodes>();
-
-		// Set turnAP to player's AP
-		turnAP = Stats.AP;
 	}
 
 	// Run only when Mouse click onto the unit
@@ -71,7 +65,7 @@ public class Players : MonoBehaviour
 			return;
 		
 		// If it is Player's turn
-		if (turnManager.IsPlayerTurn () && turnAP > 0)
+		if (turnManager.IsPlayerTurn () && Stats.AP > 0)
 		{
 			// Change Unit To This Unit
 			PlayerManager.Instance.ChangeUnit (this);
@@ -198,14 +192,12 @@ public class Players : MonoBehaviour
 					// Set the next node
 					nextNode = path.Pop ();
 					// Set AP to new AP
-					turnAP -= 1;
-					this.Stats.AP--;
+					--this.Stats.AP;
 				} 
 				else
 				{
 					// Set AP to new AP
-					turnAP -= 1;
-					this.Stats.AP--;
+					--this.Stats.AP;
 					// End the turn of the player node
 					TurnEnd ();
 					// Change unit back to no unit
@@ -317,12 +309,4 @@ public class Players : MonoBehaviour
 	// Get Unit's Stats
 	public UnitVariables GetStats() {return Stats;}
 	public void SetStats(UnitVariables n_Stats) {Stats = n_Stats;}
-
-	// Get & Set Unit's AP for the turn
-	public int GetAP() {return turnAP;}
-	public void SetAP(int _ap)
-	{
-		turnAP = _ap;
-		this.Stats.AP = _ap;
-	}
 }

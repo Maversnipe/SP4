@@ -89,7 +89,6 @@ public class AI : MonoBehaviour {
 		{
 			// Get information from Units class
 			Players selectedUnitObject = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
-			Debug.Log ("Rangeeee " + selectedUnitObject.GetStats ()._weapon.Range);
 			for (int i = 1; i <= selectedUnitObject.GetStats ()._weapon.Range; ++i)
 			{
 				if ((selectedUnitObject.GetCurrNode ().GetXIndex () + i == currNode.GetXIndex ()
