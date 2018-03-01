@@ -549,9 +549,9 @@ public class AI : MonoBehaviour {
 		int AP_Ref = Stats.AP;
 
 		while (AP_Ref > 0) {
-			int Random = Random.Range (1, 5);
+			int Rand = Random.Range (1, 5);
 
-			switch (Random)
+			switch (Rand)
 			{
 			case(1):
 				Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () + 1);
