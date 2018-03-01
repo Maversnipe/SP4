@@ -153,7 +153,8 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		else
 		{
 			// Set the number of turns left
-			BattleManager.Instance.SetNumOfTurns (BattleManager.Instance.GetNumOfTurns () - 1);
+			if(BattleManager.Instance.GetGameMode() == GAMEMODE.PROTECT_THE_PRESIDENT)
+				BattleManager.Instance.SetNumOfTurns (BattleManager.Instance.GetNumOfTurns () - 1);
 			// Start Player's Turn
 			EnterPlayerTurn ();
 		}

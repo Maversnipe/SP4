@@ -74,8 +74,9 @@ public class Players : MonoBehaviour
 			// Make GO's child active, which makes the menu appear
 			menu.transform.GetChild (0).gameObject.SetActive (true);
 
+			// Check if have enogh AP to attack
 			if (Stats.AP >= Stats._weapon.AP)
-			{
+			{ // If have, then render the normal color for attack button
 				// Set Text for Attack Button
 				GameObject attButton = GameObject.FindGameObjectWithTag ("AttackButton");
 				Debug.Log (attButton);
@@ -87,7 +88,7 @@ public class Players : MonoBehaviour
 				attButton.transform.GetChild (0).gameObject.SetActive (false);
 			} 
 			else
-			{
+			{ // Else, then render the not selectable color for attack button
 				// Set Text for Attack Button
 				GameObject attButton = GameObject.FindGameObjectWithTag ("AttackButtonNotSelectable");
 				Debug.Log (attButton);
@@ -125,14 +126,11 @@ public class Players : MonoBehaviour
 		// If it is Player's turn
 		if (turnManager.IsPlayerTurn ())
 		{
-			if (!PlayerManager.Instance.GetSelectedUnit ())
-			{
-				// De-Spawn Unit Info Window
-				Stats.SetUnitInfoWindow(false);
+			// De-Spawn Unit Info Window
+			Stats.SetUnitInfoWindow(false);
 
-				// Change Color of unit back to DefaultColor
-				rend.material.color = DefaultColor;
-			}
+			// Change Color of unit back to DefaultColor
+			rend.material.color = DefaultColor;
 		}
 	}
 

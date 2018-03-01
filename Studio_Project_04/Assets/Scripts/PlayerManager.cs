@@ -59,7 +59,6 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			// Only update menu when selected unit is not null
 			UpdateMenu();
 		}
-
 	}
 
 	// If Player selects another unit

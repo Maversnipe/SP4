@@ -87,6 +87,9 @@ public class AI : MonoBehaviour {
 		// if unit can attack
 		if (PlayerManager.Instance.GetAbleToAttack ())
 		{
+			// If the AI is an ally, cannot attack
+			if (this.Stats.Side == FACTION.ALLY)
+				return;
 			// Get information from Units class
 			Players selectedUnitObject = PlayerManager.Instance.GetSelectedUnit ().GetComponent<Players> ();
 			for (int i = 1; i <= selectedUnitObject.GetStats ()._weapon.Range; ++i)
@@ -109,8 +112,6 @@ public class AI : MonoBehaviour {
 					if (Stats.HP <= 0)
 					{
 						Destroy (this);
-						PlayerManager.Instance.SetPlayerCount (0);
-						SceneManager.LoadScene ("SceneCleared");
 					}
 					PlayerManager.Instance.SetAbleToAttack (false);
 					// End the turn of the player node

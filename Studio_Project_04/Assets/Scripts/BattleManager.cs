@@ -32,9 +32,6 @@ public class BattleManager : GenericSingleton<BattleManager>
 	// Keeps track of number of turns have passed
 	private int numOfTurns;
 
-	// The unit that has to be protected
-	private AI protectUnit;
-
 	// Use this for initialization
 	void Start () {
 		// Set game mode to none
@@ -43,8 +40,6 @@ public class BattleManager : GenericSingleton<BattleManager>
 		numOfEnemies = 0;
 		// Set num or turns to 0
 		numOfTurns = 0;
-		// Set protectUnit to null
-		protectUnit = null;
 
 		BattleManager.Instance.SetGameMode ();
 	}
@@ -62,6 +57,7 @@ public class BattleManager : GenericSingleton<BattleManager>
 				{
 					// Game Win
 					PlayerManager.Instance.SetPlayerCount (0);
+					PlayerManager.Instance.SetCurrQuest (PlayerManager.Instance.GetCurrQuest () + 1);
 					SceneManager.LoadScene ("SceneCleared");
 				}
 				// Set the text for BattleInfo
@@ -69,11 +65,19 @@ public class BattleManager : GenericSingleton<BattleManager>
 				break;
 			case GAMEMODE.PROTECT_THE_PRESIDENT:	
 				// Checks if num of turns is less than or equal to 0
-				if(numOfTurns <= 0)
+				if (numOfTurns <= 0)
 				{
 					// Game Win
 					PlayerManager.Instance.SetPlayerCount (0);
+					PlayerManager.Instance.SetCurrQuest (PlayerManager.Instance.GetCurrQuest () + 1);
 					SceneManager.LoadScene ("SceneCleared");
+				}
+				AI AIProtect = GameObject.FindGameObjectWithTag ("aiProtect").GetComponent <AI>();
+				if(AIProtect.GetStats ().HP <= 0)
+				{
+					// Gameover
+					PlayerManager.Instance.SetPlayerCount (0);
+					SceneManager.LoadScene ("SceneDefeated");
 				}
 				// Set the text for BattleInfo
 				GameObject.FindGameObjectWithTag ("BattleInfo").GetComponentInChildren<Text> ().text = "Turns Left: " + numOfTurns;
@@ -111,6 +115,8 @@ public class BattleManager : GenericSingleton<BattleManager>
 		game_mode = GAMEMODE.PROTECT_THE_PRESIDENT;
 		// Set total num of turns
 		numOfTurns = TOTAL_TURNS;
+		// Set total num of enemies
+		numOfEnemies = TOTAL_ENEMIES;
 		// Set the text for BattleInfo
 		GameObject.FindGameObjectWithTag ("BattleInfo").GetComponentInChildren<Text> ().text = "Turns Left: " + numOfTurns;
 		// Do spawning of AI
@@ -124,11 +130,11 @@ public class BattleManager : GenericSingleton<BattleManager>
 		// Set based on the player's current mission
 		switch(PlayerManager.Instance.GetCurrQuest ())
 		{
-			case 0:
+			case 1:
 				// Start Kill All Enemies Game Mode
 				StartKillAll ();
 				break;
-			case 1:
+			case 0:
 				// Start Protect The President Game Mode
 				StartProtect ();
 				break;
@@ -144,4 +150,7 @@ public class BattleManager : GenericSingleton<BattleManager>
 	// Get & Set num of turns that have passed in battle
 	public int GetNumOfTurns() {return numOfTurns;}
 	public void SetNumOfTurns(int _num) {numOfTurns = _num;}
+
+	// Get Gamemode
+	public GAMEMODE GetGameMode() {return game_mode;}
 }
