@@ -456,6 +456,11 @@ public class AI : MonoBehaviour {
 		Nodes Temp = m_start;
 		int AP_Ref = Stats.AP;
 
+		bool Up,
+		Down,
+		Left,
+		Right;
+
 		while (!m_path.Contains (m_end) && AP_Ref > 0) {
 			float UpMag = (Temp.transform.position - m_end.transform.position).magnitude,
 			DownMag = (Temp.transform.position - m_end.transform.position).magnitude,
