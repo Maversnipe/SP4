@@ -58,13 +58,6 @@ public class BackToMenu : MonoBehaviour {
 
 	public void ChangeSceneLose()
 	{
-		if(PlayerManager.Instance.GetCurrQuest () == 1)
-		{
 			SceneManager.LoadScene ("SceneOpen");
-		}
-		else if(PlayerManager.Instance.GetCurrQuest () == 2)
-		{
-			SceneManager.LoadScene ("SceneOpen");
-		}
 	}
 }

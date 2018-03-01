@@ -11,6 +11,12 @@ public class Spawner : MonoBehaviour {
 	[SerializeField]
 	private GameObject PrefabAIProtect;
 
+	[SerializeField]
+	private int  playerCount;
+
+	[SerializeField]
+	private GameObject PrefabPlayer;
+
 	// Spawn Enemies
 	public void SpawnEnemies()
 	{
@@ -25,6 +31,16 @@ public class Spawner : MonoBehaviour {
 		{
 			GameObject Temp;
 			Temp = Instantiate (PrefabAIProtect, new Vector3(0,0,0), Quaternion.Euler (0,0,0));
+		}
+	}
+
+	public void SpawnPlayers()
+	{
+		// Loops the number of players
+		for(int i = 0; i < playerCount; ++i)
+		{
+			GameObject Temp;
+			Temp = Instantiate (PrefabPlayer, new Vector3(0,0,0), Quaternion.Euler (0,0,0));
 		}
 	}
 }

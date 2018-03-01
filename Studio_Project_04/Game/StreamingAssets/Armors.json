@@ -1,0 +1,151 @@
+{
+  "Items": 
+  [
+    {
+      "id": 0,
+      "title": "Old Rag",
+      "value": 25,
+      "type": "Light",
+      "defence": 0,
+      "description": "Worn by Archer and Sniper.",
+      "stackable": false,
+      "rarity": "Common",
+      "icon": "old_rag"
+    },
+    {
+      "id": 1,
+      "title": "Cloth",
+      "value": 50,
+      "type": "Light",
+      "defence": 1,
+      "description": "Worn by Novice.",
+      "stackable": false,
+      "rarity": "Common",
+      "icon": "cloth"
+    },
+    {
+      "id": 2,
+      "title": "Upgraded Cloth",
+      "value": 75,
+      "type": "Light",
+      "defence": 2,
+      "description": "Worn by Novice. Offers greater defence than normal clothes.",
+      "stackable": false,
+      "rarity": "Rare",
+      "icon": "upgraded_cloth"
+    },
+    {
+      "id": 3,
+      "title": "Leather",
+      "value": 100,
+      "type": "Light",
+      "defence": 3,
+      "description": "Worn by Adventurer.",
+      "stackable": false,
+      "rarity": "Common",
+      "icon": "leather"
+    },
+    {
+      "id": 4,
+      "title": "Upgraded Leather",
+      "value": 125,
+      "type": "Light",
+      "defence": 4,
+      "description": "Worn by Hero. Offers greater defence than normal leather armor.",
+      "stackable": false,
+      "rarity": "Rare",
+      "icon": "upgraded_leather"
+    },
+    {
+      "id": 5,
+      "title": "Wooden",
+      "value": 150,
+      "type": "Medium",
+      "defence": 5,
+      "description": "Worn by Trainee and Fighter.",
+      "stackable": false,
+      "rarity": "Rare",
+      "icon": "wooden"
+    },
+    {
+      "id": 6,
+      "title": "Upgraded Wooden",
+      "value": 175,
+      "type": "Medium",
+      "defence": 6,
+      "description": "Worn by Mercenary. Offers greater defence than normal wooden breastplate.",
+      "stackable": false,
+      "rarity": "Epic",
+      "icon": "upgraded_wooden"
+    },
+    {
+      "id": 7,
+      "title": "Iron",
+      "value": 200,
+      "type": "Medium",
+      "defence": 7,
+      "description": "Worn by Myrmidon and Warrior.",
+      "stackable": false,
+      "rarity": "Rare",
+      "icon": "iron"
+    },
+    {
+      "id": 8,
+      "title": "Upgraded Iron",
+      "value": 225,
+      "type": "Medium",
+      "defence": 8,
+      "description": "Worn by SwordMaster. Offers greater defence than normal iron breastplate.",
+      "stackable": false,
+      "rarity": "Epic",
+      "icon": "upgraded_iron"
+    },
+
+
+
+    {
+      "id": 9,
+      "title": "Steel",
+      "value": 250,
+      "type": "Heavy",
+      "defence": 9,
+      "description": "Worn by Brigand and Brigand Trainee.",
+      "stackable": false,
+      "rarity": "Epic",
+      "icon": "steel"
+    },
+    {
+      "id": 10,
+      "title": "Upgraded Steel",
+      "value": 275,
+      "type": "Heavy",
+      "defence": 10,
+      "description": "Worn by Pirate. Offers greater defence than normal steel armor.",
+      "stackable": false,
+      "rarity": "Legendary",
+      "icon": "upgraded_steel"
+    },
+    {
+      "id": 11,
+      "title": "Silver",
+      "value": 300,
+      "type": "Heavy",
+      "defence": 11,
+      "description": "Worn by Corsair.",
+      "stackable": false,
+      "rarity": "Epic",
+      "icon": "silver"
+    },
+    {
+      "id": 12,
+      "title": "Upgraded Silver",
+      "value": 325,
+      "type": "Heavy",
+      "defence": 12,
+      "description": "Worn by Berserker. Offers greater defence than normal silver armor.",
+      "stackable": false,
+      "rarity": "Legendary",
+      "icon": "upgraded_silver"
+    }
+  ] 
+}

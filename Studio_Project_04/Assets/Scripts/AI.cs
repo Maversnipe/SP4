@@ -152,8 +152,6 @@ public class AI : MonoBehaviour {
 			// Update Opponent Unit Info
 			selectedUnitClass.GetStats ().UpdateOpponentUnitInfo (this.Stats);
 
-			Nodes unitCurrNode = selectedUnitClass.GetCurrNode ();
-
 			for(int i = 1; i <= selectedUnitClass.GetStats ()._weapon.Range; ++i)
 			{
 				if ((selectedUnitClass.GetCurrNode ().GetXIndex () + i == currNode.GetXIndex ()

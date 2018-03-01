@@ -33,12 +33,12 @@ public class Players : MonoBehaviour
 	// Player's path
 	private Stack<Nodes> path;
 
-	void Start ()
+	void Awake ()
 	{
-		//Gathers the name from the Unit Variable
+//		//Gathers the name from the Unit Variable
 		Stats = this.gameObject.GetComponent<UnitVariables> ();
-		//Gathers the stats from the Json File
-		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (Stats.Name));
+//		//Gathers the stats from the Json File
+		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (PlayerManager.Instance.GetListVariables ()[PlayerManager.Instance.GetPlayerCount ()].Name));
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
 		DefaultColor = rend.material.color;

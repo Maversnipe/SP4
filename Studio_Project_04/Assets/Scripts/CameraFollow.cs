@@ -13,7 +13,8 @@ public class CameraFollow : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
+		Debug.Log ("Pls run");
+		DontDestroyOnLoad (this.gameObject);
 	}
 	
 	// Update is called once per frame

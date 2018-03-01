@@ -23,6 +23,13 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	private bool[,] visited;
 	private List<Nodes> selectableNodes = new List<Nodes> ();
 
+	// List of unit variables
+		// This is to assign into the player when they get instantiated
+	private List<UnitVariables> listOfUnitVariables = new List<UnitVariables> ();
+
+	[SerializeField]
+	private GameObject PlayerPrefab;
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -42,6 +49,15 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		playerCount = 0;
 		// Indication ring
 		Indication = GameObject.FindGameObjectWithTag ("Indication");
+
+		for(int i = 0; i < 4; ++i)
+		{
+			//Gathers the name from the Unit Variable
+			UnitVariables Stats = PlayerPrefab.GetComponent<UnitVariables> ();
+         	//Gathers the stats from the Json File
+         	Stats.Copy(UnitDatabase.Instance.FetchUnitByName (Stats.Name));
+			listOfUnitVariables.Add (Stats);
+		}
 	}
 
 	// Update Player during Player's turn
@@ -50,6 +66,22 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// Exit function if it is not player's turn
 		if (!TurnManager.Instance.IsPlayerTurn ())
 			return;
+
+		if(isMoving)
+		{
+			// Find GO with ActionMenu tag
+			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu2");
+			// Make GO's child active, which makes the menu appear
+			menu.transform.GetChild(0).gameObject.SetActive (false);
+		}
+		else
+		{
+			// Find GO with ActionMenu tag
+			GameObject menu = GameObject.FindGameObjectWithTag ("ActionMenu2");
+			// Make GO's child active, which makes the menu appear
+			menu.transform.GetChild(0).gameObject.SetActive (true);
+		}
+
 		// Check if there is a unit selected
 		if (selectedPlayer)
 		{
@@ -110,7 +142,8 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			// Get the cancel button gameobject
 			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
 			// Set cancel button to active
-			cancelButton.transform.GetChild(0).gameObject.SetActive (true);
+			if(cancelButton)
+				cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 
 			// Checks if player's HP is at it's max
 			if (selectedPlayer.GetStats ().HP == selectedPlayer.GetStats ().startHP)
@@ -149,7 +182,8 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			// Get the cancel button gameobject
 			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
 			// Set cancel button to active
-			cancelButton.transform.GetChild(0).gameObject.SetActive (true);
+			if(cancelButton)
+				cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 		}
 	}
 
@@ -180,12 +214,14 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// Get the cancel button gameobject
 		GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
 		// Set cancel button to not active
-		cancelButton.transform.GetChild(0).gameObject.SetActive (false);
+		if(cancelButton)
+			cancelButton.transform.GetChild(0).gameObject.SetActive (false);
 
 		// Get the cancel button gameobject
 		cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
 		// Set cancel button to not active
-		cancelButton.transform.GetChild(0).gameObject.SetActive (true);
+		if(cancelButton)
+			cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 	}
 
 	// Set the selected unit to be able to move
@@ -194,19 +230,20 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		// Check if unit is available and if unit can move
 		if(selectedPlayer && !ableToMove)
 		{
-			isMoving = true;
 			ableToMove = true;
 			FindSelectableTiles ();
 
 			// Get the cancel button gameobject
 			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
 			// Set cancel button to active
-			cancelButton.transform.GetChild(0).gameObject.SetActive (false);
+			if(cancelButton)
+				cancelButton.transform.GetChild(0).gameObject.SetActive (false);
 
 			// Get the cancel button gameobject
 			cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
 			// Set cancel button to active
-			cancelButton.transform.GetChild(0).gameObject.SetActive (true);
+			if(cancelButton)
+				cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 		}
 	}
 
@@ -221,12 +258,14 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 			// Get the cancel button gameobject
 			GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
 			// Set cancel button to active
-			cancelButton.transform.GetChild(0).gameObject.SetActive (false);
+			if(cancelButton)
+				cancelButton.transform.GetChild(0).gameObject.SetActive (false);
 
 			// Get the cancel button gameobject
 			cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
 			// Set cancel button to active
-			cancelButton.transform.GetChild(0).gameObject.SetActive (true);
+			if(cancelButton)
+				cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 		}
 	}
 
@@ -308,6 +347,9 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Set & Get Player Count
 	public int GetPlayerCount() {return playerCount;}
 	public void SetPlayerCount(int _count) {playerCount = _count;}
+
+	// Get List Of Unit Variables
+	public List<UnitVariables> GetListVariables() {return listOfUnitVariables;}
 
 	// BFS for unit
 	public void FindSelectableTiles()

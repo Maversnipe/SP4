@@ -40,12 +40,11 @@ public class BattleManager : GenericSingleton<BattleManager>
 		numOfEnemies = 0;
 		// Set num or turns to 0
 		numOfTurns = 0;
-
-		BattleManager.Instance.SetGameMode ();
 	}
 
 	// Update is called once per frame
 	void Update () {
+		Debug.Log ("Gamemode: " + game_mode);
 		switch(game_mode)
 		{
 			case GAMEMODE.NONE:
@@ -106,6 +105,7 @@ public class BattleManager : GenericSingleton<BattleManager>
 		// Do spawning of AI
 		Spawner spawner = GameObject.FindGameObjectWithTag ("Spawner").GetComponent <Spawner>();
 		spawner.SpawnEnemies ();
+		spawner.SpawnPlayers ();
 	}
 
 	// Start Protect The President Game Mode
@@ -122,6 +122,7 @@ public class BattleManager : GenericSingleton<BattleManager>
 		// Do spawning of AI
 		Spawner spawner = GameObject.FindGameObjectWithTag ("Spawner").GetComponent <Spawner>();
 		spawner.SpawnEnemies ();
+		spawner.SpawnPlayers ();
 	}
 
 	// Set Game Mode
@@ -151,6 +152,7 @@ public class BattleManager : GenericSingleton<BattleManager>
 	public int GetNumOfTurns() {return numOfTurns;}
 	public void SetNumOfTurns(int _num) {numOfTurns = _num;}
 
-	// Get Gamemode
+	// Set & Get Gamemode
 	public GAMEMODE GetGameMode() {return game_mode;}
+	public void SetGameMode(GAMEMODE _mode) {game_mode = _mode;}
 }

@@ -87,6 +87,18 @@ public class Nodes : MonoBehaviour
 					// Set the player's next node
 					if (selectedUnitClass != null)
 						selectedUnitClass.SetNextNode (selectedUnitClass.GetPath ().Pop());
+
+					playerManager.SetIsMoving (true);
+					// Get the cancel button gameobject
+					GameObject cancelButton = GameObject.FindGameObjectWithTag ("CancelButton");
+					// Set cancel button to active
+					if(cancelButton)
+						cancelButton.transform.GetChild(0).gameObject.SetActive (false);
+					// Get the cancel button gameobject
+					cancelButton = GameObject.FindGameObjectWithTag ("CancelButtonNotSelectable");
+					// Set cancel button to active
+					if(cancelButton)
+						cancelButton.transform.GetChild(0).gameObject.SetActive (true);
 				}
 			}
 		}
