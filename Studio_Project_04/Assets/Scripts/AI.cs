@@ -329,12 +329,90 @@ public class AI : MonoBehaviour {
 
 	void DefensiveAction()
 	{
-		
+		if (EnemyTarget == null) {
+
+			Nodes Temp = null;
+
+			for (int x = 0; x < GridRef.GetRows (); ++x) {
+				for (int z = 0; z < GridRef.GetColumn (); ++z) {
+					if (GridRef.GetNode (x, z).GetOccupied () != null && GridRef.GetNode (x, z).GetOccupied ().tag == "PlayerUnit") {
+						if (Temp != null) { // Temp Magnitude is more than current grid magnitude, change Temp altogether
+							if ((Temp.GetOccupied ().transform.position - currNode.transform.position).magnitude > (GridRef.GetNode (x, z).GetOccupied ().transform.position - currNode.transform.position).magnitude) {
+								Temp = GridRef.GetNode (x, z);
+							}
+						} else { // Sets the first reference of Temp
+							Temp = GridRef.GetNode (x, z);
+						}
+					}
+				}
+			}
+
+			EnemyTarget = Temp;
+		} else {
+			if (!Path_Set) {
+				SetDefensivePath (currNode, EnemyTarget);
+				m_path.Dequeue ();
+				Path_Set = true;
+			} else {
+				if (!isAttacking) {
+					// Assigns a node while also removing the assigned node from the path
+					Nodes TempMove = currNode;
+					if (m_path.Count != 0) {
+						TempMove = m_path.Dequeue ();
+					} else {
+						turnManager.CalculateRestHeal (this.gameObject);
+					}
+
+					// If the next area is or isn't the enemy target, act accordingly
+					if (TempMove != EnemyTarget) {
+						currNode.SetOccupiedNULL ();
+						currNode = TempMove;
+						currNode.SetOccupied (this.gameObject);
+					} else {
+						isAttacking = true;
+						TempMove.SetSelectable (false);
+						int damageDeal = turnManager.CalculateDamage (this.gameObject, EnemyTarget.GetOccupied());
+						EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP -= damageDeal;
+						if (EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP <= 0)
+							EnemyTarget = null;
+					}
+				} else {
+					// prevent error - if player died
+					if (EnemyTarget.GetOccupied () == null) {
+						EnemyTarget = null;
+						return;
+					}
+
+					UnitVariables Temp = EnemyTarget.GetOccupied ().GetComponent<Players> ().GetStats ();
+					int damageDeal = turnManager.CalculateDamage (this.gameObject, EnemyTarget.GetOccupied());
+					Temp.HP -= damageDeal;
+					EnemyTarget.GetOccupied ().GetComponent<Players> ().SetStats (Temp);
+					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateHealthBar ();
+					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateUnitInfo ();
+					if (EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP <= 0)
+						EnemyTarget = null;
+				}
+				this.Stats.AP--;
+			}
+		}
 	}
 
 	void RandomAction()
 	{
-		
+		if (!Path_Set) {
+			SetRandomPath (currNode);
+			m_path.Dequeue ();
+			Path_Set = true;
+		} else {
+			Nodes TempMove = currNode;
+			if (m_path.Count != 0) {
+				TempMove = m_path.Dequeue ();
+
+				currNode.SetOccupiedNULL ();
+				currNode = TempMove;
+				currNode.SetOccupied (this.gameObject);
+			}
+		}
 	}
 
 	void StrategicAction()
@@ -415,6 +493,88 @@ public class AI : MonoBehaviour {
 			Temp.ChangeColour ();
 			m_path.Enqueue (Temp);
 			AP_Ref--;
+		}
+	}
+
+	public void SetDefensivePath(Nodes m_start, Nodes m_end)
+	{
+		m_path.Enqueue (m_start);
+		Nodes Temp = m_start;
+		int AP_Ref = Stats.AP / 2;
+
+		while (!m_path.Contains (m_end) && AP_Ref > 0) {
+			float UpMag = (Temp.transform.position - m_end.transform.position).magnitude,
+			DownMag = (Temp.transform.position - m_end.transform.position).magnitude,
+			LeftMag = (Temp.transform.position - m_end.transform.position).magnitude,
+			RightMag = (Temp.transform.position - m_end.transform.position).magnitude,
+			Closest;
+
+			if (Temp.GetZIndex () != GridRef.GetColumn () - 1) {
+				UpMag = (GridRef.GetNode(Temp.GetXIndex(), Temp.GetZIndex() + 1).transform.position - m_end.transform.position).magnitude;
+			}
+			if (Temp.GetZIndex () != 0) {
+				DownMag = (GridRef.GetNode(Temp.GetXIndex(), Temp.GetZIndex() - 1).transform.position - m_end.transform.position).magnitude;
+			}
+			if (Temp.GetXIndex () != GridRef.GetRows () - 1) {
+				LeftMag = (GridRef.GetNode(Temp.GetXIndex() + 1, Temp.GetZIndex()).transform.position - m_end.transform.position).magnitude;
+			}
+			if (Temp.GetXIndex () != 0) {
+				RightMag = (GridRef.GetNode(Temp.GetXIndex() - 1, Temp.GetZIndex()).transform.position - m_end.transform.position).magnitude;
+			}
+			Closest = Mathf.Min (UpMag, DownMag, LeftMag, RightMag);
+
+			if (Closest == UpMag) {
+				Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () + 1);
+			} else if (Closest == DownMag) {
+				Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () - 1);
+			} else if (Closest == LeftMag) {
+				Temp = GridRef.GetNode (Temp.GetXIndex () + 1, Temp.GetZIndex ());
+			} else if (Closest == RightMag) {
+				Temp = GridRef.GetNode (Temp.GetXIndex () - 1, Temp.GetZIndex ());
+			}
+
+			if (Temp != EnemyTarget) {
+				Temp.SetSelectable (true);
+			}
+			Temp.ChangeColour ();
+			m_path.Enqueue (Temp);
+			AP_Ref--;
+		}
+	}
+
+	public void SetRandomPath(Nodes m_start)
+	{
+		m_path.Enqueue (m_start);
+		Nodes Temp = m_start;
+		int AP_Ref = Stats.AP;
+
+		while (AP_Ref > 0) {
+			int Random = Random.Range (1, 5);
+
+			switch (Random)
+			{
+			case(1):
+				Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () + 1);
+				break;
+
+			case(2):
+				Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () - 1);
+				break;
+
+			case(3):
+				Temp = GridRef.GetNode (Temp.GetXIndex () + 1, Temp.GetZIndex ());
+				break;
+
+			case(4):
+				Temp = GridRef.GetNode (Temp.GetXIndex () - 1, Temp.GetZIndex ());
+				break;
+			}
+
+			if (!m_path.Contains (Temp)) {
+				Temp.ChangeColour ();
+				m_path.Enqueue (Temp);
+				AP_Ref--;
+			}
 		}
 	}
 

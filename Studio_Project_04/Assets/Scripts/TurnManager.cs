@@ -272,4 +272,13 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 		return damageDeal;
 	}
+
+	public int CalculateRestHeal(GameObject Temp)
+	{
+		int returnValue;
+
+		returnValue = Temp.GetComponent<UnitVariables> ().AP / 2;
+
+		return returnValue;
+	}
 }
