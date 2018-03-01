@@ -1,14 +1,17 @@
-[
-  {
-    "id": 0,
-    "title": "Health Potion",
-    "value": 25,
-    "type": "Consumable",
-    "modifier": "HP",
-    "modifier_value": 50,
-    "description": "Restores 50 HP.",
-    "stackable": true,
-    "rarity": "Common",
-    "icon": "health_potion"
-  }
-]
+{
+  "Items": 
+  [
+    {
+      "id": 0,
+      "title": "Health Potion",
+      "value": 25,
+      "type": "Consumable",
+      "modifier": "HP",
+      "modifier_value": 50,
+      "description": "Restores 50 HP.",
+      "stackable": true,
+      "rarity": "Common",
+      "icon": "health_potion"
+    }
+  ]
+}

@@ -22,8 +22,11 @@ public class ShopItemData : MonoBehaviour, IBeginDragHandler, IDragHandler, IEnd
     private Transform originalParent;
     private Vector2 offset;
 
-    void Start()
+    void Awake()
     {
+        item = null;
+        weapon = null;
+        armor = null;
         shop = GameObject.Find("Shop").GetComponent<Shop>();
         infoPanel = shop.GetComponent<ShopPanel>();
     }

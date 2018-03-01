@@ -57,7 +57,7 @@ public class EquipmentInfoPanel : MonoBehaviour {
     public void ConstructWeaponDataString()
     {
         title = weapon.Title;
-        info = weapon.Description + "\n" + "\nATK : " + weapon.Attack + "\nSTR : " + weapon.Strength + "\nVIT : " + weapon.Vitality + "\nINT : " + weapon.Intelligence + "\nDEX : " + weapon.Dexterity + "\nRarity : " + weapon.Rarity + "\nValue : " + weapon.Value;
+        info = weapon.Description + "\n" + "\nATK : " + weapon.Attack + "\nRarity : " + weapon.Rarity + "\nValue : " + weapon.Value;
         itemName.GetComponent<Text>().text = title;
         itemInfo.GetComponent<Text>().text = info;
     }
@@ -65,7 +65,7 @@ public class EquipmentInfoPanel : MonoBehaviour {
     public void ConstructArmorDataString()
     {
         title = armor.Title;
-        info = armor.Description + "\n" + "\nDEF : " + armor.Defence + "\nSTR : " + armor.Strength + "\nVIT : " + armor.Vitality + "\nINT : " + armor.Intelligence + "\nDEX : " + armor.Dexterity + "\nRarity : " + armor.Rarity + "\nValue : " + armor.Value;
+        info = armor.Description + "\n" + "\nDEF : " + armor.Defence + "\nRarity : " + armor.Rarity + "\nValue : " + armor.Value;
         itemName.GetComponent<Text>().text = title;
         itemName.GetComponent<Text>().text = title;
         itemInfo.GetComponent<Text>().text = info;

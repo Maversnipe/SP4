@@ -4,12 +4,13 @@ using UnityEngine;
 using LitJson;
 using UnityEngine.Networking;
 using System.IO;
+using System;
 
 [System.Serializable]
 public class ArmorDatabase : GenericSingleton<ArmorDatabase>
 {
     [SerializeField]
-    public static List<Armor> armorDatabase = new List<Armor>();
+    public static Armor[] armorDatabase;
     private JsonData armorData;
 
     IEnumerator loadStreamingAsset(string fileName)
@@ -22,12 +23,14 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase>
             WWW www = new WWW(filePath);
             yield return www;
             result = www.text;
-            armorData = JsonMapper.ToObject(File.ReadAllText(result));
+            Debug.Log(result);
+            armorDatabase = JsonHelper.FromJson<Armor>(result);
         }
         else
         {
             result = System.IO.File.ReadAllText(filePath);
-            armorData = JsonMapper.ToObject(result);
+            Debug.Log(result);
+            armorDatabase = JsonHelper.FromJson<Armor>(result);
         }
     }
 
@@ -36,11 +39,12 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase>
         //armorData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Armors.json"));
         StartCoroutine(loadStreamingAsset("Armors.json"));
         ConstructArmorDatabase();
-	}
+        Debug.Log(armorDatabase[5].Title);
+    }
 
     public Armor FetchArmorByName(string name)
     {
-        for (int i = 0; i < armorDatabase.Count; i++)
+        for (int i = 0; i < armorDatabase.Length; i++)
         {
             if (armorDatabase[i].Title == name)
             {
@@ -54,7 +58,7 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase>
 
     public Armor FetchArmorByID(int id)
     {
-        for(int i = 0; i < armorDatabase.Count; i++)
+        for(int i = 0; i < armorDatabase.Length; i++)
         {
             if (armorDatabase[i].ID == id)
             {
@@ -68,60 +72,54 @@ public class ArmorDatabase : GenericSingleton<ArmorDatabase>
 
     void ConstructArmorDatabase()
     {
-        for(int i = 0; i < armorData.Count; i++)
+        for(int i = 0; i < armorDatabase.Length; i++)
         {
-			Armor newArmor = new Armor((int)armorData[i]["id"], armorData[i]["title"].ToString(), (int)armorData[i]["value"],
-				armorData[i]["type"].ToString(), (int)armorData[i]["stats"]["defence"], (int)armorData[i]["stats"]["strength"],
-				(int)armorData[i]["stats"]["vitality"], (int)armorData[i]["stats"]["intelligence"], (int)armorData[i]["stats"]["dexterity"],
-				armorData[i]["description"].ToString(), (bool)armorData[i]["stackable"], armorData[i]["rarity"].ToString(),
-				armorData[i]["icon"].ToString());
-			
-			armorDatabase.Add(newArmor);
+            armorDatabase[i].ID = armorDatabase[i].id;
+            armorDatabase[i].Title = armorDatabase[i].title;
+            armorDatabase[i].Value = armorDatabase[i].value;
+            armorDatabase[i].Type = armorDatabase[i].type;
+            armorDatabase[i].Defence = armorDatabase[i].defence;
+            armorDatabase[i].Description = armorDatabase[i].description;
+            armorDatabase[i].Stackable = armorDatabase[i].stackable;
+            armorDatabase[i].Rarity = armorDatabase[i].rarity;
+            armorDatabase[i].Icon = armorDatabase[i].icon;
+            armorDatabase[i].Sprite = Resources.Load<Sprite>("Sprite/Items/Armors/" + armorDatabase[i].Icon);
         }
     }
 }
 
+[Serializable]
 public class Armor
 {
-    public int ID { get; set; }
-    public string Title { get; set; }
-    public int Value { get; set; }
-    public string Type { get; set; }
-    public int Defence { get; set; }
-    public int Strength { get; set; }
-    public int Vitality { get; set; }
-    public int Intelligence { get; set; }
-    public int Dexterity { get; set; }
-    public string Description { get; set; }
-    public bool Stackable { get; set; }
-    public string Rarity { get; set; }
-    public string Icon { get; set; }
-    public Sprite Sprite { get; set; }
+    public int id;
+    public string title;
+    public int value;
+    public string type;
+    public int defence;
+    public string description;
+    public bool stackable;
+    public string rarity;
+    public string icon;
 
-    public Armor(int id, string title, int value,
-		string type, int defence, int strength,
-		int vitality, int intelligence, int dexterity,
-		string description, bool stackable, string rarity,
-		string icon)
-    {
-        this.ID = id;
-        this.Title = title;
-        this.Value = value;
-        this.Type = type;
-        this.Defence = defence;
-        this.Strength = strength;
-        this.Vitality = vitality;
-        this.Intelligence = intelligence;
-        this.Dexterity = dexterity;
-        this.Description = description;
-        this.Stackable = stackable;
-        this.Rarity = rarity;
-        this.Icon = icon;
-        this.Sprite = Resources.Load<Sprite>("Sprite/Items/Armors/" + icon);
-    }
+    public int ID;
+    public string Title;
+    public int Value;
+    public string Type;
+    public int Defence;
+    public string Description;
+    public bool Stackable;
+    public string Rarity;
+    public string Icon;
+    public Sprite Sprite;
 
     public Armor()
     {
-        this.ID = -1;
+        
+        //this.Sprite = Resources.Load<Sprite>("Sprite/Items/Armors/" + icon);
     }
+
+    //public Armor()
+    //{
+    //    this.ID = -1;
+    //}
 }

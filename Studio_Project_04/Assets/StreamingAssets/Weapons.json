@@ -1,412 +1,253 @@
-[
-  {
-    "id": 0,
-    "title": "Wooden Sword",
-    "value": 150,
-    "type": "Slash",
-    "stats":
+{
+  "Items": 
+  [
     {
+      "id": 0,
+      "title": "Wooden Sword",
+      "value": 150,
+      "type": "Slash",
       "attack": 8,
       "ap": 1,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Wooden sword used by Trainee.",
+      "stackable": false,
+      "rarity": "Common",
+      "icon": "wooden_sword"
     },
-    "description": "Wooden sword used by Trainee.",
-    "stackable": false,
-    "rarity": "Common",
-    "icon": "wooden_sword"
-  }
-  ,
-  {
-    "id": 1,
-    "title": "Iron Sword",
-    "value": 250,
-    "type": "Slash",
-    "stats":
     {
+      "id": 1,
+      "title": "Iron Sword",
+      "value": 250,
+      "type": "Slash",
       "attack": 10,
       "ap": 2,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Iron sword used by Mecenary.",
+      "stackable": false,
+      "rarity": "Rare",
+      "icon": "iron_sword"
     },
-    "description": "Iron sword used by Mecenary.",
-    "stackable": false,
-    "rarity": "Rare",
-    "icon": "iron_sword"
-  }
-  ,
-  {
-    "id": 2,
-    "title": "Steel Sword",
-    "value": 350,
-    "type": "Slash",
-    "stats":
     {
+      "id": 2,
+      "title": "Steel Sword",
+      "value": 350,
+      "type": "Slash",
       "attack": 12,
       "ap": 3,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Steel sword used by Myrmidon.",
+      "stackable": false,
+      "rarity": "Epic",
+      "icon": "steel_sword"
     },
-    "description": "Steel sword used by Myrmidon.",
-    "stackable": false,
-    "rarity": "Epic",
-    "icon": "steel_sword"
-  }
-  ,
-  {
-    "id": 3,
-    "title": "Zanpaktou",
-    "value": 450,
-    "type": "Slash",
-    "stats":
     {
+      "id": 3,
+      "title": "Zanpaktou",
+      "value": 450,
+      "type": "Slash",
       "attack": 14,
       "ap": 4,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Zanpaktou used by SwordMaster.",
+      "stackable": false,
+      "rarity": "Legendary",
+      "icon": "zanpaktou"
     },
-    "description": "Zanpaktou used by SwordMaster.",
-    "stackable": false,
-    "rarity": "Legendary",
-    "icon": "zanpaktou"
-  }
-  ,
-  {
-    "id": 4,
-    "title": "The Hax Sword",
-    "value": 696969,
-    "type": "Slash",
-    "stats":
     {
+      "id": 4,
+      "title": "The Hax Sword",
+      "value": 696969,
+      "type": "Slash",
       "attack": 6969,
       "ap": 1,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Hax sword of unlimited haxx",
+      "stackable": false,
+      "rarity": "Legendary",
+      "icon": "hax_sword"
     },
-    "description": "Hax sword of unlimited haxx",
-    "stackable": false,
-    "rarity": "Legendary",
-    "icon": "hax_sword"
-  }
-  ,
-  {
-    "id": 5,
-    "title": "Hatchet",
-    "value": 150,
-    "type": "Slash",
-    "stats":
     {
-      "attack": 8,
-      "ap": 1,
-      "range": 2,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
-    },
-    "description": "Hachet used by Fighter.",
-    "stackable": false,
-    "rarity": "Common",
-    "icon": "hatchet"
-  }
-  ,
-  {
-    "id": 6,
-    "title": "Hand Axe",
-    "value": 250,
-    "type": "Slash",
-    "stats":
-    {
-      "attack": 12,
-      "ap": 3,
-      "range": 2,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
-    },
-    "description": "Hand Axe used by Warrior.",
-    "stackable": false,
-    "rarity": "Rare",
-    "icon": "hand_axe"
-  }
-
-
-
-  ,
-
-
-
-  {
-    "id": 7,
-    "title": "Wooden Lance",
-    "value": 150,
-    "type": "Pierce",
-    "stats":
-    {
+      "id": 5,
+      "title": "Hatchet",
+      "value": 150,
+      "type": "Slash",
       "attack": 8,
       "ap": 1,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Hachet used by Fighter.",
+      "stackable": false,
+      "rarity": "Common",
+      "icon": "hatchet"
     },
-    "description": "Wooden Lance used by Novice.",
-    "stackable": false,
-    "rarity": "Common",
-    "icon": "wooden_lance"
-  }
-  ,
-  {
-    "id": 8,
-    "title": "Iron Lance",
-    "value": 250,
-    "type": "Pierce",
-    "stats":
     {
+      "id": 6,
+      "title": "Hand Axe",
+      "value": 250,
+      "type": "Slash",
+      "attack": 12,
+      "ap": 3,
+      "range": 1,
+      "description": "Hand Axe used by Warrior.",
+      "stackable": false,
+      "rarity": "Rare",
+      "icon": "hand_axe"
+    },
+
+    {
+      "id": 7,
+      "title": "Wooden Lance",
+      "value": 150,
+      "type": "Pierce",
+      "attack": 8,
+      "ap": 1,
+      "range": 1,
+      "description": "Wooden Lance used by Novice.",
+      "stackable": false,
+      "rarity": "Common",
+      "icon": "wooden_lance"
+    },
+    {
+      "id": 8,
+      "title": "Iron Lance",
+      "value": 250,
+      "type": "Pierce",
       "attack": 10,
       "ap": 2,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Iron Lance used by Squire.",
+      "stackable": false,
+      "rarity": "Rare",
+      "icon": "iron_lance"
     },
-    "description": "Iron Lance used by Squire.",
-    "stackable": false,
-    "rarity": "Rare",
-    "icon": "iron_lance"
-  }
-  ,
-  {
-    "id": 9,
-    "title": "Steel Lance",
-    "value": 350,
-    "type": "Pierce",
-    "stats":
     {
+      "id": 9,
+      "title": "Steel Lance",
+      "value": 350,
+      "type": "Pierce",
       "attack": 12,
       "ap": 3,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Steel Lance used by Adventurer.",
+      "stackable": false,
+      "rarity": "Epic",
+      "icon": "steel_lance"
     },
-    "description": "Steel Lance used by Adventurer.",
-    "stackable": false,
-    "rarity": "Epic",
-    "icon": "steel_lance"
-  }
-  ,
-  {
-    "id": 10,
-    "title": "Silver Lance",
-    "value": 450,
-    "type": "Pierce",
-    "stats":
     {
+      "id": 10,
+      "title": "Silver Lance",
+      "value": 450,
+      "type": "Pierce",
       "attack": 14,
       "ap": 4,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Silver Lance used by Hero.",
+      "stackable": false,
+      "rarity": "Legendary",
+      "icon": "silver_lance"
     },
-    "description": "Silver Lance used by Hero.",
-    "stackable": false,
-    "rarity": "Legendary",
-    "icon": "silver_lance"
-  }
-  ,
-  {
-    "id": 11,
-    "title": "Bow",
-    "value": 150,
-    "type": "Pierce",
-    "stats":
     {
+      "id": 11,
+      "title": "Bow",
+      "value": 150,
+      "type": "Pierce",
       "attack": 8,
       "ap": 1,
-      "range": 2,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "range": 3,
+      "description": "Bow used by Archer.",
+      "stackable": false,
+      "rarity": "Common",
+      "icon": "bow"
     },
-    "description": "Bow used by Archer.",
-    "stackable": false,
-    "rarity": "Common",
-    "icon": "bow"
-  }
-  ,
-  {
-    "id": 12,
-    "title": "Cross Bow",
-    "value": 250,
-    "type": "Pierce",
-    "stats": 
     {
+      "id": 12,
+      "title": "Cross Bow",
+      "value": 250,
+      "type": "Pierce",
       "attack": 12,
       "ap": 3,
-      "range": 2,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "range": 3,
+      "description": "Cross Bow used by Sniper.",
+      "stackable": false,
+      "rarity": "Rare",
+      "icon": "cross_bow"
     },
-    "description": "Cross Bow used by Sniper.",
-    "stackable": false,
-    "rarity": "Rare",
-    "icon": "cross_bow"
-  }
-
-
-
-  ,
-
-
-
-  {
-    "id": 13,
-    "title": "Wooden Hammer",
-    "value": 150,
-    "type": "Blunt",
-    "stats":
     {
+      "id": 13,
+      "title": "Wooden Hammer",
+      "value": 150,
+      "type": "Blunt",
       "attack": 8,
       "ap": 1,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Wooden Hammer used by Brigand.",
+      "stackable": false,
+      "rarity": "Common",
+      "icon": "wooden_hammer"
     },
-    "description": "Wooden Hammer used by Brigand.",
-    "stackable": false,
-    "rarity": "Common",
-    "icon": "wooden_hammer"
-  }
-  ,
-  {
-    "id": 14,
-    "title": "Spike Rod",
-    "value": 250,
-    "type": "Blunt",
-    "stats":
     {
+      "id": 14,
+      "title": "Spike Rod",
+      "value": 250,
+      "type": "Blunt",
       "attack": 10,
       "ap": 2,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Spike Rod used by Pirate.",
+      "stackable": false,
+      "rarity": "Rare",
+      "icon": "spike_rod"
     },
-    "description": "Spike Rod used by Pirate.",
-    "stackable": false,
-    "rarity": "Rare",
-    "icon": "spike_rod"
-  }
-  ,
-  {
-    "id": 15,
-    "title": "Stone Hammer",
-    "value": 350,
-    "type": "Blunt",
-    "stats":
     {
+      "id": 15,
+      "title": "Stone Hammer",
+      "value": 350,
+      "type": "Blunt",
       "attack": 12,
       "ap": 3,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Stone Hammer used by Corsair.",
+      "stackable": false,
+      "rarity": "Epic",
+      "icon": "stone_hammer"
     },
-    "description": "Stone Hammer used by Corsair.",
-    "stackable": false,
-    "rarity": "Epic",
-    "icon": "stone_hammer"
-  }
-  ,
-  {
-    "id": 16,
-    "title": "Mythril Hammer",
-    "value": 450,
-    "type": "Blunt",
-    "stats":
     {
-      "attack": 14,
-      "ap": 4,
+      "id": 16,
+      "title": "Mythril Hammer",
+      "value": 450,
+      "type": "Blunt",
+      "attack": 12,
+      "ap": 3,
       "range": 1,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Mythril Hammer used by Berserker.",
+      "stackable": false,
+      "rarity": "Legendary",
+      "icon": "mythril_hammer"
     },
-    "description": "Mythril Hammer used by Berserker.",
-    "stackable": false,
-    "rarity": "Legendary",
-    "icon": "mythril_hammer"
-  }
-  ,
-  {
-    "id": 17,
-    "title": "Sling Shot",
-    "value": 150,
-    "type": "Blunt",
-    "stats":
     {
-      "attack": 8,
-      "ap": 1,
-      "range": 2,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
-    },
-    "description": "Sling Shot used by Brigand Trainee.",
-    "stackable": false,
-    "rarity": "Common",
-    "icon": "sling_shot"
-  }
-  ,
-  {
-    "id": 12,
-    "title": "Boomerang",
-    "value": 250,
-    "type": "Blunt",
-    "stats": 
-    {
+      "id": 17,
+      "title": "Sling Shot",
+      "value": 150,
+      "type": "Blunt",
       "attack": 12,
       "ap": 3,
       "range": 2,
-      "strength": 6969,
-      "vitality": 6969,
-      "intelligence": 6969,
-      "dexterity": 6969
+      "description": "Sling Shot used by Brigand Trainee.",
+      "stackable": false,
+      "rarity": "Common",
+      "icon": "sling_shot"
     },
-    "description": "Boomerang used by Joker.",
-    "stackable": false,
-    "rarity": "Rare",
-    "icon": "boomerang"
-  }
-]
+    {
+      "id": 12,
+      "title": "Boomerang",
+      "value": 250,
+      "type": "Blunt",
+      "attack": 12,
+      "ap": 3,
+      "range": 2,
+      "description": "Boomerang used by Joker.",
+      "stackable": false,
+      "rarity": "Rare",
+      "icon": "boomerang"
+    }
+  ] 
+}

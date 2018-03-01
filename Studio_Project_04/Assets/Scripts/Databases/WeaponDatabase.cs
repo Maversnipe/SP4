@@ -5,13 +5,14 @@ using LitJson;
 using UnityEngine.Networking;
 
 using System.IO;
+using System;
 
 [System.Serializable]
 public class WeaponDatabase : GenericSingleton<WeaponDatabase>
 {
     [SerializeField]
-    public static List<Weapon> weaponDatabase = new List<Weapon>();
-    private JsonData weaponData;
+    public static Weapon[] weaponDatabase;
+    private string weaponData;
 
     IEnumerator loadStreamingAsset(string fileName)
     {
@@ -23,12 +24,14 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase>
             WWW www = new WWW(filePath);
             yield return www;
             result = www.text;
-            weaponData = JsonMapper.ToObject(File.ReadAllText(result));
+            Debug.Log(result);
+            weaponDatabase = JsonHelper.FromJson<Weapon>(result);
         }
         else
         {
             result = System.IO.File.ReadAllText(filePath);
-            weaponData = JsonMapper.ToObject(result);
+            Debug.Log(result);
+            weaponDatabase = JsonHelper.FromJson<Weapon>(result);
         }
     }
 
@@ -36,13 +39,15 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase>
     void Start () {
         //weaponData = JsonMapper.ToObject(File.ReadAllText(Application.dataPath + "/StreamingAssets/Weapons.json"));
         StartCoroutine(loadStreamingAsset("Weapons.json"));
-        ConstructWeaponDatabase();
 
-	}
+        ConstructWeaponDatabase();
+        Debug.Log(weaponDatabase[0].Description);
+
+    }
 
     public Weapon FetchWeaponByName(string name)
     {
-        for (int i = 0; i < weaponDatabase.Count; i++)
+        for (int i = 0; i < weaponDatabase.Length; i++)
         {
             if (weaponDatabase[i].Title == name)
             {
@@ -56,7 +61,7 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase>
 
     public Weapon FetchWeaponByID(int id)
     {
-        for(int i = 0; i < weaponDatabase.Count; i++)
+        for(int i = 0; i < weaponDatabase.Length; i++)
         {
             if (weaponDatabase[i].ID == id)
             {
@@ -70,64 +75,59 @@ public class WeaponDatabase : GenericSingleton<WeaponDatabase>
 
     void ConstructWeaponDatabase()
     {
-        for(int i = 0; i < weaponData.Count; i++)
+        for (int i = 0; i < weaponDatabase.Length; i++)
         {
-			Weapon newWeapon = new Weapon ((int)weaponData[i]["id"], weaponData[i]["title"].ToString(), (int)weaponData[i]["value"],
-				weaponData[i]["type"].ToString(), (int)weaponData[i]["stats"]["attack"], (int)weaponData[i]["stats"]["ap"], (int)weaponData[i]["stats"]["range"],
-				(int)weaponData[i]["stats"]["strength"], (int)weaponData[i]["stats"]["vitality"], (int)weaponData[i]["stats"]["intelligence"],
-				(int)weaponData[i]["stats"]["dexterity"], weaponData[i]["description"].ToString(), (bool)weaponData[i]["stackable"],
-				weaponData[i]["rarity"].ToString(), weaponData[i]["icon"].ToString());
-
-			weaponDatabase.Add(newWeapon);
+            weaponDatabase[i].ID = weaponDatabase[i].id;
+            weaponDatabase[i].Title = weaponDatabase[i].title;
+            weaponDatabase[i].Value = weaponDatabase[i].value;
+            weaponDatabase[i].Type = weaponDatabase[i].type;
+            weaponDatabase[i].Attack = weaponDatabase[i].attack;
+            weaponDatabase[i].AP = weaponDatabase[i].ap;
+            weaponDatabase[i].Range = weaponDatabase[i].range;
+            weaponDatabase[i].Description = weaponDatabase[i].description;
+            weaponDatabase[i].Stackable = weaponDatabase[i].stackable;
+            weaponDatabase[i].Rarity = weaponDatabase[i].rarity;
+            weaponDatabase[i].Icon = weaponDatabase[i].icon;
+            weaponDatabase[i].Sprite = Resources.Load<Sprite>("Sprite/Items/Weapons/" + weaponDatabase[i].Icon);
         }
     }
 }
 
+[Serializable]
 public class Weapon
 {
-    public int ID { get; set; }
-    public string Title { get; set; }
-    public int Value { get; set; }
-    public string Type { get; set; }
-    public int Attack { get; set; }
-	public int AP { get; set; }
-	public int Range { get; set; }
-    public int Strength { get; set; }
-    public int Vitality { get; set; }
-    public int Intelligence { get; set; }
-    public int Dexterity { get; set; }
-    public string Description { get; set; }
-    public bool Stackable { get; set; }
-    public string Rarity { get; set; }
-    public string Icon { get; set; }
-    public Sprite Sprite { get; set; }
+    public int id;
+    public string title;
+    public int value;
+    public string type;
+    public int attack;
+    public int ap;
+    public int range;
+    public string description;
+    public bool stackable;
+    public string rarity;
+    public string icon;
 
-	public Weapon(int id, string title, int value,
-		string type, int attack, int ap, int range,
-		int strength, int vitality, int intelligence,
-		int dexterity, string description, bool stackable,
-		string rarity, string icon)
+    public int ID;
+    public string Title;
+    public int Value;
+    public string Type;
+    public int Attack;
+    public int AP;
+    public int Range;
+    public string Description;
+    public bool Stackable;
+    public string Rarity;
+    public string Icon;
+    public Sprite Sprite;
+
+	public Weapon()
     {
-        this.ID = id;
-        this.Title = title;
-        this.Value = value;
-        this.Type = type;
-        this.Attack = attack;
-		this.AP = ap;
-		this.Range = range;
-        this.Strength = strength;
-        this.Vitality = vitality;
-        this.Intelligence = intelligence;
-        this.Dexterity = dexterity;
-        this.Description = description;
-        this.Stackable = stackable;
-        this.Rarity = rarity;
-        this.Icon = icon;
-        this.Sprite = Resources.Load<Sprite>("Sprite/Items/Weapons/" + icon);
+        //this.Sprite = Resources.Load<Sprite>("Sprite/Items/Weapons/" + Icon);
     }
 
-    public Weapon()
-    {
-        this.ID = -1;
-    }
+    //public Weapon()
+    //{
+    //    this.ID = -1;
+    //}
 }

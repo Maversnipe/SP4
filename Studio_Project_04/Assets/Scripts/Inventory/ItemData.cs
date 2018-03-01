@@ -26,8 +26,12 @@ public class ItemData : MonoBehaviour , IBeginDragHandler, IDragHandler, IEndDra
     public Transform originalParent;
     private Vector2 offset;
 
-    void Start()
+    void Awake()
     {
+
+        item = null;
+        weapon = null;
+        armor = null;
         equipped = false;
         infoPanel = Inventory.Instance.GetComponent<InfoPanel>();
         equipmentInfoPanel = StatusMenu.Instance.GetComponent<EquipmentInfoPanel>();

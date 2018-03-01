@@ -38,7 +38,7 @@ public class ShopPanel : MonoBehaviour
             buyButton.GetComponent<ButtonScript>().shopItemData = data;
             infoPanel.transform.GetChild(0).GetComponent<Image>().sprite = item.Sprite;
         }
-        else if (data.weapon != null)
+        if (data.weapon != null)
         {
             this.weapon = data.weapon;
             ConstructWeaponDataString();
@@ -47,7 +47,7 @@ public class ShopPanel : MonoBehaviour
             buyButton.GetComponent<ButtonScript>().shopItemData = data;
             infoPanel.transform.GetChild(0).GetComponent<Image>().sprite = weapon.Sprite;
         }
-        else if (data.armor != null)
+        if (data.armor != null)
         {
             this.armor = data.armor;
             ConstructWeaponDataString();
@@ -75,7 +75,7 @@ public class ShopPanel : MonoBehaviour
     public void ConstructWeaponDataString()
     {
         title = weapon.Title;
-        info = weapon.Description + "\n" + "\nATK : " + weapon.Attack + "\nSTR : " + weapon.Strength + "\nVIT : " + weapon.Vitality + "\nINT : " + weapon.Intelligence + "\nDEX : " + weapon.Dexterity + "\nRarity : " + weapon.Rarity + "\nValue : " + weapon.Value;
+        info = weapon.Description + "\n" + "\nATK : " + weapon.Attack + "\nRarity : " + weapon.Rarity + "\nValue : " + weapon.Value;
         itemName.GetComponent<Text>().text = title;
         itemInfo.GetComponent<Text>().text = info;
     }
@@ -83,7 +83,7 @@ public class ShopPanel : MonoBehaviour
     public void ConstructArmorDataString()
     {
         title = armor.Title;
-        info = armor.Description + "\n" + "\nDEF : " + armor.Defence + "\nSTR : " + armor.Strength + "\nVIT : " + armor.Vitality + "\nINT : " + armor.Intelligence + "\nDEX : " + armor.Dexterity + "\nRarity : " + armor.Rarity + "\nValue : " + armor.Value;
+        info = armor.Description + "\n" + "\nDEF : " + armor.Defence + "\nRarity : " + armor.Rarity + "\nValue : " + armor.Value;
         itemName.GetComponent<Text>().text = title;
         itemName.GetComponent<Text>().text = title;
         itemInfo.GetComponent<Text>().text = info;

@@ -4,12 +4,13 @@ using UnityEngine;
 using LitJson;
 using UnityEngine.Networking;
 using System.IO;
+using System;
 
 [System.Serializable]
 public class ItemDatabase : GenericSingleton<ItemDatabase>
 {
     [SerializeField]
-    public static List<Item> itemDatabase = new List<Item>();
+    public static Item[] itemDatabase;
     private JsonData itemData;
 
     IEnumerator loadStreamingAsset(string fileName)
@@ -22,12 +23,14 @@ public class ItemDatabase : GenericSingleton<ItemDatabase>
             WWW www = new WWW(filePath);
             yield return www;
             result = www.text;
-            itemData = JsonMapper.ToObject(File.ReadAllText(result));
+            Debug.Log(result);
+            itemDatabase = JsonHelper.FromJson<Item>(result);
         }
         else
         {
             result = System.IO.File.ReadAllText(filePath);
-            itemData = JsonMapper.ToObject(result);
+            Debug.Log(result);
+            itemDatabase = JsonHelper.FromJson<Item>(result);
         }
     }
 
@@ -41,7 +44,7 @@ public class ItemDatabase : GenericSingleton<ItemDatabase>
 
     public Item FetchItemByName(string name)
     {
-        for (int i = 0; i < itemDatabase.Count; i++)
+        for (int i = 0; i < itemDatabase.Length; i++)
         {
             if (itemDatabase[i].Title == name)
             {
@@ -55,7 +58,7 @@ public class ItemDatabase : GenericSingleton<ItemDatabase>
 
     public Item FetchItemByID(int id)
     {
-        for(int i = 0; i < itemDatabase.Count; i++)
+        for(int i = 0; i < itemDatabase.Length; i++)
         {
             if (itemDatabase[i].ID == id)
             {
@@ -69,45 +72,57 @@ public class ItemDatabase : GenericSingleton<ItemDatabase>
 
     void ConstructItemDatabase()
     {
-        for(int i = 0; i < itemData.Count; i++)
+        for (int i = 0; i < itemDatabase.Length; i++)
         {
-            itemDatabase.Add(new Item((int)itemData[i]["id"], itemData[i]["title"].ToString(), (int)itemData[i]["value"], itemData[i]["type"].ToString(), itemData[i]["modifier"].ToString(), (int)itemData[i]["modifier_value"]
-                , itemData[i]["description"].ToString(), (bool)itemData[i]["stackable"], itemData[i]["rarity"].ToString(), itemData[i]["icon"].ToString()));
+            itemDatabase[i].ID = itemDatabase[i].id;
+            itemDatabase[i].Title = itemDatabase[i].title;
+            itemDatabase[i].Value = itemDatabase[i].value;
+            itemDatabase[i].Type = itemDatabase[i].type;
+            itemDatabase[i].Modifier = itemDatabase[i].modifier;
+            itemDatabase[i].ModifierValue = itemDatabase[i].modifier_value;
+            itemDatabase[i].Description = itemDatabase[i].description;
+            itemDatabase[i].Stackable = itemDatabase[i].stackable;
+            itemDatabase[i].Rarity = itemDatabase[i].rarity;
+            itemDatabase[i].Icon = itemDatabase[i].icon;
+            itemDatabase[i].Sprite = Resources.Load<Sprite>("Sprite/Items/" + itemDatabase[i].Icon);
         }
     }
 }
 
+[Serializable]
 public class Item
 {
-    public int ID { get; set; }
-    public string Title { get; set; }
-    public int Value { get; set; }
-    public string Type { get; set; }
-    public string Modifier { get; set; }
-    public int ModifierValue { get; set; }
-    public string Description { get; set; }
-    public bool Stackable { get; set; }
-    public string Rarity { get; set; }
-    public string Icon { get; set; }
-    public Sprite Sprite { get; set; }
+    public int id;
+    public string title;
+    public int value;
+    public string type;
+    public string modifier;
+    public int modifier_value;
+    public string description;
+    public bool stackable;
+    public string rarity;
+    public string icon;
 
-    public Item(int id, string title, int value, string type, string modifier, int modifierValue, string description, bool stackable, string rarity, string icon)
-    {
-        this.ID = id;
-        this.Title = title;
-        this.Value = value;
-        this.Type = type;
-        this.Modifier = modifier;
-        this.ModifierValue = modifierValue;
-        this.Description = description;
-        this.Stackable = stackable;
-        this.Rarity = rarity;
-        this.Icon = icon;
-        this.Sprite = Resources.Load<Sprite>("Sprite/Items/" + icon);
-    }
+    public int ID;
+    public string Title;
+    public int Value;
+    public string Type;
+    public string Modifier;
+    public int ModifierValue;
+    public string Description;
+    public bool Stackable;
+    public string Rarity;
+    public string Icon;
+    public Sprite Sprite;
 
     public Item()
     {
-        this.ID = -1;
+       
+        //this.Sprite = Resources.Load<Sprite>("Sprite/Items/" + icon);
     }
+
+    //public Item()
+    //{
+    //    this.ID = -1;
+    //}
 }
