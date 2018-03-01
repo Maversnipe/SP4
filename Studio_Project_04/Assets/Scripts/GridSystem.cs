@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GridSystem : GenericSingleton<GridSystem>
 {
@@ -19,7 +20,16 @@ public class GridSystem : GenericSingleton<GridSystem>
 	private float width;
 	private float height;
 
-	void Start()
+	void Update()
+	{
+		if (!SceneManager.GetActiveScene ().Equals (SceneManager.GetSceneByName ("SceneBase")))
+			return;
+		if (BattleManager.Instance.GetGameMode () == GAMEMODE.NONE)
+			MakeGrid ();
+	}
+
+	// Make Grid
+	public void MakeGrid()
 	{
 		// Create Grid based on input number of rows and columns
 		Grid = new GameObject[Rows, Columns];

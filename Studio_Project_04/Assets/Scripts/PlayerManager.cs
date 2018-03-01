@@ -23,13 +23,6 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	private bool[,] visited;
 	private List<Nodes> selectableNodes = new List<Nodes> ();
 
-	// List of unit variables
-		// This is to assign into the player when they get instantiated
-	private List<UnitVariables> listOfUnitVariables = new List<UnitVariables> ();
-
-	[SerializeField]
-	private GameObject PlayerPrefab;
-
 	// Use this for initialization
 	void Start ()
 	{
@@ -49,15 +42,7 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 		playerCount = 0;
 		// Indication ring
 		Indication = GameObject.FindGameObjectWithTag ("Indication");
-
-		for(int i = 0; i < 4; ++i)
-		{
-			//Gathers the name from the Unit Variable
-			UnitVariables Stats = PlayerPrefab.GetComponent<UnitVariables> ();
-         	//Gathers the stats from the Json File
-         	Stats.Copy(UnitDatabase.Instance.FetchUnitByName (Stats.Name));
-			listOfUnitVariables.Add (Stats);
-		}
+		DontDestroyOnLoad (Indication);
 	}
 
 	// Update Player during Player's turn
@@ -347,9 +332,6 @@ public class PlayerManager : GenericSingleton<PlayerManager> {
 	// Set & Get Player Count
 	public int GetPlayerCount() {return playerCount;}
 	public void SetPlayerCount(int _count) {playerCount = _count;}
-
-	// Get List Of Unit Variables
-	public List<UnitVariables> GetListVariables() {return listOfUnitVariables;}
 
 	// BFS for unit
 	public void FindSelectableTiles()

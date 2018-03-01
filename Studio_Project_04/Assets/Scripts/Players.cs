@@ -38,7 +38,7 @@ public class Players : MonoBehaviour
 //		//Gathers the name from the Unit Variable
 		Stats = this.gameObject.GetComponent<UnitVariables> ();
 //		//Gathers the stats from the Json File
-		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (PlayerManager.Instance.GetListVariables ()[PlayerManager.Instance.GetPlayerCount ()].Name));
+		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (PlayerUnitVariables.Instance.GetListVariables ()[PlayerManager.Instance.GetPlayerCount ()].Name));
 		// Code Optimising - Get Renderer Component once only
 		rend = GetComponent<Renderer> ();
 		DefaultColor = rend.material.color;
@@ -79,7 +79,6 @@ public class Players : MonoBehaviour
 			{ // If have, then render the normal color for attack button
 				// Set Text for Attack Button
 				GameObject attButton = GameObject.FindGameObjectWithTag ("AttackButton");
-				Debug.Log (attButton);
 				attButton.transform.GetChild(0).gameObject.GetComponentInChildren <Text> ().text = "Attack\n" + PlayerManager.Instance.GetSelectedUnit ().GetStats ()._weapon.AP + " AP";
 				attButton.transform.GetChild (0).gameObject.SetActive (true);
 
@@ -91,7 +90,6 @@ public class Players : MonoBehaviour
 			{ // Else, then render the not selectable color for attack button
 				// Set Text for Attack Button
 				GameObject attButton = GameObject.FindGameObjectWithTag ("AttackButtonNotSelectable");
-				Debug.Log (attButton);
 				attButton.transform.GetChild(0).gameObject.GetComponentInChildren <Text> ().text = "Attack\n" + PlayerManager.Instance.GetSelectedUnit ().GetStats ()._weapon.AP + " AP";
 				attButton.transform.GetChild (0).gameObject.SetActive (true);
 
@@ -239,7 +237,6 @@ public class Players : MonoBehaviour
 		if (nextNode)
 		{
 			currNode.SetOccupiedNULL();
-			//Debug.Log ("Before Move -> X: " + currNode.GetXIndex() + " Z: " + currNode.GetZIndex() + " Name: " + currNode.GetOccupied().name);
 			currNode = nextNode;
 			// Set curr node as occupied by this unit
 			currNode.SetOccupied (this.gameObject);

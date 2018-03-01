@@ -18,7 +18,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 	void Start()
 	{
-		StartBattle ();
 	}
 
 	private bool loadedDefeat = false;
@@ -28,7 +27,6 @@ public class TurnManager : GenericSingleton<TurnManager> {
 	{
 		BattleManager.Instance.SetGameMode ();
 		GameObject[] ArrayOfPlayers = GameObject.FindGameObjectsWithTag ("PlayerUnit");
-		Debug.Log(ArrayOfPlayers.Count ());
 		// Set the game mode
 		listOfAIUnits = FindObjectsOfType<AI> ();
 
@@ -57,21 +55,48 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 	// Update is called once per frame
 	void Update () {
-		if (BattleManager.Instance.GetGameMode () == GAMEMODE.NONE)
+		if (!SceneManager.GetActiveScene ().Equals (SceneManager.GetSceneByName ("SceneBase")))
 			return;
-		if(Input.GetKey("q"))
+		
+		if (BattleManager.Instance.GetGameMode () == GAMEMODE.NONE)
 		{
-			BattleManager.Instance.SetGameMode (GAMEMODE.NONE);
-			PlayerManager.Instance.SetPlayerCount (0);
-			SceneManager.LoadScene ("SceneDefeated");
+			// Start Battle if in this scene
+			StartBattle ();
 		}
+
 		// Get all players into an array - if empty, load defeat scene
 		GameObject[] ArrayOfPlayers = GameObject.FindGameObjectsWithTag ("PlayerUnit");
 		if (!loadedDefeat && ArrayOfPlayers.Length <= 0) {
+			// Set GameMode to None
 			BattleManager.Instance.SetGameMode (GAMEMODE.NONE);
+			// Set player's count to 0
 			PlayerManager.Instance.SetPlayerCount (0);
+			// Set to scene defeated
 			SceneManager.LoadScene ("SceneDefeated");
 			loadedDefeat = true;
+		}
+
+		// For Debug Purposes
+		if(Input.GetKey("q"))
+		{
+			// Set GameMode to None
+			BattleManager.Instance.SetGameMode (GAMEMODE.NONE);
+			// Set player's count to 0
+			PlayerManager.Instance.SetPlayerCount (0);
+			// Set to scene defeated
+			SceneManager.LoadScene ("SceneDefeated");
+		}
+		// For Debug purposes
+		if(Input.GetKey("e"))
+		{
+			// Set GameMode to None
+			BattleManager.Instance.SetGameMode (GAMEMODE.NONE);
+			// Set player's count to 0
+			PlayerManager.Instance.SetPlayerCount (0);
+			// Set next quest
+			PlayerManager.Instance.SetCurrQuest (PlayerManager.Instance.GetCurrQuest () + 1);
+			// Set to scene cleared
+			SceneManager.LoadScene ("SceneCleared");
 		}
 
 		// Enter Player Update only if it is Player's turn

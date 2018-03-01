@@ -44,7 +44,6 @@ public class BattleManager : GenericSingleton<BattleManager>
 
 	// Update is called once per frame
 	void Update () {
-		Debug.Log ("Gamemode: " + game_mode);
 		switch(game_mode)
 		{
 			case GAMEMODE.NONE:
@@ -55,8 +54,13 @@ public class BattleManager : GenericSingleton<BattleManager>
 				if (numOfEnemies <= 0)
 				{
 					// Game Win
+					// Set GameMode to None
+					game_mode = GAMEMODE.NONE;
+					// Set player's count to 0
 					PlayerManager.Instance.SetPlayerCount (0);
+					// Set next quest
 					PlayerManager.Instance.SetCurrQuest (PlayerManager.Instance.GetCurrQuest () + 1);
+					// Set to scene cleared
 					SceneManager.LoadScene ("SceneCleared");
 				}
 				// Set the text for BattleInfo
@@ -67,15 +71,24 @@ public class BattleManager : GenericSingleton<BattleManager>
 				if (numOfTurns <= 0)
 				{
 					// Game Win
+					// Set GameMode to None
+					game_mode = GAMEMODE.NONE;
+					// Set player's count to 0
 					PlayerManager.Instance.SetPlayerCount (0);
+					// Set next quest
 					PlayerManager.Instance.SetCurrQuest (PlayerManager.Instance.GetCurrQuest () + 1);
+					// Set to scene cleared
 					SceneManager.LoadScene ("SceneCleared");
 				}
 				AI AIProtect = GameObject.FindGameObjectWithTag ("aiProtect").GetComponent <AI>();
 				if(AIProtect && AIProtect.GetStats ().HP <= 0)
 				{
 					// Gameover
+					// Set GameMode to None
+					BattleManager.Instance.SetGameMode (GAMEMODE.NONE);
+					// Set player's count to 0
 					PlayerManager.Instance.SetPlayerCount (0);
+					// Set to scene defeated
 					SceneManager.LoadScene ("SceneDefeated");
 				}
 				// Set the text for BattleInfo

@@ -17,6 +17,9 @@ public class Spawner : MonoBehaviour {
 	[SerializeField]
 	private GameObject PrefabPlayer;
 
+	[SerializeField]
+	private GameObject PrefabIndication;
+
 	// Spawn Enemies
 	public void SpawnEnemies()
 	{
