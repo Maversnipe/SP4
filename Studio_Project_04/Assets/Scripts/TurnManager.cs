@@ -54,12 +54,16 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 	// Update is called once per frame
 	void Update () {
-
+		if(Input.GetKey("q"))
+		{
+			PlayerManager.Instance.SetCurrQuest (1);
+			SceneManager.LoadScene ("SceneCleared");
+		}
 		// Get all players into an array - if empty, load defeat scene
 		GameObject[] ArrayOfPlayers = GameObject.FindGameObjectsWithTag ("PlayerUnit");
 		if (!loadedDefeat && ArrayOfPlayers.Length <= 0) {
 			PlayerManager.Instance.SetPlayerCount (0);
-			SceneManager.LoadScene ("SceneDefeated");
+			SceneManager.LoadScene ("SceneCleared");
 			loadedDefeat = true;
 		}
 

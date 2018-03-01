@@ -54,6 +54,7 @@
      <Compile Include="Assets\Scripts\Compiled Stuff\UnitVariables.cs" />
      <Compile Include="Assets\Scripts\Databases\ArmorDatabase.cs" />
      <Compile Include="Assets\Scripts\Databases\ItemDatabase.cs" />
+     <Compile Include="Assets\Scripts\Databases\JsonHelper.cs" />
      <Compile Include="Assets\Scripts\Databases\UnitDatabase.cs" />
      <Compile Include="Assets\Scripts\Databases\WeaponDatabase.cs" />
      <Compile Include="Assets\Scripts\EnemyUpdate.cs" />

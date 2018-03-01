@@ -73,7 +73,7 @@ public class BattleManager : GenericSingleton<BattleManager>
 					SceneManager.LoadScene ("SceneCleared");
 				}
 				AI AIProtect = GameObject.FindGameObjectWithTag ("aiProtect").GetComponent <AI>();
-				if(AIProtect.GetStats ().HP <= 0)
+				if(AIProtect && AIProtect.GetStats ().HP <= 0)
 				{
 					// Gameover
 					PlayerManager.Instance.SetPlayerCount (0);
