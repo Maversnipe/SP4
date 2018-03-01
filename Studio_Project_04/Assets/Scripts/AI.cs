@@ -62,7 +62,11 @@ public class AI : MonoBehaviour {
 		++AICount;
 
 		// Set the AI starting Position & occupies the current node
-		currNode = GridSystem.Instance.GetNode(Random.Range(0,GridSystem.Instance.GetRows()),Random.Range(0,GridSystem.Instance.GetColumn()));
+		if (this.tag == "aiProtect") {
+			currNode = GridSystem.Instance.GetNode (Random.Range (0, 9), Random.Range (0, 9));
+		} else {
+			currNode = GridSystem.Instance.GetNode(Random.Range(0,GridSystem.Instance.GetRows()),Random.Range(0,GridSystem.Instance.GetColumn()));
+		}
 		//currNode = GridSystem.Instance.GetNode(0,0);
 		currNode.SetOccupied (this.gameObject);
 		this.transform.position = currNode.transform.position;
@@ -267,13 +271,16 @@ public class AI : MonoBehaviour {
 
 			for (int x = 0; x < GridRef.GetRows (); ++x) {
 				for (int z = 0; z < GridRef.GetColumn (); ++z) {
-					if (GridRef.GetNode (x, z).GetOccupied () != null && GridRef.GetNode (x, z).GetOccupied ().tag == "PlayerUnit") {
-						if (Temp != null) { // Temp Magnitude is more than current grid magnitude, change Temp altogether
-							if ((Temp.GetOccupied ().transform.position - currNode.transform.position).magnitude > (GridRef.GetNode (x, z).GetOccupied ().transform.position - currNode.transform.position).magnitude) {
+					//Null Check
+					if (GridRef.GetNode (x, z).GetOccupied () != null && GridRef.GetNode(x,z).GetOccupied().activeInHierarchy == true) {
+						if (GridRef.GetNode (x, z).GetOccupied ().tag == "PlayerUnit" || GridRef.GetNode (x, z).GetOccupied ().tag == "aiProtect") {
+							if (Temp != null) {
+								if ((this.transform.position - Temp.GetOccupied ().transform.position).magnitude > (this.transform.position - GridRef.GetNode (x, z).GetOccupied ().transform.position).magnitude) {
+									Temp = GridRef.GetNode (x, z);
+								}
+							} else {
 								Temp = GridRef.GetNode (x, z);
 							}
-						} else { // Sets the first reference of Temp
-							Temp = GridRef.GetNode (x, z);
 						}
 					}
 				}
@@ -319,8 +326,11 @@ public class AI : MonoBehaviour {
 					EnemyTarget.GetOccupied ().GetComponent<Players> ().SetStats (Temp);
 					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateHealthBar ();
 					EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().UpdateUnitInfo ();
-					if (EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP <= 0)
+					if (EnemyTarget.GetOccupied ().GetComponent<UnitVariables> ().HP <= 0) {
 						EnemyTarget = null;
+
+						return;
+					}
 				}
 				this.Stats.AP--;
 			}
@@ -411,6 +421,8 @@ public class AI : MonoBehaviour {
 				currNode.SetOccupiedNULL ();
 				currNode = TempMove;
 				currNode.SetOccupied (this.gameObject);
+
+				this.Stats.AP--;
 			}
 		}
 	}
@@ -456,12 +468,8 @@ public class AI : MonoBehaviour {
 		Nodes Temp = m_start;
 		int AP_Ref = Stats.AP;
 
-		bool Up,
-		Down,
-		Left,
-		Right;
-
 		while (!m_path.Contains (m_end) && AP_Ref > 0) {
+
 			float UpMag = (Temp.transform.position - m_end.transform.position).magnitude,
 			DownMag = (Temp.transform.position - m_end.transform.position).magnitude,
 			LeftMag = (Temp.transform.position - m_end.transform.position).magnitude,
@@ -552,34 +560,51 @@ public class AI : MonoBehaviour {
 		m_path.Enqueue (m_start);
 		Nodes Temp = m_start;
 		int AP_Ref = Stats.AP;
+		Nodes Prev = null;
+
+		List<Nodes> m_visited = new List<Nodes> ();
 
 		while (AP_Ref > 0) {
+			Prev = Temp;
 			int Rand = Random.Range (1, 5);
 
 			switch (Rand)
 			{
 			case(1):
-				Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () + 1);
+				if (Temp.GetZIndex () + 1 != GridRef.GetColumn () - 1) {
+					Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () + 1);
+				}
 				break;
 
 			case(2):
-				Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () - 1);
+				if (Temp.GetZIndex () + 1 != 0) {
+					Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () - 1);
+				}
 				break;
 
 			case(3):
-				Temp = GridRef.GetNode (Temp.GetXIndex () + 1, Temp.GetZIndex ());
+				if (Temp.GetXIndex () + 1 != GridRef.GetRows () - 1) {
+					Temp = GridRef.GetNode (Temp.GetXIndex () + 1, Temp.GetZIndex ());
+				}
 				break;
 
 			case(4):
-				Temp = GridRef.GetNode (Temp.GetXIndex () - 1, Temp.GetZIndex ());
+				if (Temp.GetXIndex () + 1 != 0) {
+					Temp = GridRef.GetNode (Temp.GetXIndex () - 1, Temp.GetZIndex ());
+				}
 				break;
 			}
 
-			if (!m_path.Contains (Temp)) {
-				Temp.ChangeColour ();
-				m_path.Enqueue (Temp);
-				AP_Ref--;
+			if (Temp.GetOccupied () != null || m_visited.Contains(Temp)) {
+				Temp = Prev;
+				continue;
 			}
+
+			Temp.SetSelectable (true);
+			Temp.ChangeColour ();
+			m_path.Enqueue (Temp);
+			m_visited.Add(Temp);
+			AP_Ref--;
 		}
 	}
 
