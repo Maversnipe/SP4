@@ -9,7 +9,7 @@ public class PlayerUnitVariables : GenericSingleton<PlayerUnitVariables> {
 
 	// List of player's unit variables
 		// This is to assign into the player when they get instantiated
-	private List<UnitVariables> ListOfUnitVariables = new List<UnitVariables> () ;
+	public List<UnitVariables> ListOfUnitVariables = new List<UnitVariables> () ;
 
 	// Use this for initialization
 	void Start () {
@@ -24,6 +24,6 @@ public class PlayerUnitVariables : GenericSingleton<PlayerUnitVariables> {
 		}
 	}
 
-	// Get List Of Unit Variables
-	public List<UnitVariables> GetListVariables() {return ListOfUnitVariables;}
+    // Get List Of Unit Variables
+    public List<UnitVariables> GetListVariables() {return ListOfUnitVariables;}
 }

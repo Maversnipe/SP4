@@ -97,6 +97,7 @@
     <Compile Include="Assets\Scripts\Inventory\Inventory.cs" />
     <Compile Include="Assets\Scripts\Inventory\ItemData.cs" />
     <Compile Include="Assets\Scripts\Inventory\Slot.cs" />
+    <Compile Include="Assets\Scripts\Inventory\StorageScript.cs" />
     <Compile Include="Assets\Scripts\ItemScripts\ConsumableItem.cs" />
     <Compile Include="Assets\Scripts\ItemScripts\UnitPanelScript.cs" />
     <Compile Include="Assets\Scripts\ItemScripts\UnitSelectScript.cs" />
@@ -106,7 +107,9 @@
     <Compile Include="Assets\Scripts\Nodes.cs" />
     <Compile Include="Assets\Scripts\OpenControl.cs" />
     <Compile Include="Assets\Scripts\PlayerManager.cs" />
+    <Compile Include="Assets\Scripts\PlayerUnitVariables.cs" />
     <Compile Include="Assets\Scripts\Players.cs" />
+    <Compile Include="Assets\Scripts\SceneStart.cs" />
     <Compile Include="Assets\Scripts\Shop\BuyScript.cs" />
     <Compile Include="Assets\Scripts\Shop\SellScript.cs" />
     <Compile Include="Assets\Scripts\Shop\Shop.cs" />

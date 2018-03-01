@@ -8,7 +8,7 @@ using UnityEngine.EventSystems;
 public class StatusMenu : GenericSingleton<StatusMenu>, IDragHandler
 {
 
-    public GameObject[] players;
+    public List<UnitVariables> players;
 
     public int currPlayerUnit;
 
@@ -24,7 +24,7 @@ public class StatusMenu : GenericSingleton<StatusMenu>, IDragHandler
     {
         currPlayerUnit = 0;
 
-        players = GameObject.FindGameObjectsWithTag("PlayerUnit");
+        players = PlayerUnitVariables.Instance.ListOfUnitVariables;
         equipmentPanel = GameObject.Find("Equipment Slot Panel " + currPlayerUnit);
 
         for (int i = 0; i < 4; i++)
@@ -35,7 +35,8 @@ public class StatusMenu : GenericSingleton<StatusMenu>, IDragHandler
     }
     void Update()
     {
-        for (int i = 0; i < players.Length; i++)
+        players = PlayerUnitVariables.Instance.ListOfUnitVariables;
+        for (int i = 0; i < players.Count; i++)
         {
             this.transform.Find("Unit Panel").Find("Unit Slot " + i).GetComponent<UnitSlot>().unitNo = i;
         }
@@ -48,28 +49,27 @@ public class StatusMenu : GenericSingleton<StatusMenu>, IDragHandler
         this.transform.Find("Equipment Slot Panel " + currPlayerUnit).gameObject.SetActive(true);
         this.transform.Find("Equipment Slot Panel " + currPlayerUnit).SetAsLastSibling();
 
-        this.transform.Find("Status Panel").GetChild(0).GetComponent<Text>().text = "\nHP : " + players[currPlayerUnit].GetComponent<UnitVariables>().HP.ToString() + " / " + players[currPlayerUnit].GetComponent<UnitVariables>().startAP.ToString() + "\nAP : " + players[currPlayerUnit].GetComponent<UnitVariables>().AP.ToString()
-                                                                                    + "\nInitiative : " + players[currPlayerUnit].GetComponent<UnitVariables>().Initiative.ToString();
+        this.transform.Find("Status Panel").GetChild(0).GetComponent<Text>().text = "\nHP : " + players[currPlayerUnit].HP.ToString() + "\nAP : " + players[currPlayerUnit].GetComponent<UnitVariables>().AP.ToString()
+                                                                                    + "\nInitiative : " + players[currPlayerUnit].Initiative.ToString();
 
         this.transform.Find("Unit Name").GetChild(0).GetComponent<Text>().text = players[currPlayerUnit].name;
 
         if(this.transform.Find("Equipment Slot Panel " + currPlayerUnit).Find("Weapon Slot").childCount > 0)
         {
-            players[currPlayerUnit].GetComponent<UnitVariables>()._weapon = this.transform.Find("Equipment Slot Panel " + currPlayerUnit).Find("Weapon Slot").GetChild(0).GetComponent<ItemData>().weapon;
+            players[currPlayerUnit]._weapon = this.transform.Find("Equipment Slot Panel " + currPlayerUnit).Find("Weapon Slot").GetChild(0).GetComponent<ItemData>().weapon;
         }
         else
         {
-            players[currPlayerUnit].GetComponent<UnitVariables>()._weapon = null;
+            players[currPlayerUnit]._weapon = null;
         }
         if (this.transform.Find("Equipment Slot Panel " + currPlayerUnit).Find("Armor Slot").childCount > 0)
         {
-            players[currPlayerUnit].GetComponent<UnitVariables>()._armor = this.transform.Find("Equipment Slot Panel " + currPlayerUnit).Find("Armor Slot").GetChild(0).GetComponent<ItemData>().armor;
+            players[currPlayerUnit]._armor = this.transform.Find("Equipment Slot Panel " + currPlayerUnit).Find("Armor Slot").GetChild(0).GetComponent<ItemData>().armor;
         }
         else
         {
-            players[currPlayerUnit].GetComponent<UnitVariables>()._armor = null;
+            players[currPlayerUnit]._armor = null;
         }
-        players[currPlayerUnit].GetComponent<UnitVariables>().UpdateUnitInfo(); 
     }
 
     public void OnDrag(PointerEventData eventData)

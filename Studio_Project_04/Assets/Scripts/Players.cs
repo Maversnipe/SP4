@@ -33,32 +33,32 @@ public class Players : MonoBehaviour
 	// Player's path
 	private Stack<Nodes> path;
 
-	void Awake ()
-	{
-//		//Gathers the name from the Unit Variable
-		Stats = this.gameObject.GetComponent<UnitVariables> ();
-//		//Gathers the stats from the Json File
-		Stats.Copy(UnitDatabase.Instance.FetchUnitByName (PlayerUnitVariables.Instance.GetListVariables ()[PlayerManager.Instance.GetPlayerCount ()].Name));
-		// Code Optimising - Get Renderer Component once only
-		rend = GetComponent<Renderer> ();
-		DefaultColor = rend.material.color;
-		// Code Optimising - Get UnitManager instance once only
-		turnManager = TurnManager.Instance;
-		// Set a random initial position for unit
-		currNode = GridSystem.Instance.GetNode (Random.Range(0, 9), Random.Range(0, 9));
-		currNode.SetOccupied (this.gameObject);
-		transform.position = new Vector3 (currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
+    void Awake()
+    {
+        //		//Gathers the name from the Unit Variable
+        Stats = this.gameObject.GetComponent<UnitVariables>();
+        //		//Gathers the stats from the Json File
+        Stats.Copy(UnitDatabase.Instance.FetchUnitByName(PlayerUnitVariables.Instance.GetListVariables()[PlayerManager.Instance.GetPlayerCount()].Name));
+        // Code Optimising - Get Renderer Component once only
+        rend = GetComponent<Renderer>();
+        DefaultColor = rend.material.color;
+        // Code Optimising - Get UnitManager instance once only
+        turnManager = TurnManager.Instance;
+        // Set a random initial position for unit
+        currNode = GridSystem.Instance.GetNode(Random.Range(0, 9), Random.Range(0, 9));
+        currNode.SetOccupied(this.gameObject);
+        transform.position = new Vector3(currNode.transform.position.x, transform.position.y, currNode.transform.position.z);
 
-		// Set Unit's ID
-		ID = PlayerManager.Instance.GetPlayerCount ();
-		PlayerManager.Instance.SetPlayerCount (PlayerManager.Instance.GetPlayerCount () + 1);
+        // Set Unit's ID
+        ID = PlayerManager.Instance.GetPlayerCount();
+        PlayerManager.Instance.SetPlayerCount(PlayerManager.Instance.GetPlayerCount() + 1);
 
-		// Init the path
-		path = new Stack<Nodes>();
-	}
+        // Init the path
+        path = new Stack<Nodes>();
+    }
 
-	// Run only when Mouse click onto the unit
-	void OnMouseDown()
+    // Run only when Mouse click onto the unit
+    void OnMouseDown()
 	{
 		// Return if player is blocked by UI elements
 		if (EventSystem.current.IsPointerOverGameObject ())
@@ -135,18 +135,20 @@ public class Players : MonoBehaviour
 
 	void Update()
 	{
-		// Kill player if hp reach 0
-		if (this.Stats.HP <= 0)
+        // Kill player if hp reach 0
+        if (this.Stats.HP <= 0)
 		{
 			PlayerManager.Instance.SetPlayerCount (PlayerManager.Instance.GetPlayerCount () - 1);
 			Destroy (this.gameObject);
 		}
-		
+
 		this.gameObject.GetComponent<UnitVariables> ().Copy (Stats);
 		// Update Unit Info Window
 		this.gameObject.GetComponent<UnitVariables> ().UpdateUnitInfo ();
 
-		if (!turnManager.IsPlayerTurn ())
+        PlayerUnitVariables.Instance.ListOfUnitVariables[this.ID] = this.gameObject.GetComponent<UnitVariables>();
+
+        if (!turnManager.IsPlayerTurn ())
 			return;
 
         // Move the unit to clicked Node position

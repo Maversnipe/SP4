@@ -43,7 +43,7 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
         buyConfirmDialog.SetActive(false);
         slotAmount = 20;
         emptySlots = slotAmount;
-        inventoryPanel = GameObject.Find("Inventory");
+        inventoryPanel = GameObject.FindWithTag("Inventory");
         slotPanel = inventoryPanel.transform.Find("Slot Panel").gameObject;
 
         for (int i = 0; i < slotAmount; i++)
@@ -54,21 +54,40 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
             slots[i].transform.SetParent(slotPanel.transform, false);
         }
 
-        gold += 99999;
+        gold = StorageScript.Instance.s_gold;
 
-        AddItem(0, 3);
-        AddWeapon(0, 1);
-        AddArmor(1, 1);
+
+        for (int i = 0; i < StorageScript.Instance.s_items.Count; i++)
+        {
+            if (!StorageScript.Instance.s_items[i].isEmpty)
+            {
+                if (StorageScript.Instance.s_items[i].itemType == "Item")
+                {
+                    AddItem(StorageScript.Instance.s_items[i].item.ID, 1);
+                }
+                if (StorageScript.Instance.s_items[i].itemType == "Weapon")
+                {
+                    AddWeapon(StorageScript.Instance.s_items[i].weapon.ID, 1);
+                }
+                if (StorageScript.Instance.s_items[i].itemType == "Armor")
+                {
+                    AddArmor(StorageScript.Instance.s_items[i].armor.ID, 1);
+                }
+            }
+        }
 
     }
 
     void Update()
     {
+        StorageScript.Instance.s_gold = this.gold;
+        StorageScript.Instance.s_items = this.items;
+
         int no = 0;
 
         for (int i = 0; i < items.Count; i++)
         {
-            if(items[i].isEmpty)
+            if (items[i].isEmpty)
             {
                 no++;
             }
@@ -114,7 +133,7 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
                     itemObj.GetComponent<Image>().sprite = itemToAdd.Sprite;
                     itemObj.name = itemToAdd.Title;
                     ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
-                    if(itemToAdd.Stackable)
+                    if (itemToAdd.Stackable)
                     {
                         data.amount += no;
                         data.transform.GetChild(0).GetComponent<Text>().text = data.amount.ToString();
@@ -172,7 +191,7 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
             }
         }
 
-        if(removeItem)
+        if (removeItem)
         {
             if (checkForItem(itemToRemove))
             {
@@ -252,7 +271,7 @@ public class Inventory : GenericSingleton<Inventory>, IDragHandler
                     if (items[i].weapon.ID == id)
                     {
                         ItemData data = slots[i].transform.GetChild(0).GetComponent<ItemData>();
-                        if((data.amount - no) <= 0)
+                        if ((data.amount - no) <= 0)
                         {
                             removeItem = true;
                             break;

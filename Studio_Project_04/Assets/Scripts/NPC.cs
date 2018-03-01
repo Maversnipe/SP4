@@ -9,6 +9,9 @@ public class NPC : MonoBehaviour {
 	[SerializeField]
 	private string[] Dialogue = null;
 
+    [SerializeField]
+    private bool isShop;
+
 	private bool Interacted;
 
 	private Camera CameraRef;
@@ -18,6 +21,8 @@ public class NPC : MonoBehaviour {
 	private Rect windowRect = new Rect(150, 150, 200, 200);
 
 	private bool Seen = false;
+
+    private GameObject shop;
 
 	// All the variables needed to allow basic patrolling Movement
 	[SerializeField]
@@ -40,7 +45,7 @@ public class NPC : MonoBehaviour {
 		if (Waypoints.Length != 0) {
 			TargetMovement = Waypoints [0].transform.position;
 		}
-
+        shop = GameObject.Find("Shop");
 		isMoving = true;
 	}
 	
@@ -106,6 +111,10 @@ public class NPC : MonoBehaviour {
 						FindObjectOfType<OpenControl> ().setAbleToMove (true);
 						TextToShow = Dialogue [0];
 						isMoving = true;
+                        if(isShop)
+                        {
+                            shop.SetActive(true);
+                        }
 					} else { // Seen is needed to ensure the code doesn't blitz past to the end
 						int temp = i + 1;
 						TextToShow = Dialogue [temp];
