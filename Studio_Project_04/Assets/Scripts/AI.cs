@@ -468,6 +468,8 @@ public class AI : MonoBehaviour {
 		Nodes Temp = m_start;
 		int AP_Ref = Stats.AP;
 
+		List<float> DirValues = new List<float> ();
+
 		while (!m_path.Contains (m_end) && AP_Ref > 0) {
 
 			float UpMag = (Temp.transform.position - m_end.transform.position).magnitude,
@@ -477,18 +479,37 @@ public class AI : MonoBehaviour {
 			Closest;
 
 			if (Temp.GetZIndex () != GridRef.GetColumn () - 1) {
-				UpMag = (GridRef.GetNode(Temp.GetXIndex(), Temp.GetZIndex() + 1).transform.position - m_end.transform.position).magnitude;
+				if(GridRef.GetNode(Temp.GetXIndex(), Temp.GetZIndex() + 1).GetOccupied() == null)
+				{
+					UpMag = (GridRef.GetNode(Temp.GetXIndex(), Temp.GetZIndex() + 1).transform.position - m_end.transform.position).magnitude;
+
+					DirValues.Add (UpMag);
+				}
 			}
 			if (Temp.GetZIndex () != 0) {
-				DownMag = (GridRef.GetNode(Temp.GetXIndex(), Temp.GetZIndex() - 1).transform.position - m_end.transform.position).magnitude;
+				if (GridRef.GetNode(Temp.GetXIndex(), Temp.GetZIndex() - 1).GetOccupied() == null)
+				{
+					DownMag = (GridRef.GetNode(Temp.GetXIndex(), Temp.GetZIndex() - 1).transform.position - m_end.transform.position).magnitude;
+
+					DirValues.Add (DownMag);
+				}
 			}
 			if (Temp.GetXIndex () != GridRef.GetRows () - 1) {
-				LeftMag = (GridRef.GetNode(Temp.GetXIndex() + 1, Temp.GetZIndex()).transform.position - m_end.transform.position).magnitude;
+				if (GridRef.GetNode (Temp.GetXIndex () + 1, Temp.GetZIndex ()).GetOccupied () == null) {
+					LeftMag = (GridRef.GetNode(Temp.GetXIndex() + 1, Temp.GetZIndex()).transform.position - m_end.transform.position).magnitude;
+
+					DirValues.Add (LeftMag);
+				}
 			}
 			if (Temp.GetXIndex () != 0) {
-				RightMag = (GridRef.GetNode(Temp.GetXIndex() - 1, Temp.GetZIndex()).transform.position - m_end.transform.position).magnitude;
+				if (GridRef.GetNode (Temp.GetXIndex () - 1, Temp.GetZIndex ()).GetOccupied () == null) {
+					RightMag = (GridRef.GetNode(Temp.GetXIndex() - 1, Temp.GetZIndex()).transform.position - m_end.transform.position).magnitude;
+
+					DirValues.Add (RightMag);
+				}
 			}
-			Closest = Mathf.Min (UpMag, DownMag, LeftMag, RightMag);
+
+			Closest = Mathf.Min (DirValues.ToArray());
 
 			if (Closest == UpMag) {
 				Temp = GridRef.GetNode (Temp.GetXIndex (), Temp.GetZIndex () + 1);
