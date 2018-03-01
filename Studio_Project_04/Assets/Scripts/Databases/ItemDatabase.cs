@@ -16,7 +16,6 @@ public class ItemDatabase : GenericSingleton<ItemDatabase>
     IEnumerator loadStreamingAsset(string fileName)
     {
         string filePath = System.IO.Path.Combine(Application.streamingAssetsPath, fileName);
-
         string result;
         if (filePath.Contains("://") || filePath.Contains(":///"))
         {
