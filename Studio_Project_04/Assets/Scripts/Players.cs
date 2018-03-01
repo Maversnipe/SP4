@@ -36,7 +36,7 @@ public class Players : MonoBehaviour
 	// Player's AP amount in the current turn
 	public int turnAP;
 
-	void Awake ()
+	void Start ()
 	{
 		//Gathers the name from the Unit Variable
 		Stats = this.gameObject.GetComponent<UnitVariables> ();
