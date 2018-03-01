@@ -48,7 +48,7 @@ public class StatusMenu : GenericSingleton<StatusMenu>, IDragHandler
         this.transform.Find("Equipment Slot Panel " + currPlayerUnit).gameObject.SetActive(true);
         this.transform.Find("Equipment Slot Panel " + currPlayerUnit).SetAsLastSibling();
 
-        this.transform.Find("Status Panel").GetChild(0).GetComponent<Text>().text = "\nHP : " + players[currPlayerUnit].GetComponent<UnitVariables>().HP.ToString() + " / " + players[currPlayerUnit].GetComponent<UnitVariables>().startHp.ToString() + "\nAP : " + players[currPlayerUnit].GetComponent<UnitVariables>().AP.ToString()
+        this.transform.Find("Status Panel").GetChild(0).GetComponent<Text>().text = "\nHP : " + players[currPlayerUnit].GetComponent<UnitVariables>().HP.ToString() + " / " + players[currPlayerUnit].GetComponent<UnitVariables>().startAP.ToString() + "\nAP : " + players[currPlayerUnit].GetComponent<UnitVariables>().AP.ToString()
                                                                                     + "\nInitiative : " + players[currPlayerUnit].GetComponent<UnitVariables>().Initiative.ToString();
 
         this.transform.Find("Unit Name").GetChild(0).GetComponent<Text>().text = players[currPlayerUnit].name;

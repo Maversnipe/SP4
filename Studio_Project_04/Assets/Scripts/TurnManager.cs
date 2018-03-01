@@ -86,9 +86,8 @@ public class TurnManager : GenericSingleton<TurnManager> {
 		for(int i = 0; i < ArrayOfPlayers.Count (); ++i)
 		{
 			Players thePlayer = ArrayOfPlayers [i].GetComponent <Players> ();
-			Debug.Log (thePlayer.GetStats());
 			// Set each of Player's unit's AP at start of player's turn
-			thePlayer.SetAP (thePlayer.GetStats ().startAP); 
+			thePlayer.GetStats().AP = thePlayer.GetStats ().startAP; 
 		}
 
 		// Set Camera position to be the last player unit's position
@@ -268,7 +267,7 @@ public class TurnManager : GenericSingleton<TurnManager> {
 
 		// Decrease AP from plater required to carry out the attack
 		if (attacker.GetComponent<Players> () != null)
-			attacker.GetComponent<Players> ().turnAP -= weapon.AP;
+			attacker.GetComponent<Players> ().GetStats ().AP -= weapon.AP;
 
 		return damageDeal;
 	}

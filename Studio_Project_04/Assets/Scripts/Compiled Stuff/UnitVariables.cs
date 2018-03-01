@@ -18,7 +18,7 @@ public class UnitVariables : MonoBehaviour {
 
 	[SerializeField]
 	private Image healthbar;
-	public int startHp;
+	public int startHP;
 
 	[SerializeField]
 	private GameObject UnitInfoObject;
@@ -49,7 +49,7 @@ public class UnitVariables : MonoBehaviour {
 		this._weapon = WeaponDatabase.Instance.FetchWeaponByName (weapon);
 		this._armor = ArmorDatabase.Instance.FetchArmorByName (armor);
 
-		this.startHp = this.HP;
+		this.startHP = this.HP;
 		this.startAP = this.AP;
 	}
 
@@ -63,7 +63,7 @@ public class UnitVariables : MonoBehaviour {
 		this._weapon = RealStats._weapon;
 		this._armor = RealStats._armor;
 
-		this.startHp = RealStats.startHp;
+		this.startHP = RealStats.startHP;
 		this.startAP = RealStats.startAP;
 	}
 
@@ -71,7 +71,7 @@ public class UnitVariables : MonoBehaviour {
 	public void UpdateHealthBar()
 	{
 		// Calculation of health percentage
-		healthbar.fillAmount = ((float)this.HP / (float)this.startHp);
+		healthbar.fillAmount = ((float)this.HP / (float)this.startHP);
 	}
 
 	// Update Unit Info Window for all units - Active status
