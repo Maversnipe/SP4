@@ -1,28 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-<<<<<<< HEAD
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\PlayerManager.cs">
-    <Files>
-      <File FileName="Assets\Scripts\CameraControl.cs" Line="34" Column="27" />
-      <File FileName="Assets\Scripts\PlayerManager.cs" Line="48" Column="34" />
-      <File FileName="Assets\Scripts\Players.cs" Line="109" Column="45" />
-    </Files>
-  </MonoDevelop.Ide.Workbench>
-=======
-<<<<<<< HEAD
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\AI.cs">
     <Files>
-      <File FileName="Assets\Scripts\BattleManager.cs" Line="76" Column="38" />
-      <File FileName="Assets\Scripts\BackToMenu.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\AI.cs" Line="485" Column="54" />
-      <File FileName="Assets\Scripts\Spawner.cs" Line="27" Column="83" />
-      <File FileName="Assets\Scripts\TurnManager.cs" Line="203" Column="23" />
+      <File FileName="Assets\Scripts\AI.cs" Line="504" Column="33" />
+      <File FileName="Assets\Scripts\GridSystem.cs" Line="56" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
-=======
-  <MonoDevelop.Ide.Workbench />
->>>>>>> 13d0a8342d4de0825c0b82b80830e779db1658cb
->>>>>>> c4e2bcec3665ee0a20a30b0ed94047f2e694de52
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
